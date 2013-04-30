@@ -1,0 +1,16 @@
+#This is the codebase for processing/visualizing the NEXRAD Radar Data
+If you are downloading this code base, you would need access to the data as well
+Download the data (smaller test data set from) : /mnt/nfs/work1/sheldon/birdcast/radar_test_data
+This is a test data set with just three scans and the associated wind files as well
+The above data should be copied to a folder called 'data' in the cajun directory
+
+After cloning this repository and adding data, you would need to recompile rsl2mat. 
+The instructions for the same are in rsl2mat/README.txt
+
+To avoid commiting rsl2mat and data to the repository everytime you commit, add the following to the .gitignore file
+data/
+rsl2mat/
+
+Before running any of the code files, make sure all the data directories are given properly
+
+An open list of issues/bugs is mentioned in open_list.txt
