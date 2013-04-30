@@ -15,3 +15,23 @@ rsl2mat/
 Before running any of the code files, make sure all the data directories are given properly, and make sure to add those data directories to the .hgignore file to avoid commiting the data directories
 
 An open list of issues/bugs is mentioned in open_list.txt
+
+If you need to clone this repository and use, follow the steps below : 
+(This is a private repository, so you will have permission to push changes)
+
+1. Set up Mercurial on your machine
+	* Download mercurial from mercurial.selenic.com
+	* Check the installation as:
+		which hg
+
+2. Update the ~/.hgrc file
+	* Update the ~/.hgrc file as follows :
+		[ui]
+		username = John Smith <jsmith@univ.edu>
+	* To avoid some certificate warnings when committing code, create a dummy certificate.
+		*Detailed steps for the same are given at http://mercurial.selenic.com/wiki/CACertificates . 
+
+3. Go to the clone option in the repository, and execute the clone command given there
+	* e.g. hg clone ssh://hg@bitbucket.org/jeffreyjohn/cajun
+
+
