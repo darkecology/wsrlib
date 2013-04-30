@@ -31,7 +31,5 @@ If you need to clone this repository and use, follow the steps below :
 	* To avoid some certificate warnings when committing code, create a dummy certificate.
 		*Detailed steps for the same are given at http://mercurial.selenic.com/wiki/CACertificates . 
 
-3. Go to the clone option in the repository, and execute the clone command given there
-	* e.g. hg clone ssh://hg@bitbucket.org/jeffreyjohn/cajun
-
+3. Now clone the repository. Alternately, Download the free app Sourcetree which gives a easy GUI interface for managing the repository on local. 
 
