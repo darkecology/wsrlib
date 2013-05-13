@@ -1,5 +1,4 @@
 #This is the codebase for processing/visualizing the NEXRAD Radar Data
-#testing pull/push
 If you are downloading this code base, you would need access to the data as well
 Download the data (smaller test data set from) : /mnt/nfs/work1/sheldon/birdcast/radar_test_data
 This is a test data set with just three scans and the associated wind files as well
