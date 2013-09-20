@@ -2,6 +2,7 @@ function [ success ] = testAlignSweepsToFixed( dataSetName )
 %testAlignSweepsToFixed Unit Test for the alignSweepsToFixed function. 
 
 scans = getScans(dataSetName);      %get absolute paths of all scans in the dataset
+results  = fopen('testResults.txt','w+');  %tesresults file
 
 for i=1:size(scans,1),
     radar_file = scans(i);
@@ -17,9 +18,9 @@ for i=1:size(scans,1),
     try
         radar = rsl2mat(radar_file{1}, scaninfo.station, opt);
         radar_aligned = alignSweepsToFixed(radar,false,'ground');
-        fprintf('%s : Aligned.  \n', radar_file{1});
+        fprintf(results,'%s : Aligned.  \n', radar_file{1});
     catch err       
-        fprintf('%s : %s \n', radar_file{1}, err.message);
+        fprintf(results,'%s : %s \n', radar_file{1}, err.message);
     end
 end
 
