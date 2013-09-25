@@ -2,6 +2,10 @@ function [ scans ] = getScans( dataSetFolder )
 %getScans Return absoulte paths of scan files given a top level dataSet
 %name. Utility function for unit tests for a new feature. 
 
+if ~exist(dataSetFolder, 'dir')
+    error('Folder does not exist: %s', dataSetFolder);
+end
+
 scans = [];
 
 stations = listSubFolders(dataSetFolder);          %get all the stations
