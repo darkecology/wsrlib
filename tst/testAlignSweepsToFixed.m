@@ -1,11 +1,11 @@
-function [ success ] = testAlignSweepsToFixed( dataSetName )
+function [ ] = testAlignSweepsToFixed( dataSetName )
 %testAlignSweepsToFixed Unit Test for the alignSweepsToFixed function. 
-
+tic 
 scans = getScans(dataSetName);      %get absolute paths of all scans in the dataset
-results  = fopen('testResults.txt','w+');  %tesresults file
+log  = fopen('testAlignSweepsToFixedLOG.txt','w+');  %test log file
 
-if results == -1
-    error('Could not create output file');
+if log == -1
+    error('Could not create log file');
 end
 
 for i=1:size(scans,1),
@@ -21,15 +21,15 @@ for i=1:size(scans,1),
         
     try
         radar = rsl2mat(radar_file{1}, scaninfo.station, opt);
-        radar_aligned = alignSweepsToFixed(radar,false,'ground');
-        fprintf(results,'%s : Aligned.  \n', radar_file{1});
+        radar_aligned = alignSweepsToFixed(radar,true);
+        fprintf(log,'%s : Aligned.  \n', radar_file{1});
     catch err       
-        fprintf(results,'%s : %s \n', radar_file{1}, err.message);
+        fprintf(log,'%s : %s \n', radar_file{1}, err.message);
     end
 end
 
-
-fprintf('Testing successful \n');
-
+fclose(log);
+fprintf('Test: testAlignSweepsToFixed completed.  \n');
+toc
 end
 
