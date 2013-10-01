@@ -1,4 +1,5 @@
-dataSetName = '../data';
+% Specify the location of the data set. 
+dataSetName = '/Users/jeffrey/Documents/cajunTest/data';
 
 %function [ ] = testAlignSweepsToFixedImagery( dataSetName )
 %testAlignSweepsToFixedImagery Interactive Unit Test to visualize results
@@ -45,7 +46,7 @@ for i=1:size(scans,1),
     
     try
         radar = rsl2mat(radar_file{1}, scaninfo.station, opt);
-        radar_aligned = alignSweepsToFixed(radar, false, 0.25, 250, 250000);
+        radar_aligned = alignSweepsToFixed(radar, true, 0.25, 250, 250000);
         
         % Note that the velocity sweeps are not dealiased
         
@@ -96,7 +97,7 @@ for i=1:size(scans,1),
                 imagesc(diff);
                 colorbar();
                 title('Difference', 'FontSize', 18);
-                fprintf('Maximum difference is: %.4f\n', max(abs(diff(:))));
+                fprintf('% s : Maximum difference is: %.4f\n', radar_file{1} , max(abs(diff(:))));
                 fprintf('RMSE = %.4f\n', sqrt(nanmean(diff(:).^2)));
                 
                 pause;
