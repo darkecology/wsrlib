@@ -507,3 +507,4 @@
 /mnt/nfs/work1/sheldon/birdcast/data/birdcast-shared/data/KBGM/KBGM-2010-09/KBGM20100917_071331_V03.gz : Aligned.  
 /mnt/nfs/work1/sheldon/birdcast/data/birdcast-shared/data/KBGM/KBGM-2010-09/KBGM20100917_081118_V03.gz : Aligned.  
 /mnt/nfs/work1/sheldon/birdcast/data/birdcast-shared/data/KBGM/KBGM-2010-09/KBGM20100917_090945_V03.gz : Aligned.  
+/mnt/nfs/work1/sheldon/birdcast/data/birdcast-shared/data/KBGM/KBGM-2010-09/KBGM20100917_100915_V03.gz : Aligned.  
