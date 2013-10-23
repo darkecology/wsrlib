@@ -10,6 +10,10 @@ function setup_cajun()
 % If you another subdirectory contains utility functions and should be on
 % the MATLAB path, add it below.
 
+if isdeployed
+    return;
+end
+
 cajundir = fileparts(mfilename('fullpath'));
 
 % Add directories non-recursively when possible to avoid slow commands and
@@ -26,5 +30,6 @@ addpath(sprintf('%s/colormaps', cajundir));
 
 % Setup netcdf-java toolbox. Includes java files
 addpath(genpath(sprintf('%s/njtbx', cajundir)));
+
 javaaddpath(sprintf('%s/njtbx/jar/toolsUI-4.0.49.jar', cajundir),'-end');
 javaaddpath(sprintf('%s/njtbx/jar/njTools-2.0.12_jre1.6.jar', cajundir),'-end');
