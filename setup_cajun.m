@@ -23,10 +23,7 @@ addpath(genpath(sprintf('%s/lightspeed', cajundir)));
 addpath(sprintf('%s/m_map', cajundir));
 addpath(sprintf('%s/clutterMaps',cajundir));
 addpath(sprintf('%s/narr', cajundir));
-<<<<<<< local
 addpath(sprintf('%s/run', cajundir));
-=======
->>>>>>> other
 addpath(sprintf('%s/rsl2mat', cajundir));
 addpath(sprintf('%s/scripts', cajundir));
 addpath(sprintf('%s/util', cajundir));
