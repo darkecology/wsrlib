@@ -29,6 +29,7 @@ addpath(sprintf('%s/scripts', cajundir));
 addpath(sprintf('%s/util', cajundir));
 addpath(sprintf('%s/vvp', cajundir));
 addpath(sprintf('%s/colormaps', cajundir));
+addpath(sprintf('%s/clutterMaps', cajundir));
 
 % Setup netcdf-java toolbox. Includes java files
 addpath(genpath(sprintf('%s/njtbx', cajundir)));
