@@ -19,13 +19,11 @@ cajundir = fileparts(mfilename('fullpath'));
 % Add directories non-recursively when possible to avoid slow commands and
 % bloated MATLAB path
 addpath(cajundir);
-addpath(genpath(sprintf('%s/lightspeed', cajundir)));
 addpath(sprintf('%s/m_map', cajundir));
-addpath(sprintf('%s/clutterMaps',cajundir));
 addpath(sprintf('%s/narr', cajundir));
 addpath(sprintf('%s/run', cajundir));
 addpath(sprintf('%s/rsl2mat', cajundir));
-addpath(sprintf('%s/scripts', cajundir));
+addpath(sprintf('%s/tst', cajundir));
 addpath(sprintf('%s/util', cajundir));
 addpath(sprintf('%s/vvp', cajundir));
 addpath(sprintf('%s/colormaps', cajundir));
