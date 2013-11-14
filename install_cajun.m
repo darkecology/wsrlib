@@ -30,8 +30,8 @@ make_rsl2mat();
 % lightspeed
 %%%%%%%%%%%%%%%%%%%%%%
 
-fprintf('\n\nCompiling lightspeed toolbox\n\n');
+%fprintf('\n\nCompiling lightspeed toolbox\n\n');
 
-curdir = cd(sprintf('%s/lightspeed/lightspeed', cajundir));
-install_lightspeed;
-cd(curdir);
+%curdir = cd(sprintf('%s/lightspeed/lightspeed', cajundir));
+%install_lightspeed;
+%cd(curdir);
