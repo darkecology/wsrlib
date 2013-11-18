@@ -1,0 +1,158 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<!-- DW6 -->
+<head>
+<!-- Copyright 2005 Macromedia, Inc. All rights reserved. -->
+<title>Netcdf-Java Toolbox for Matlab (njTBX) - Demo do_interop_bot_temp</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" href="../../njtbxhelp/njtbx.css" type="text/css" />
+
+<style type="text/css">
+<!--
+.style1 {color: #003399}
+-->
+</style>
+
+
+
+ 
+</head>
+<body bgcolor="#ffffff">
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr bgcolor="#ffffff">
+    <td width="62" colspan="1" rowspan="1"><div align="center"><img src="../../njtbxhelp/images/njtbx-icon.png" alt="njtbx-icon" width="35" height="29" align="bottom" /></div></td>
+   <td height="30" colspan="3" align="center" valign="bottom" nowrap="nowrap" class="style1" id="logosmall"><div align="left"><a href="demos.html" class="style1">Netcdf-Java Toolbox <img src="../../njtbxhelp/images/up.png" border="0" align="bottom" /></a></div></td>
+  
+  </tr>
+
+ 
+
+ 
+
+  
+
+
+  <tr bgcolor="#CCDDFF">
+    <td colspan="1" nowrap="nowrap" class="smallText2"></td>
+    
+    <td colspan="2" valign="baseline" nowrap="nowrap" class="smallText3" ><div align="left" ><a href="bathy_comp.html" style="color:#000000"><img src="../../njtbxhelp/images/b_prev.gif" alt="previous" width="17" height="17" border="0" align="texttop"/> Demo bathy_comp</a></div></td>
+    <td colspan="3" valign="baseline" nowrap="nowrap" class="smallText3"><div align="right"><a href="do_interop_data.html" style="color:#000000">Demo do_interop_data <img src="../../njtbxhelp/images/b_next.gif" alt="Next" width="20" height="17" border="0" align="texttop" class="navText" /></a></div></td>
+    <td width="1" nowrap="nowrap"></td>
+  </tr>
+  <tr bgcolor="#ffffff">
+    <td width="71"><img src="../../njtbxhelp/images/mm_spacer.gif" alt="" width="25" height="1" border="0" /></td>
+    <td colspan="1" valign="top"><img src="../../njtbxhelp/images/mm_spacer.gif" alt="" width="305" height="1" border="0" /><br />
+	&nbsp;<br />
+	&nbsp;<br /><table border="0" cellspacing="0" cellpadding="0" width="744">
+        <tr>
+          <td width="372" class="pageName"><div align="left">Demo do_interop_bot_temp</div></td>
+		  <td width="372" class="subHeader"><div align="right"><a href="matlab:echodemo do_interop_bot_temp">Run demo in Matlab</a></div></td>
+        </tr>
+
+		<tr>
+          <td colspan="2"><!-- # njTools -->
+          
+            <div class="content">
+         <h2>Contents</h2>
+         <div>
+            <ul>
+               <li><a href="#2">Specify input variables</a></li>
+               <li><a href="#3">Call njTBX functions</a></li>
+               <li><a href="#4">Plot data</a></li>
+            </ul>
+         </div><pre class="codeinput"><span class="comment">% DO_INTEROP_BOT_TEMP: Plot modeled and observed bottom temperatures</span>
+<span class="comment">%</span>
+<span class="comment">% A diver requested an example of something that would allow him to view</span>
+<span class="comment">% predicted and observed temperatures in the Gulf of Maine, hence the</span>
+<span class="comment">% units in Farenheit.</span>
+<span class="comment">%</span>
+<span class="comment">% Rich Signell (rsignell@usgs.gov)</span>
+
+<span class="comment">% Get latest bottom (actually deepest) temps from buoys.</span>
+<span class="comment">% Find the URLs to more buoy data at:</span>
+<span class="comment">% http://gyre.umeoce.maine.edu/buoyhome.php</span>
+</pre><h2>Specify input variables<a name="2"></a></h2><pre class="codeinput"><span class="comment">% GOMOOS Buoy A bottom temp (20 m Temp)</span>
+uri_a=<span class="string">'http://gyre.umeoce.maine.edu/data/gomoos/buoy/archive/A01/realtime/A01.sbe37.realtime.20m.nc'</span>;
+
+<span class="comment">% GOMOOS Buoy B bottom temp (50 m Temp)</span>
+uri_b=<span class="string">'http://gyre.umeoce.maine.edu/data/gomoos/buoy/archive/B01/realtime/B01.sbe37.realtime.50m.nc'</span>;
+
+<span class="comment">% URI to Umaine's latest forecast</span>
+
+uri_mod=<span class="string">'http://coast-enviro.er.usgs.gov/thredds/dodsC/gom_interop/umaine/latest'</span>;
+</pre><h2>Call njTBX functions<a name="3"></a></h2><pre class="codeinput">[Tc_a,ga] = <a href="../../njtbxhelp/njTools/njFunc/nj_grid_varget.html">nj_grid_varget</a>(uri_a,<span class="string">'temperature'</span>);
+
+[Tc_b,gb] = <a href="../../njtbxhelp/njTools/njFunc/nj_grid_varget.html">nj_grid_varget</a>(uri_b,<span class="string">'temperature'</span>);
+
+Tf_last=[Tc_a(end) Tc_b(end)]*(9/5)+32;
+lon=[ga.lon gb.lon];
+lat=[ga.lat gb.lat];
+
+<span class="comment">% Get model forecast closest to last observed bottom temperature:</span>
+
+jd=[ga.time(end) gb.time(end)];  <span class="comment">% UTC</span>
+ind=find(abs(now+4/24-jd)&lt;1); <span class="comment">%plot all results within last day</span>
+<span class="keyword">if</span> isempty(ind),
+    disp(<span class="string">'Sorry, no model data within 24 hours of last observation'</span>);
+    <span class="keyword">return</span>
+<span class="keyword">end</span>
+jdmax=max(jd(ind));
+
+jdmod=<a href="../../njtbxhelp/njTools/njFunc/nj_time.html">nj_time</a>(uri_mod,<span class="string">'temp'</span>);     <span class="comment">% retrieve the dates of the forecast</span>
+itime=near(jdmod,jdmax);
+
+<span class="comment">% retrieve the model forecast data</span>
+[Tc,g] = <a href="../../njtbxhelp/njTools/njFunc/nj_grid_varget.html">nj_grid_varget</a>(uri_mod,<span class="string">'temp'</span>,[itime,1,1,1],[1,inf,inf,inf]);
+
+Tf = (9/5)*Tc+32;   <span class="comment">% switch to fahrenheit</span>
+</pre>
+<h2>Plot data<a name="4"></a></h2><pre class="codeinput"><span class="comment">%Plot bottom temperature</span>
+
+pcolorjw(g.lon,g.lat,squeeze(double(Tf(end,:,:)))); shading <span class="string">flat</span>;
+dasp(43);
+set(gcf,<span class="string">'color'</span>,<span class="string">'white'</span>);
+
+title([<span class="string">'Bottom Temperature (deg F): '</span> datestr(g.time) <span class="string">' UTC'</span>])
+cax=caxis;
+
+<span class="comment">%plot observed bottom temps as colored dots</span>
+
+cdot(lon(ind),lat(ind),Tf_last(ind),jet,20,1,cax);
+colorbar
+
+<span class="comment">% load and plot a Gulf of Maine coastline</span>
+load <span class="string">gom_coast.mat</span> <span class="string">coast</span>
+fillseg(coast);
+</pre><img vspace="5" hspace="5" src="do_interop_bot_temp_01.png"> <p class="footer"><br>
+            Published with MATLAB&reg; 7.6<br></p>
+      </div>
+
+
+
+<br />
+
+</td>
+        </tr>
+      </table></td>
+
+    <td colspan="1" nowrap="nowrap"></td>
+  </tr>
+  <tr bgcolor="#CCDDFF">
+    <td colspan="1" nowrap="nowrap" class="smallText2"></td>
+    
+    <td colspan="2" valign="middle" nowrap="nowrap" class="smallText3"><div align="left"><a href="bathy_comp.html" style="color:#000000"><img src="../../njtbxhelp/images/b_prev.gif" alt="previous" width="17" height="17" border="0" align="texttop" /> Demo bathy_comp</a></div></td>
+    <td colspan="3" valign="middle" nowrap="nowrap" class="smallText3"><div align="right"><a href="do_interop_data.html" style="color:#000000">Demo do_interop_data <img src="../../njtbxhelp/images/b_next.gif" alt="Next" width="17" height="17" border="0" align="texttop" /></a></div></td>
+    <td width="1" nowrap="nowrap"></td>
+  </tr> 
+    <tr bgcolor="#003399">
+    <td colspan="1" nowrap="nowrap" class="smallText2">&copy; 2006-2009</td>
+    <td colspan="3" nowrap="nowrap" class="smallText2" >&nbsp;&nbsp;Mississippi State University&nbsp;&nbsp;&nbsp;&bull;&nbsp;<a href="../../njtbxhelp/license.html" style="text-decoration:none; color: #FFFFFF">License Terms</a>&nbsp;&nbsp;&nbsp;&bull;&nbsp;<a href="../../njtbxhelp/credits.html" style="text-decoration:none; color: #FFFFFF">Credits</a></td>
+   
+    <td colspan="2" nowrap="nowrap" class="smallText2"></td>
+    <td width="1" nowrap="nowrap"></td>
+  </tr>
+  
+</table>
+
+</body>
+</html>

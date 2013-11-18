@@ -1,0 +1,17 @@
+function set_narr_proj( )
+%SET_NARR_PROJ Set m_map to use the NARR projection
+
+% The details of the projection are given here:
+%  http://www.nco.ncep.noaa.gov/pmb/docs/on388/tableb.html#GRID221
+%
+% In short, it is a Lambert conformal conic projection, with 
+%  - Central latitude = -107
+%  - Standard parallel 1 = Standard parallel 2 = 50
+%
+% The lat/lon limits set below do not matter so much to the projection,
+% but are big enough to include the entire NARR grid
+
+m_proj('lambert', 'long', [-234 20], 'lat', [0 100], 'clo', -107, 'par', [50 50]);
+
+end
+

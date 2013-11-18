@@ -1,0 +1,109 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<!-- DW6 -->
+<head>
+<!-- Copyright 2005 Macromedia, Inc. All rights reserved. -->
+<title>Netcdf-Java Toolbox for Matlab (njTBX) - mDataset/getVar</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" href="../../../njtbx.css" type="text/css" />
+
+<style type="text/css">
+<!--
+.style1 {color: #003399}
+-->
+</style>
+</head>
+<body bgcolor="#ffffff">
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr bgcolor="#ffffff">
+    <td width="62" colspan="1" rowspan="1"><div align="center"><img src="../../../images/njtbx-icon.png" alt="njtbx-icon" width="35" height="29" align="bottom" /></div></td>
+  <td height="30" colspan="3" align="center" valign="bottom" nowrap="nowrap" class="style1" id="logosmall"><div align="left"><a href="../../../apidoc.html" class="style1">Netcdf-Java Toolbox <img src="../../../images/up.png" border="0" align="bottom" /></a></div></td>
+  </tr>
+
+ 
+
+ 
+
+  
+
+
+  <tr bgcolor="#CCDDFF">
+    <td colspan="1" nowrap="nowrap" class="smallText2"></td>
+    
+    <td colspan="2" valign="baseline" nowrap="nowrap" class="smallText3"><div align="left"><a href="getJDataset.html" style="color:#000000"><img src="../../../images/b_prev.gif" alt="previous" width="17" height="17" border="0" align="texttop" /> Method getJDataset</a></div></td>
+    <td colspan="3" valign="baseline" nowrap="nowrap" class="smallText3"><div align="right"><a href="../@mGeoGridVar/mGeoGridVar.html" style="color:#000000">Class mGeoGridVar <img src="../../../images/b_next.gif" alt="Next" width="20" height="17" border="0" align="texttop" class="navText" /></a></div></td>
+    <td width="1" nowrap="nowrap"></td>
+  </tr>
+  <tr bgcolor="#ffffff">
+    <td width="71"><img src="../../../images/mm_spacer.gif" alt="" width="25" height="1" border="0" /></td>
+    <td colspan="1" valign="top"><img src="../../../images/mm_spacer.gif" alt="" width="305" height="1" border="0" /><br />
+	&nbsp;<br />
+	&nbsp;<br /><table border="0" cellspacing="0" cellpadding="0" width="744">
+        <tr>
+          <td width="744" class="pageName">Method getVar</td>
+		</tr>
+
+		<tr>
+          <td><a name="_top"></a>
+<!-- # njTools --><!-- # njTBX-2.0 --><!-- menu.html @mDataset -->
+<h3><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../images/up.png"></a></h3>
+<div class="box"><strong>mDataset/getVar - Retrieves a matlab variable object.</strong></div>
+
+<h3><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../images/up.png"></a></h3>
+<div class="box"><strong>function result = getVar(mDatasetObj, varName) </strong></div>
+
+<h3><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../images/up.png"></a></h3>
+<div class="fragment">
+  <pre class="comment2"><span class="comment2">mDataset/getVar - Retrieves a matlab variable object.
+                  Data variable can be gridded or non-gridded.
+ Method Usage:
+       result=getVariable(mDatasetObj,varName)
+       Variable can also be retrieved using matlab's subscripted reference to objects. 
+       result=mDatasetObj{'varName'} 
+          
+ where,
+       mDatasetObj - mDataset object 
+       varName - variable name, e.g. 'temp' (gridded or non-gridded)
+ returns,
+       result - matlab object of class 'mVar'
+
+
+
+ See also <a href="getGeoGridVar.html" class="code" title="function result = getGeoGridVar(mDatasetObj,varName)">getGeoGridVar</a></span></pre>
+</div>
+
+
+<!-- crossreference -->
+<h3><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../images/up.png"></a></h3>
+See functions using  <strong>getVar</strong>:
+<div class="fragment">
+<ul style="list-style-image:url(../../../images/function.png)">
+  <li><a href="../../../njTools/njFunc/nj_grid_varget.html" class="code" title="function [data, grid]=nj_grid_varget(ncRef,var,start, count, stride)">nj_grid_varget</a> NJ_GRID_VARGET - get variable data and associated grid coordinates from local NetCDF file, NetCDF URL or OpenDAP URL</li>
+  <li><a href="../../../njTools/njFunc/nj_time.html" class="code" title="function result=nj_time(ncRef,var,timeIndex)">nj_time</a> NJ_TIME - Get entire time vector for variable 'var' from any CF-compliant file</li>
+  <li><a href="../../../njTools/njFunc/nj_varget.html" class="code" title="function data=nj_varget(ncRef,var,start, count, stride)">nj_varget</a> NJ_VARGET - get variable data from local NetCDF file, NetCDF URL or OpenDAP URL</li>
+  </ul>
+</div>
+<br /><br /></td>
+        </tr>
+      </table></td>
+
+    <td colspan="1" nowrap="nowrap"></td>
+  </tr>
+  <tr bgcolor="#CCDDFF">
+    <td colspan="1" nowrap="nowrap" class="smallText2"></td>
+    
+    <td colspan="2" valign="middle" nowrap="nowrap" class="smallText3"><div align="left"><a href="getJDataset.html" style="color:#000000"><img src="../../../images/b_prev.gif" alt="previous" width="17" height="17" border="0" align="texttop" /> Method getJDataset</a></div></td>
+    <td colspan="3" valign="middle" nowrap="nowrap" class="smallText3"><div align="right"><a href="../@mGeoGridVar/mGeoGridVar.html" style="color:#000000">Class mGeoGridVar <img src="../../../images/b_next.gif" alt="Next" width="17" height="17" border="0" align="texttop" /></a></div></td>
+    <td width="1" nowrap="nowrap"></td>
+  </tr> 
+    <tr bgcolor="#003399">
+    <td colspan="1" nowrap="nowrap" class="smallText2">&copy; 2006-2009</td>
+    <td colspan="3" nowrap="nowrap" class="smallText2" >&nbsp;&nbsp;Mississippi State University&nbsp;&nbsp;&nbsp;&bull;&nbsp;<a href="../../../license.html" style="text-decoration:none; color: #FFFFFF">License Terms</a>&nbsp;&nbsp;&nbsp;&bull;&nbsp;<a href="../../../credits.html" style="text-decoration:none; color: #FFFFFF">Credits</a></td>
+   
+    <td colspan="2" nowrap="nowrap" class="smallText2"></td>
+    <td width="1" nowrap="nowrap"></td>
+  </tr>
+</table>
+
+</body>
+</html>

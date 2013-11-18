@@ -1,0 +1,161 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<!-- DW6 -->
+<head>
+<!-- Copyright 2005 Macromedia, Inc. All rights reserved. -->
+<title>Netcdf-Java Toolbox for Matlab (njTBX) - Demo gomoos_latest</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" href="../../njtbxhelp/njtbx.css" type="text/css" />
+
+<style type="text/css">
+<!--
+.style1 {color: #003399}
+-->
+</style>
+
+
+
+ 
+</head>
+<body bgcolor="#ffffff">
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr bgcolor="#ffffff">
+    <td width="62" colspan="1" rowspan="1"><div align="center"><img src="../../njtbxhelp/images/njtbx-icon.png" alt="njtbx-icon" width="35" height="29" align="bottom" /></div></td>
+    <td height="30" colspan="3" align="center" valign="bottom" nowrap="nowrap" class="style1" id="logosmall"><div align="left"><a href="demos.html" class="style1">Netcdf-Java Toolbox <img src="../../njtbxhelp/images/up.png" border="0" align="bottom" /></a></div></td>
+  
+  </tr>
+
+ 
+
+ 
+
+  
+
+
+  <tr bgcolor="#CCDDFF">
+    <td colspan="1" nowrap="nowrap" class="smallText2"></td>
+    
+    <td colspan="2" valign="baseline" nowrap="nowrap" class="smallText3" ><div align="left" ><a href="do_interop_temp_comp.html" style="color:#000000"><img src="../../njtbxhelp/images/b_prev.gif" alt="previous" width="17" height="17" border="0" align="texttop"/> Demo do_interop_temp_comp</a></div></td>
+    <td colspan="3" valign="baseline" nowrap="nowrap" class="smallText3"><div align="right"><a href="plot_isosurface.html" style="color:#000000">Demo plot_isosurface <img src="../../njtbxhelp/images/b_next.gif" alt="Next" width="20" height="17" border="0" align="texttop" class="navText" /></a></div></td>
+    <td width="1" nowrap="nowrap"></td>
+  </tr>
+  <tr bgcolor="#ffffff">
+    <td width="71"><img src="../../njtbxhelp/images/mm_spacer.gif" alt="" width="25" height="1" border="0" /></td>
+    <td colspan="1" valign="top"><img src="../../njtbxhelp/images/mm_spacer.gif" alt="" width="305" height="1" border="0" /><br />
+	&nbsp;<br />
+	&nbsp;<br /><table border="0" cellspacing="0" cellpadding="0" width="744">
+        <tr>
+          <td width="372" class="pageName"><div align="left">Demo gomoos_latest</div></td>
+		  <td width="372" class="subHeader"><div align="right"><a href="matlab:echodemo gomoos_latest">Run demo in Matlab</a></div></td>
+        </tr>
+
+		<tr>
+          <td colspan="2"><!-- # njTools -->
+          
+            <div class="content">
+         <h2>Contents</h2>
+         <div>
+            <ul>
+               <li><a href="#2">Specify input variables</a></li>
+               <li><a href="#3">Call njTBX functions</a></li>
+               <li><a href="#4">Plot data</a></li>
+            </ul>
+         </div><pre class="codeinput"><span class="comment">% GOMOOS_LATEST - Grab alongshore velocity</span>
+<span class="comment">% Along a onshore/offshore section from latest GOMOOS-UMAINE-POM run,</span>
+<span class="comment">% averaging over 24 hours to remove tide</span>
+<span class="comment">%</span>
+<span class="comment">% Uses:</span>
+<span class="comment">%</span>
+<span class="comment">% SW_DIST - SEAWATER toolkit</span>
+<span class="comment">%</span>
+<span class="comment">% DASP, PCOLORJW - RPSstuff toolkit</span>
+<span class="comment">%</span>
+<span class="comment">% Rich Signell (rsignell@usgs.gov)</span>
+</pre><h2>Specify input variables<a name="2"></a></h2><pre class="codeinput">tic
+<span class="comment">% Access latest GoMOOS forecase via  THREDDS OPeNDAP</span>
+uri=<span class="string">'http://coast-enviro.er.usgs.gov/thredds/dodsC/gom_interop/umaine/latest'</span>;
+</pre><h2>Call njTBX functions<a name="3"></a></h2><pre class="codeinput"><span class="comment">% Get U component of velocity along this section:</span>
+ii=92;
+jj=85:110;
+
+jd=<a href="../../njtbxhelp/njTools/njFunc/nj_time.html">nj_time</a>(uri,<span class="string">'temp'</span>);
+nt=length(jd);
+itime=nt-7:nt;  <span class="comment">% time steps to average over (8 steps @ 3 hours = 24 hours)</span>
+levs=1:22;  <span class="comment">% get these vertical levels</span>
+<span class="comment">% get lon,lat,z</span>
+istep=nt-3;
+disp(<span class="string">'accessing data...'</span>);
+[t,t_grd] = <a href="../../njtbxhelp/njTools/njFunc/nj_grid_varget.html">nj_grid_varget</a>(uri,<span class="string">'u'</span>,[istep,1,1,1],[1,inf,inf,inf]);
+
+lon=t_grd.lon;
+lat=t_grd.lat;
+<span class="comment">%</span>
+u=<a href="../../njtbxhelp/njTools/njFunc/nj_varget.html">nj_varget</a>(uri,<span class="string">'u'</span>,[itime(1) levs(1) jj(1) ii(1)],<span class="keyword">...</span>
+    [length(itime) length(levs) length(jj) length(ii)]);
+umean=squeeze(mean(u));
+dist=sw_dist(lat(jj,ii),lon(jj,ii),<span class="string">'km'</span>);
+x=[0 cumsum(dist(:).')];
+z=t_grd.z(:,jj,ii);
+[nz,ny]=size(umean);
+x=ones(nz,1)*x;
+</pre>
+<pre class="codeoutput">accessing data...
+</pre><h2>Plot data<a name="4"></a></h2><pre class="codeinput"><span class="comment">%plot section</span>
+figure;
+set(gcf,<span class="string">'color'</span>,<span class="string">'white'</span>);
+set(gcf,<span class="string">'pos'</span>,[ 384   294   672   504]);
+[c,h]=contourf(max(x(:))-x,z,double(umean),[-.5:.02:.5]);hc=colorbar;
+set(get(hc,<span class="string">'YLabel'</span>),<span class="string">'String'</span>,<span class="string">'m/s'</span>);
+hold <span class="string">on</span>;
+[c2,h2]=contourf(max(x(:))-x,z,double(umean),[0 0]);
+set(h2,<span class="string">'linewidth'</span>,2);
+hold <span class="string">off</span>;
+<span class="comment">%pcolorjw(max(x(:))-x,z,double(umean));colorbar</span>
+
+titl=sprintf(<span class="string">'UMAINE-POM: Daily-Averaged Alongshore Velocity: %s'</span>,<span class="keyword">...</span>
+    datestr(t_grd.time));
+title(titl);
+xlabel(<span class="string">'Distance offshore (km)'</span>);
+ylabel(<span class="string">'Depth (m)'</span>);
+
+<span class="comment">% plot location of section as inset</span>
+h3=axes(<span class="string">'pos'</span>,[0.15 .15 .3 .3]);
+pcolorjw(lon,lat,squeeze(double(t_grd.z(end,:,:))));
+caxis([-300 0]);dasp(44);
+title(<span class="string">'Transect Location:'</span>);
+line(lon(jj,ii),lat(jj,ii),<span class="string">'color'</span>,<span class="string">'black'</span>,<span class="string">'linewidth'</span>,2);
+axis <span class="string">off</span>
+toc
+</pre><pre class="codeoutput">Elapsed time is 26.063822 seconds.
+</pre><img vspace="5" hspace="5" src="gomoos_latest_01.png"> <p class="footer"><br>
+            Published with MATLAB&reg; 7.6<br></p>
+      </div>
+
+
+<br />
+
+</td>
+        </tr>
+      </table></td>
+
+    <td colspan="1" nowrap="nowrap"></td>
+  </tr>
+  <tr bgcolor="#CCDDFF">
+    <td colspan="1" nowrap="nowrap" class="smallText2"></td>
+    
+    <td colspan="2" valign="middle" nowrap="nowrap" class="smallText3"><div align="left"><a href="do_interop_temp_comp.html" style="color:#000000"><img src="../../njtbxhelp/images/b_prev.gif" alt="previous" width="17" height="17" border="0" align="texttop" /> Demo do_interop_temp_comp</a></div></td>
+    <td colspan="3" valign="middle" nowrap="nowrap" class="smallText3"><div align="right"><a href="plot_isosurface.html" style="color:#000000">Demo plot_isosurface <img src="../../njtbxhelp/images/b_next.gif" alt="Next" width="17" height="17" border="0" align="texttop" /></a></div></td>
+    <td width="1" nowrap="nowrap"></td>
+  </tr> 
+    <tr bgcolor="#003399">
+    <td colspan="1" nowrap="nowrap" class="smallText2">&copy; 2006-2009</td>
+    <td colspan="3" nowrap="nowrap" class="smallText2" >&nbsp;&nbsp;Mississippi State University&nbsp;&nbsp;&nbsp;&bull;&nbsp;<a href="../../njtbxhelp/license.html" style="text-decoration:none; color: #FFFFFF">License Terms</a>&nbsp;&nbsp;&nbsp;&bull;&nbsp;<a href="../../njtbxhelp/credits.html" style="text-decoration:none; color: #FFFFFF">Credits</a></td>
+   
+    <td colspan="2" nowrap="nowrap" class="smallText2"></td>
+    <td width="1" nowrap="nowrap"></td>
+  </tr>
+  
+</table>
+
+</body>
+</html>

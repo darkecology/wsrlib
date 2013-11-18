@@ -1,52 +1,6 @@
-#This is the codebase for processing/visualizing the NEXRAD Radar Data
-#From actual path
+CAJUN : Radar Processing Toolkit. 
 
-If you are downloading this code base, you would need access to the
-data as well Download the data (smaller test data set from) :
-/mnt/nfs/work1/sheldon/birdcast/radar_test_data This is a test data
-set with just three scans and the associated wind files as well The
-above data should be copied to a folder called 'data' in the cajun
-directory
+General Purpose Toolkit for processing NEXRAD Level II data files. 
 
-After cloning this repository and adding data, you would need to
-recompile rsl2mat.  The instructions for the same are in
-rsl2mat/README.txt
-
-To avoid commiting rsl2mat and data to the repository everytime you
-commit, add the following to the .hgignore file
-
-data/
-rsl2mat/
-
-Before running any of the code files, make sure all the data
-directories are given properly, and make sure to add those data
-directories to the .hgignore file to avoid commiting the data
-directories
-
-An open list of issues/bugs is mentioned in open_list.txt
-
-If you need to clone this repository and use, follow the steps below :
-(This is a private repository, so you will have permission to push
-changes)
-
-1. Set up Mercurial on your machine
-   * Download mercurial from mercurial.selenic.com
-   * Check the installation as:
-      which hg
-
-2. Update the ~/.hgrc file
-   
-   * Update the ~/.hgrc file as follows :
-     [ui]
-     username = John Smith <jsmith@univ.edu>
-
-   * To avoid some certificate warnings when committing code, create a
-     dummy certificate.
-
-   * Detailed steps for the same are given at
-      http://mercurial.selenic.com/wiki/CACertificates . 
-
-3. Now clone the repository. Alternately, Download the free app
-   Sourcetree which gives a easy GUI interface for managing the
-   repository on local. 
+cajun will help you ingest, process, analyze, visualize and extract useful information from WSR-88D radar data. 
 

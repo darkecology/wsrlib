@@ -1,0 +1,129 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<!-- DW6 -->
+<head>
+<!-- Copyright 2005 Macromedia, Inc. All rights reserved. -->
+<title>Netcdf-Java Toolbox for Matlab (njTBX) - Demo test_plot3D_fvcom</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" href="../../njtbxhelp/njtbx.css" type="text/css" />
+
+<style type="text/css">
+<!--
+.style1 {color: #003399}
+-->
+</style>
+
+
+
+ 
+</head>
+<body bgcolor="#ffffff">
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr bgcolor="#ffffff">
+    <td width="62" colspan="1" rowspan="1"><div align="center"><img src="../../njtbxhelp/images/njtbx-icon.png" alt="njtbx-icon" width="35" height="29" align="bottom" /></div></td>
+   <td height="30" colspan="3" align="center" valign="bottom" nowrap="nowrap" class="style1" id="logosmall"><div align="left"><a href="demos.html" class="style1">Netcdf-Java Toolbox <img src="../../njtbxhelp/images/up.png" border="0" align="bottom" /></a></div></td>
+  
+  </tr>
+
+ 
+
+ 
+
+  
+
+
+  <tr bgcolor="#CCDDFF">
+    <td colspan="1" nowrap="nowrap" class="smallText2"></td>
+    
+    <td colspan="2" valign="baseline" nowrap="nowrap" class="smallText3" ><div align="left" ><a href="test_plot2D_fvcom.html" style="color:#000000"><img src="../../njtbxhelp/images/b_prev.gif" alt="previous" width="17" height="17" border="0" align="texttop"/> Demo test_plot2D_fvcom</a></div></td>
+    <td colspan="3" valign="baseline" nowrap="nowrap" class="smallText3"><div align="right"><a href="test_cf_ugrid.html" style="color:#000000">Demo test_cf_ugrid <img src="../../njtbxhelp/images/b_next.gif" alt="Next" width="20" height="17" border="0" align="texttop" class="navText" /></a></div></td>
+    <td width="1" nowrap="nowrap"></td>
+  </tr>
+  <tr bgcolor="#ffffff">
+    <td width="71"><img src="../../njtbxhelp/images/mm_spacer.gif" alt="" width="25" height="1" border="0" /></td>
+    <td colspan="1" valign="top"><img src="../../njtbxhelp/images/mm_spacer.gif" alt="" width="305" height="1" border="0" /><br />
+	&nbsp;<br />
+	&nbsp;<br /><table border="0" cellspacing="0" cellpadding="0" width="744">
+        <tr>
+          <td width="372" class="pageName"><div align="left">Demo test_plot3D_fvcom</div></td>
+		  <td width="372" class="subHeader"><div align="right"><a href="matlab:echodemo test_plot3D_fvcom">Run demo in Matlab</a></div></td>
+        </tr>
+
+		<tr>
+          <td colspan="2"><!-- # njTools -->
+          
+           <div class="content">
+         <h2>Contents</h2>
+         <div>
+            <ul>
+               <li><a href="#2">Specify input variables</a></li>
+               <li><a href="#3">Call njTBX functions</a></li>
+               <li><a href="#4">Plot data</a></li>
+            </ul>
+         </div><pre class="codeinput"><span class="comment">% TEST_PLOT3D_FVCOM - Plot a 3d field from an FVCOM file at a particular time step</span>
+<span class="comment">%</span>
+<span class="comment">% Rich Signell (rsignell@usgs.gov)</span>
+</pre><h2>Specify input variables<a name="2"></a></h2><pre class="codeinput">uri=<span class="string">'http://fvcom.smast.umassd.edu/Data/netcdf_java.nc'</span>;
+var_1=<span class="string">'temp'</span>;
+var_2=<span class="string">'nv'</span>;
+</pre><h2>Call njTBX functions<a name="3"></a></h2>
+    <pre class="codeinput">  <span class="comment">
+%Read all the times 
+%jdmat= nj_time(uri,var); 
+%itime=near(jdmat,datenum('30-Oct-2007 01:00'));
+% find the time step nearest this date</span>
+
+itime=1;  <span class="comment">% get the 1st time step from this URI</span>
+
+<span class="comment">% Read data and geo_grid for 3D field at time step ITIME</span>
+<span class="comment">% This works for any CF compliant NetCDF file, structured, unstructured</span>
+
+[var,var_grd] = <a href="../../njtbxhelp/njTools/njFunc/nj_grid_varget.html">nj_grid_varget</a>(uri,var_1,[itime,1,1,1],[1,inf,inf,inf]);
+
+<span class="comment">%Read connectivity array</span>
+<span class="comment">% This is specific to unstructured grid, and FVCOM</span>
+
+nv=<a href="../../njtbxhelp/njTools/njFunc/nj_varget.html">nj_varget</a>(uri,var_2);
+</pre>
+         <h2>Plot data<a name="4"></a></h2><pre class="codeinput"><span class="comment">%Plot up the bottom layer temperature:</span>
+
+trisurf(nv.',var_grd.lon,var_grd.lat,var_grd.z(end,:),var(end,:));
+view(43,46);
+shading(<span class="string">'interp'</span>);
+colorbar
+camlight <span class="string">headlight</span>
+lighting <span class="string">phong</span>
+set(gca,<span class="string">'DataAspectRatio'</span>,[1 0.74 500]); <span class="comment">% lon/lat</span>
+titl=sprintf(<span class="string">'FVCOM: Bottom %s at %s'</span>,var_1,datestr(var_grd.time));
+title(titl);
+figure(gcf);
+</pre><img vspace="5" hspace="5" src="test_plot3D_fvcom_01.png"> <p class="footer"><br>
+            Published with MATLAB&reg; 7.6<br></p>
+      </div>
+<br />
+
+</td>
+        </tr>
+      </table></td>
+
+    <td colspan="1" nowrap="nowrap"></td>
+  </tr>
+  <tr bgcolor="#CCDDFF">
+    <td colspan="1" nowrap="nowrap" class="smallText2"></td>
+    
+    <td colspan="2" valign="middle" nowrap="nowrap" class="smallText3"><div align="left"><a href="test_plot2D_fvcom.html" style="color:#000000"><img src="../../njtbxhelp/images/b_prev.gif" alt="previous" width="17" height="17" border="0" align="texttop" /> Demo test_plot2D_fvcom</a></div></td>
+    <td colspan="3" valign="middle" nowrap="nowrap" class="smallText3"><div align="right"><a href="test_cf_ugrid.html" style="color:#000000">Demo test_cf_ugrid <img src="../../njtbxhelp/images/b_next.gif" alt="Next" width="20" height="17" border="0" align="texttop" class="navText" /></a></div></td>
+    <td width="1" nowrap="nowrap"></td>
+  </tr> 
+    <tr bgcolor="#003399">
+    <td colspan="1" nowrap="nowrap" class="smallText2">&copy; 2006-2009</td>
+    <td colspan="3" nowrap="nowrap" class="smallText2" >&nbsp;&nbsp;Mississippi State University&nbsp;&nbsp;&nbsp;&bull;&nbsp;<a href="../../njtbxhelp/license.html" style="text-decoration:none; color: #FFFFFF">License Terms</a>&nbsp;&nbsp;&nbsp;&bull;&nbsp;<a href="../../njtbxhelp/credits.html" style="text-decoration:none; color: #FFFFFF">Credits</a></td>
+   
+    <td colspan="2" nowrap="nowrap" class="smallText2"></td>
+    <td width="1" nowrap="nowrap"></td>
+  </tr>
+  
+</table>
+
+</body>
+</html>

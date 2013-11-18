@@ -1,0 +1,137 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<!-- DW6 -->
+<head>
+<!-- Copyright 2005 Macromedia, Inc. All rights reserved. -->
+<title>Netcdf-Java Toolbox for Matlab (njTBX) - Function NJ_SUBSETGRID</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" href="../../njtbx.css" type="text/css" />
+
+<style type="text/css">
+<!--
+.style1 {color: #003399}
+.style2 {
+	font-size: 10px;
+	font-weight: bold;
+}
+-->
+</style>
+</head>
+<body bgcolor="#ffffff">
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr bgcolor="#ffffff">
+    <td width="62" colspan="1" rowspan="1"><div align="center"><img src="../../images/njtbx-icon.png" alt="njtbx-icon" width="35" height="29" align="bottom" /></div></td>
+     <td height="30" colspan="3" align="center" valign="bottom" nowrap="nowrap" class="style1" id="logosmall"><div align="left"><a href="njfunc.html" class="style1">Netcdf-Java Toolbox <img src="../../images/up.png" border="0" align="bottom" /></a></div></td>
+  
+  </tr>
+
+ 
+
+ 
+
+  
+
+
+  <tr bgcolor="#CCDDFF">
+    <td colspan="1" nowrap="nowrap" class="smallText2"></td>
+    
+    <td colspan="2" valign="baseline" nowrap="nowrap" class="smallText3" ><div align="left" ><a href="nj_info.html" style="color:#000000"><img src="../../images/b_prev.gif" alt="previous" width="17" height="17" border="0" align="texttop"/> Function nj_info</a></div></td>
+    <td colspan="3" valign="baseline" nowrap="nowrap" class="smallText3"><div align="right"><a href="nj_time.html" style="color:#000000">Function nj_time <img src="../../images/b_next.gif" alt="Next" width="20" height="17" border="0" align="texttop" class="navText" /></a></div></td>
+    <td width="1" nowrap="nowrap"></td>
+  </tr>
+  <tr bgcolor="#ffffff">
+    <td width="71"><img src="../../images/mm_spacer.gif" alt="" width="25" height="1" border="0" /></td>
+    <td colspan="1" valign="top"><img src="../../images/mm_spacer.gif" alt="" width="305" height="1" border="0" /><br />
+	&nbsp;<br />
+	&nbsp;<br /><table border="0" cellspacing="0" cellpadding="0" width="744">
+        <tr>
+          <td width="372" class="pageName"><div align="left">Function  nj_subsetGrid</div></td>
+		  <td width="372" class="subHeader"><div align="right"><a href="matlab:edit(&#0039;nj_subsetGrid&#0039;)">View Source in Matlab</a></div></td>
+        </tr>
+
+		<tr>
+          <td colspan="2"><a name="_top"></a>
+<!-- # njTools --><!-- # njTBX-2.0 --><!-- menu.html @mDataset -->
+<h3><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../images/up.png"></a></h3>
+<div class="box"><strong>NJ_SUBSETGRID: Subset grid based on lat-lon bounding box and time</strong></div>
+
+<h3><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../images/up.png"></a></h3>
+<div class="box"><strong>function [data,grd]=nj_subsetGrid(ncRef,var,lonLatRange,dn1,dn2) </strong></div>
+
+<h3><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../images/up.png"></a></h3>
+<div class="fragment">
+  <pre class="comment2">NJ_SUBSETGRID: Subset grid based on lat-lon bounding box and time
+
+ Usage:
+   [data, grd]=nj_subsetGrid(uri,var,[lonLatRange], dn1, dn2);
+ where,
+   ncRef - Reference to netcdf file. It can be either of two
+           a. local file name or a URL  or
+           b. An 'mDataset' matlab object, which is the reference to already
+              open netcdf file.
+              [ncRef=mDataset(uri)]
+
+  var - variable to subset
+  lonLatRange - [minLon maxLon minLat maxLat]  % matlab 'axes' function      
+  dn1 - Matlab datenum, datestr or datevec  ex: [1990 4 5 0 0 0] or '5-Apr-1990 00:00'        
+  dn2 - Matlab datenum, datestr or datevec (optional)  
+
+ Returns,
+   data - subset data  based on lonlat and time range
+   grd - structure containing lon,lat
+
+  e.g,
+   ncRef='http://www.gri.msstate.edu/rsearch_data/nopp/bora_feb.nc';
+   var = 'temp';
+   lonLatRange = [13.0 16.0 41.0 42.0];   [minlon maxlon minlat maxlat]
+   dn1 = '14-Feb-2003 12:00:00';
+   dn2 = [2003 2 16 14 0 0];
+   [data, grd]=nj_subsetGrid(ncRef,var,lonLatRange,dn1, dn2)     or
+   [data, grd]=nj_subsetGrid(ncRef,var,lonLatRange,dn1)          or
+   [data, grd]=nj_subsetGrid(ncRef,var,lonLatRange)              or
+   [data, grd]=nj_subsetGrid(ncRef,var) </pre>
+</div>
+
+
+<!-- crossreference -->
+<h3><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../images/up.png"></a></h3>
+This function makes following<strong> njTBX API</strong> calls:
+<div class="fragment">
+  <ul style="list-style-image:url(../../images/njtbx-small-icon.png)"><li><a href="../../njTools/njTBX-2.0/@mDataset/mDataset.html" class="code" title="function result = mDataset(ncURI)">mDataset</a> mDataset class constructor - opens a netcdf file and creates a grid or netcdf mDataset object.</li>
+    <li><a href="../../njTools/njTBX-2.0/@mDataset/getGeoGridVar.html" class="code" title="function result = getGeoGridVar(mDatasetObj,varName)">getGeoGridVar</a> mDataset/getGeoGridVar - Get variable into a GeoGrid if it has a Georeferencing coordinate system.</li>
+  </ul>
+</div>
+ <br />
+See demos using function<strong> nj_subsetGrid</strong>:
+<div class="fragment">
+  <ul style="list-style-image:url(../../images/demoicon.gif)">
+    <li><a href="../../../examples/html/bathy_comp.html" class="code" title="function [ax1,ax2]=bathy_comp(uri1,uri2,ax,cax)">bathy_comp</a> BATHY_COMP - plot comparison between two bathymetry datasets</li>
+    <!--<li><a href="../../../examples/html/comp_temp_data.html" class="code" title="">comp_temp_data</a> - Compare temperature data from various model output and observations</li>-->
+    </ul>
+</div>
+<br /> <br />
+</td>
+        </tr>
+      </table></td>
+
+    <td colspan="1" nowrap="nowrap"></td>
+  </tr>
+  <tr bgcolor="#CCDDFF">
+    <td colspan="1" nowrap="nowrap" class="smallText2"></td>
+    
+    <td colspan="2" valign="middle" nowrap="nowrap" class="smallText3"><div align="left"><a href="nj_info.html" style="color:#000000"><img src="../../images/b_prev.gif" alt="previous" width="17" height="17" border="0" align="texttop" /> Function nj_info</a></div></td>
+    <td colspan="3" valign="middle" nowrap="nowrap" class="smallText3"><div align="right"><a href="nj_time.html" style="color:#000000">Function nj_time <img src="../../images/b_next.gif" alt="Next" width="17" height="17" border="0" align="texttop" /></a></div></td>
+    <td width="1" nowrap="nowrap"></td>
+  </tr> 
+    <tr bgcolor="#003399">
+    <td colspan="1" nowrap="nowrap" class="smallText2">&copy; 2006-2009</td>
+    <td colspan="3" nowrap="nowrap" class="smallText2" >&nbsp;&nbsp;Mississippi State University&nbsp;&nbsp;&nbsp;&bull;&nbsp;<a href="../../license.html" style="text-decoration:none; color: #FFFFFF">License Terms</a>&nbsp;&nbsp;&nbsp;&bull;&nbsp;<a href="../../credits.html" style="text-decoration:none; color: #FFFFFF">Credits</a></td>
+   
+    <td colspan="2" nowrap="nowrap" class="smallText2"></td>
+    <td width="1" nowrap="nowrap"></td>
+  </tr>
+  
+</table>
+
+</body>
+</html>

@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- $Revision: 1.9.4.24.4.2 $  $Date: 2008/01/25 23:47:06 $ -->
+<demos>
+	<name>njTBX</name>
+	<type>toolbox</type>
+	<icon>$toolbox/matlab/icons/matlabicon.gif</icon>
+
+	<description isCdata="no">
+		<p>njTBX&#174; is an object API and a collection of high level functions based on
+			netcdf-java library from Unidata.</p>
+	</description>
+<!--  General demos -->
+	<demosection>
+		<label>General</label>
+		<demoitem>
+			<label>bathy_comp_demo</label>
+			<type>M-file</type>
+			<source>bathy_comp</source>
+		</demoitem>
+		<!--<demoitem>
+			<label>comp_temp_data_demo</label>
+			<type>M-file</type>
+			<source>comp_temp_data</source>
+		</demoitem>-->
+		<demoitem>
+			<label>gomoos_latest_demo</label>
+			<type>M-file</type>
+			<source>gomoos_latest</source>
+		</demoitem>
+		<demoitem>
+			<label>plot_isosurface_demo</label>
+			<type>M-file</type>
+			<source>plot_isosurface</source>
+		</demoitem>
+	</demosection>
+<!--  Interoprability demos  -->	
+	<demosection>
+		<label>Interoperability</label>
+		<demoitem>
+			<label>do_interop_bot_temp_demo</label>
+			<type>M-file</type>
+			<source>do_interop_bot_temp</source>
+		</demoitem>
+		<demoitem>
+			<label>do_interop_data_demo</label>
+			<type>M-file</type>
+			<source>do_interop_data</source>
+		</demoitem>		
+		<demoitem>
+			<label>do_interop_plot3d_demo</label>
+			<type>M-file</type>
+			<source>do_interop_plot3d</source>
+		</demoitem>
+		<demoitem>
+			<label>do_interop_salt_comp_demo</label>
+			<type>M-file</type>
+			<source>do_interop_salt_comp</source>
+		</demoitem>
+		<demoitem>
+			<label>do_interop_temp_comp_demo</label>
+			<type>M-file</type>
+			<source>do_interop_temp_comp</source>
+		</demoitem>
+	</demosection>
+
+<!--  Unstructured grid demos -->
+	<demosection>
+		<label>Unstructured Grid</label>
+		<demoitem>
+			<label>test_plot2D_fvcom_demo</label>
+			<type>M-file</type>
+			<source>test_plot2D_fvcom</source>
+		</demoitem>
+		<demoitem>
+			<label>test_plot3D_fvcom_demo</label>
+			<type>M-file</type>
+			<source>test_plot3D_fvcom</source>
+		</demoitem>
+		<demoitem>
+			<label>test_cf_ugrid_demo</label>
+			<type>M-file</type>
+			<source>test_cf_ugrid</source>
+		</demoitem>
+	</demosection>
+
+
+
+</demos>
