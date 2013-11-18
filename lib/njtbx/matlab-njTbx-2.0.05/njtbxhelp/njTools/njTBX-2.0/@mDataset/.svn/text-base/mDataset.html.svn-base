@@ -1,0 +1,137 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<!-- DW6 -->
+<head>
+<!-- Copyright 2005 Macromedia, Inc. All rights reserved. -->
+<title>Netcdf-Java Toolbox for Matlab (njTBX) - Class mDataset</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" href="../../../njtbx.css" type="text/css" />
+
+<style type="text/css">
+<!--
+.style1 {color: #003399}
+-->
+</style>
+</head>
+<body bgcolor="#ffffff">
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr bgcolor="#ffffff">
+    <td width="62" colspan="1" rowspan="1"><div align="center"><img src="../../../images/njtbx-icon.png" alt="njtbx-icon" width="35" height="29" align="bottom" /></div></td>
+    <td height="30" colspan="3" align="center" valign="bottom" nowrap="nowrap" class="style1" id="logosmall"><div align="left"><a href="../../../apidoc.html" class="style1">Netcdf-Java Toolbox <img src="../../../images/up.png" border="0" align="bottom" /></a></div></td>
+  
+  </tr>
+
+ 
+
+ 
+
+  
+
+
+  <tr bgcolor="#CCDDFF">
+    <td colspan="1" nowrap="nowrap" class="smallText2"></td>
+    
+    <td colspan="2" valign="baseline" nowrap="nowrap" class="smallText3"><div align="left"><a href="../../../apidoc.html" style="color:#000000"><img src="../../../images/b_prev.gif" alt="previous" width="17" height="17" border="0" align="texttop" /> API Index</a></div></td>
+    <td colspan="3" valign="baseline" nowrap="nowrap" class="smallText3"><div align="right"><a href="close.html" style="color:#000000">Method Close <img src="../../../images/b_next.gif" alt="Next" width="20" height="17" border="0" align="texttop" class="navText" /></a></div></td>
+    <td width="1" nowrap="nowrap"></td>
+  </tr>
+  <tr bgcolor="#ffffff">
+    <td width="71"><img src="../../../images/mm_spacer.gif" alt="" width="25" height="1" border="0" /></td>
+    <td colspan="1" valign="top"><img src="../../../images/mm_spacer.gif" alt="" width="305" height="1" border="0" /><br />
+	&nbsp;<br />
+	&nbsp;<br /><table border="0" cellspacing="0" cellpadding="0" width="744">
+        <tr>
+          <td width="744" class="pageName">Class mDataset </td>
+		</tr>
+
+		<tr>
+          <td><a name="_top"></a>
+<!-- # njTools --><!-- # njTBX-2.0 --><!-- menu.html @mDataset -->
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../images/up.png"></a></h2>
+<div class="box"><strong>mDataset class constructor - opens a netcdf file and creates a grid or netcdf mDataset object.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../images/up.png"></a></h2>
+<div class="box"><strong>function result = mDataset(ncURI) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../images/up.png"></a></h2>
+<div class="fragment"><pre class="comment2">mDataset class constructor - opens a netcdf file and creates a grid or netcdf mDataset object.
+
+ Usage,
+   nc=mDataset(ncURI) 
+ where,
+   ncURI - Location of netcdf file could be local, URL, NcML,
+                 OpenDAP, THREDDS etc.
+ returns,  
+   nc -   A 'nc' object of class 'mDataset'.
+          In order to know the methods available for data access under
+          class 'mDataset', use matlab 'builtin' function
+          'methods(className).
+          i.e. methods(nc)        
+
+      Methods for class mDataset:          
+			
+           a. <a href="close.html">close(nc)</a> - closes the dataset object (clean up).
+           
+           b. <a href="getAttributes.html">getAttributes(nc)</a> - get all global attributes in a
+           matlab structure.          
+           
+           c. <a href="getGeoGridVar.html">getGeoGridVar(nc, 'variable_name')</a> - Get variable into a
+           GeoGrid if it has a Georeferencing coordinate system. This
+           method returns a 'mGeoGrid' matlab object/class.%
+ 		   
+           d. <a href="getInfo.html">getInfo(nc)</a> - Display detailed data information about
+           the dataset, including grid types. This is a good method to
+           know status of dataset (especially grids) or quick error check,
+           if you are trying to make a non-CF dataset into CF-compliant 
+           using NcML.              
+
+           e. <a href="getJDataset.html">getJDataset(nc)</a> - Retrieves a java JDataset object.
+              (For experience java users who whould like access to java objects) 
+              
+           f. <a href="getVar.html">getVar(nc, 'variable_name')</a> - Retrieves the specified
+           variable into an 'mVar' matlab object/class.
+           Variable can also be retrieved using matlab's subscripted
+           reference to objects. e.g
+           v=nc{'variable_name'} - this will return 'mVariable' object as
+           well.
+           
+ </pre>
+</div>
+
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../images/up.png"></a></h2>
+See functions using  <strong>mDataset</strong>:
+<div class="fragment">
+<ul style="list-style-image:url(../../../images/function.png)">
+<li><a href="../../../njTools/njFunc/nj_grid_varget.html" class="code" title="function [data, grid]=nj_grid_varget(ncRef,var,start, count, stride)">nj_grid_varget</a>	NJ_GRID_VARGET - get variable data and associated grid coordinates from local NetCDF file, NetCDF URL or OpenDAP URL</li>
+<li><a href="../../../njTools/njFunc/nj_time.html" class="code" title="function result=nj_time(ncRef,var,timeIndex)">nj_time</a>	NJ_TIME - Get entire time vector for variable 'var' from any CF-compliant file</li>
+<li><a href="../../../njTools/njFunc/nj_tslice.html" class="code" title="function [data,grd]=nj_tslice(ncRef,var,iTime, level)">nj_tslice</a>	NJ_TSLICE - Get data and coordinates from a CF-compliant file at a specific time step and level</li>
+<li><a href="../../../njTools/njFunc/nj_varget.html" class="code" title="function data=nj_varget(ncRef,var,start, count, stride)">nj_varget</a>	NJ_VARGET - get variable data from local NetCDF file, NetCDF URL or OpenDAP URL</li>
+</ul>
+</div>
+<br /> <br /></td>
+        </tr>
+      </table></td>
+
+    <td colspan="1" nowrap="nowrap"></td>
+  </tr>
+  <tr bgcolor="#CCDDFF">
+    <td colspan="1" nowrap="nowrap" class="smallText2"></td>
+    
+    <td colspan="2" valign="middle" nowrap="nowrap" class="smallText3"><div align="left"><a href="../../../apidoc.html" style="color:#000000"><img src="../../../images/b_prev.gif" alt="previous" width="17" height="17" border="0" align="texttop" /> API Index</a></div></td>
+    <td colspan="3" valign="middle" nowrap="nowrap" class="smallText3"><div align="right"><a href="close.html" style="color:#000000">Method Close <img src="../../../images/b_next.gif" alt="Next" width="17" height="17" border="0" align="texttop" /></a></div></td>
+    <td width="1" nowrap="nowrap"></td>
+  </tr> 
+    <tr bgcolor="#003399">
+    <td colspan="1" nowrap="nowrap" class="smallText2">&copy; 2006-2009</td>
+    <td colspan="3" nowrap="nowrap" class="smallText2" >&nbsp;&nbsp;Mississippi State University&nbsp;&nbsp;&nbsp;&bull;&nbsp;<a href="../../../license.html" style="text-decoration:none; color: #FFFFFF">License Terms</a>&nbsp;&nbsp;&nbsp;&bull;&nbsp;<a href="../../../credits.html" style="text-decoration:none; color: #FFFFFF">Credits</a></td>
+   
+    <td colspan="2" nowrap="nowrap" class="smallText2"></td>
+    <td width="1" nowrap="nowrap"></td>
+  </tr>
+  
+</table>
+
+</body>
+</html>

@@ -1,0 +1,127 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<!-- DW6 -->
+<head>
+<!-- Copyright 2005 Macromedia, Inc. All rights reserved. -->
+<title>Netcdf-Java Toolbox for Matlab (njTBX) - Class mGeoGridVar</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" href="../../../njtbx.css" type="text/css" />
+
+<style type="text/css">
+<!--
+.style1 {color: #003399}
+-->
+</style>
+</head>
+<body bgcolor="#ffffff">
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr bgcolor="#ffffff">
+    <td width="62" colspan="1" rowspan="1"><div align="center"><img src="../../../images/njtbx-icon.png" alt="njtbx-icon" width="35" height="29" align="bottom" /></div></td>
+    <td height="30" colspan="3" align="center" valign="bottom" nowrap="nowrap" class="style1" id="logosmall"><div align="left"><a href="../../../apidoc.html" class="style1">Netcdf-Java Toolbox <img src="../../../images/up.png" border="0" align="bottom" /></a></div></td>
+  
+  </tr>
+
+ 
+
+ 
+
+  
+
+
+  <tr bgcolor="#CCDDFF">
+    <td colspan="1" nowrap="nowrap" class="smallText2"></td>
+    
+    <td colspan="2" valign="baseline" nowrap="nowrap" class="smallText3" ><div align="left" ><a href="../@mDataset/getVar.html" style="color:#000000"><img src="../../../images/b_prev.gif" alt="previous" width="17" height="17" border="0" align="texttop"/> Method getVar</a></div></td>
+    <td colspan="3" valign="baseline" nowrap="nowrap" class="smallText3"><div align="right"><a href="getAttributes.html" style="color:#000000">Method getAttributes <img src="../../../images/b_next.gif" alt="Next" width="20" height="17" border="0" align="texttop" class="navText" /></a></div></td>
+    <td width="1" nowrap="nowrap"></td>
+  </tr>
+  <tr bgcolor="#ffffff">
+    <td width="71"><img src="../../../images/mm_spacer.gif" alt="" width="25" height="1" border="0" /></td>
+    <td colspan="1" valign="top"><img src="../../../images/mm_spacer.gif" alt="" width="305" height="1" border="0" /><br />
+	&nbsp;<br />
+	&nbsp;<br /><table border="0" cellspacing="0" cellpadding="0" width="744">
+        <tr>
+          <td width="744" class="pageName">Class mGeoGridVar </td>
+		</tr>
+
+		<tr>
+          <td><a name="_top"></a>
+<!-- # njTools --><!-- # njTBX-2.0 --><!-- menu.html @mDataset -->
+<h3><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../images/up.png"></a></h3>
+<div class="box"><strong>mGeoGridVar class constructor - creates a GeoGrid Variable object</strong></div>
+
+<h3><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../images/up.png"></a></h3>
+<div class="box"><strong>function result = mGeoGridVar(varName, mDatasetObj) </strong></div>
+
+<h3><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../images/up.png"></a></h3>
+<div class="fragment">
+  <pre class="comment2">mGeoGridVar class constructor - creates a GeoGrid Variable object
+
+ Usage:
+  gvar=mGeoGridVar(varName, mDatasetObj) reads the variable and create a
+  mGeoGridVar object.
+  where,            
+       varName: variable name, e.g. 'temp' (only gridded variable)
+       mDatasetObj- mDataset object
+  returns,
+       gvar - A 'gvar' object of class 'mGeoGridVar'.
+       In order to know the methods available for data access under
+       class 'mGeoGridVar', use matlab 'builtin' function
+       'methods(className).
+       i.e. methods(gvar)
+
+    Methods for class mGeoGridVar:          
+
+           a.<a href="getAttributes.html"> getAttributes(gvar,attName</a>) - get attribute(s) associated with the gridded variable 
+
+           b. <a href="getCoordSys.html">getCoordSys(gvar)</a> - Get the Grid Coordinate System associated with the referenced GeoGrid
+              It returns a 'Grid Coordinates' object containing coordinate and time axes.
+                            
+           c. <a href="getData.html">getData(gvar, timeIndex, vertLevelIndex)</a> - get the 3D volume data for all times or particular time index. 
+              Specify 'level' to read a Y-X 'horizontal slice' at the given time  
+           
+           d. <a href="getGrid.html">getGrid(gvar, timeIndex, vertLevel)</a> - Get grid coordinate and time axes associated with the geogrid. 
+              i.e. lat, lon, time and z.
+              
+           e. <a href="getJGeoGridDataset.html">getJGeoGridDataset(gvar)</a> - Retrieves a java JGeoGridDataset object.(For experience java users)  
+                 
+           f. <a href="getShape.html">getShape(gvar)</a> - get grid variable shape       
+
+           g. <a href="getShape.html">subsetGeoGridVar(gvar, start, count, stride)</a> - subset gridded variable based on start,count and stride. 
+              It returns a new subsampled mGeoGridVar object. 
+              result = gvar(i,j, ...) - subset using matlab subscripting reference.
+			
+    See also <a href="../@mDataset/getGeoGridVar.html">getGeoGridVar</a>
+
+</pre>
+</div>
+
+
+<!-- crossreference -->
+
+<br /> <br />
+</td>
+        </tr>
+      </table></td>
+
+    <td colspan="1" nowrap="nowrap"></td>
+  </tr>
+  <tr bgcolor="#CCDDFF">
+    <td colspan="1" nowrap="nowrap" class="smallText2"></td>
+    
+    <td colspan="2" valign="middle" nowrap="nowrap" class="smallText3"><div align="left"><a href="../@mDataset/getVar.html" style="color:#000000"><img src="../../../images/b_prev.gif" alt="previous" width="17" height="17" border="0" align="texttop" /> Method getVar</a></div></td>
+    <td colspan="3" valign="middle" nowrap="nowrap" class="smallText3"><div align="right"><a href="getAttributes.html" style="color:#000000">Method getAttributes <img src="../../../images/b_next.gif" alt="Next" width="17" height="17" border="0" align="texttop" /></a></div></td>
+    <td width="1" nowrap="nowrap"></td>
+  </tr> 
+    <tr bgcolor="#003399">
+    <td colspan="1" nowrap="nowrap" class="smallText2">&copy; 2006-2009</td>
+    <td colspan="3" nowrap="nowrap" class="smallText2" >&nbsp;&nbsp;Mississippi State University&nbsp;&nbsp;&nbsp;&bull;&nbsp;<a href="../../../license.html" style="text-decoration:none; color: #FFFFFF">License Terms</a>&nbsp;&nbsp;&nbsp;&bull;&nbsp;<a href="../../../credits.html" style="text-decoration:none; color: #FFFFFF">Credits</a></td>
+   
+    <td colspan="2" nowrap="nowrap" class="smallText2"></td>
+    <td width="1" nowrap="nowrap"></td>
+  </tr>
+  
+</table>
+
+</body>
+</html>

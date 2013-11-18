@@ -1,0 +1,141 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<!-- DW6 -->
+<head>
+<!-- Copyright 2005 Macromedia, Inc. All rights reserved. -->
+<title>Netcdf-Java Toolbox for Matlab (njTBX) - Demo do_interop_plot3d</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" href="../../njtbxhelp/njtbx.css" type="text/css" />
+
+<style type="text/css">
+<!--
+.style1 {color: #003399}
+-->
+</style>
+
+
+
+ 
+</head>
+<body bgcolor="#ffffff">
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr bgcolor="#ffffff">
+    <td width="62" colspan="1" rowspan="1"><div align="center"><img src="../../njtbxhelp/images/njtbx-icon.png" alt="njtbx-icon" width="35" height="29" align="bottom" /></div></td>
+   <td height="30" colspan="3" align="center" valign="bottom" nowrap="nowrap" class="style1" id="logosmall"><div align="left"><a href="demos.html" class="style1">Netcdf-Java Toolbox <img src="../../njtbxhelp/images/up.png" border="0" align="bottom" /></a></div></td>
+  
+  </tr>
+
+ 
+
+ 
+
+  
+
+
+  <tr bgcolor="#CCDDFF">
+    <td colspan="1" nowrap="nowrap" class="smallText2"></td>
+    
+    <td colspan="2" valign="baseline" nowrap="nowrap" class="smallText3" ><div align="left" ><a href="do_interop_data.html" style="color:#000000"><img src="../../njtbxhelp/images/b_prev.gif" alt="previous" width="17" height="17" border="0" align="texttop"/> Demo do_interop_data</a></div></td>
+    <td colspan="3" valign="baseline" nowrap="nowrap" class="smallText3"><div align="right"><a href="do_interop_salt_comp.html" style="color:#000000">Demo do_interop_salt_comp <img src="../../njtbxhelp/images/b_next.gif" alt="Next" width="20" height="17" border="0" align="texttop" class="navText" /></a></div></td>
+    <td width="1" nowrap="nowrap"></td>
+  </tr>
+  <tr bgcolor="#ffffff">
+    <td width="71"><img src="../../njtbxhelp/images/mm_spacer.gif" alt="" width="25" height="1" border="0" /></td>
+    <td colspan="1" valign="top"><img src="../../njtbxhelp/images/mm_spacer.gif" alt="" width="305" height="1" border="0" /><br />
+	&nbsp;<br />
+	&nbsp;<br /><table border="0" cellspacing="0" cellpadding="0" width="744">
+        <tr>
+          <td width="372" class="pageName"><div align="left">Demo do_interop_plot3d</div></td>
+		  <td width="372" class="subHeader"><div align="right"><a href="matlab:echodemo do_interop_plot3d">Run demo in Matlab</a></div></td>
+        </tr>
+
+		<tr>
+          <td colspan="2"><!-- # njTools -->
+          <div class="content">
+         <h2>Contents</h2>
+         <div>
+            <ul>
+               <li><a href="#2">Specify input variables</a></li>
+               <li><a href="#3">Call njTBX functions</a></li>
+               <li><a href="#4">View output data</a></li>
+               <li><a href="#5">Plot data</a></li>
+            </ul>
+         </div><pre class="codeinput"><span class="comment">% DO_INTEROP_PLOT3D: Get a 3D temperature field from different CF-compliant models</span>
+<span class="comment">%</span>
+<span class="comment">% Rich Signell (rsignell@usgs.gov)</span>
+</pre><h2>Specify input variables<a name="2"></a></h2><pre class="codeinput"><span class="comment">% WHOI-ROMS Model Output</span>
+<span class="comment">%uri='http://science.whoi.edu/users/kestons/redtide_2005_hindcast/OUT/avg_gom_0014.nc';</span>
+<span class="comment">%uri='http://coast-enviro.er.usgs.gov/models/whoi/redtide_2005_hindcast/avg_gom_0014.nc';</span>
+<span class="comment">%kbot=1; % bottom level</span>
+
+<span class="comment">% UMAINE-POM Model Output</span>
+<span class="comment">%uri='http://coast-enviro.er.usgs.gov/models/test/umaine_pom.ncml';</span>
+<span class="comment">%kbot=21;  % bottom level</span>
+
+<span class="comment">% UMASSB-ECOM Model Output</span>
+uri=<span class="string">'http://coast-enviro.er.usgs.gov/models/test/umassb_ecom.ncml'</span>;
+kbot=12; <span class="comment">%bottom level</span>
+
+var=<span class="string">'temp'</span>;
+istep=1;
+</pre><h2>Call njTBX functions<a name="3"></a></h2><pre class="codeinput"><span class="comment">% Get Data and Geo-Grid at a particular time step</span>
+
+[t,t_grd] = <a href="../../njtbxhelp/njTools/njFunc/nj_grid_varget.html">nj_grid_varget</a>(uri,var,[istep,kbot,1,1],[1,1,inf,inf]);
+</pre>
+<h2>View output data<a name="4"></a></h2>
+         <p>See what we got:</p><pre class="codeinput">whos <span class="string">t</span>
+t_grd
+</pre><pre class="codeoutput">  Name       Size            Bytes  Class     Attributes
+
+  t         68x68            18496  single              
+
+
+t_grd = 
+
+     lat: [68x68 single]
+     lon: [68x68 single]
+       z: [68x68 double]
+    time: 7.3061e+005
+
+</pre><h2>Plot data<a name="5"></a></h2><pre class="codeinput"><span class="comment">% Plot bottom layer temperature  in 3D</span>
+
+surf(t_grd.lon,t_grd.lat,t_grd.z,double(t));
+set(gca,<span class="string">'DataAspectRatio'</span>,[1 .74 500]); <span class="comment">% for lon,lat in degrees</span>
+view(43,46);
+shading(<span class="string">'interp'</span>);
+colorbar
+camlight <span class="string">headlight</span>
+lighting <span class="string">phong</span>
+figure(gcf)
+</pre><img vspace="5" hspace="5" src="do_interop_plot3d_01.png"> <p class="footer"><br>
+            Published with MATLAB&reg; 7.6<br></p>
+      </div>
+
+
+<br />
+
+</td>
+        </tr>
+      </table></td>
+
+    <td colspan="1" nowrap="nowrap"></td>
+  </tr>
+  <tr bgcolor="#CCDDFF">
+    <td colspan="1" nowrap="nowrap" class="smallText2"></td>
+    
+    <td colspan="2" valign="middle" nowrap="nowrap" class="smallText3"><div align="left"><a href="do_interop_data.html" style="color:#000000"><img src="../../njtbxhelp/images/b_prev.gif" alt="previous" width="17" height="17" border="0" align="texttop" /> Demo do_interop_data</a></div></td>
+    <td colspan="3" valign="middle" nowrap="nowrap" class="smallText3"><div align="right"><a href="do_interop_salt_comp.html" style="color:#000000">Demo do_interop_salt_comp <img src="../../njtbxhelp/images/b_next.gif" alt="Next" width="17" height="17" border="0" align="texttop" /></a></div></td>
+    <td width="1" nowrap="nowrap"></td>
+  </tr> 
+    <tr bgcolor="#003399">
+    <td colspan="1" nowrap="nowrap" class="smallText2">&copy; 2006-2009</td>
+    <td colspan="3" nowrap="nowrap" class="smallText2" >&nbsp;&nbsp;Mississippi State University&nbsp;&nbsp;&nbsp;&bull;&nbsp;<a href="../../njtbxhelp/license.html" style="text-decoration:none; color: #FFFFFF">License Terms</a>&nbsp;&nbsp;&nbsp;&bull;&nbsp;<a href="../../njtbxhelp/credits.html" style="text-decoration:none; color: #FFFFFF">Credits</a></td>
+   
+    <td colspan="2" nowrap="nowrap" class="smallText2"></td>
+    <td width="1" nowrap="nowrap"></td>
+  </tr>
+  
+</table>
+
+</body>
+</html>

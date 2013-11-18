@@ -1,0 +1,129 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<!-- DW6 -->
+<head>
+<!-- Copyright 2005 Macromedia, Inc. All rights reserved. -->
+<title>Netcdf-Java Toolbox for Matlab (njTBX) - Function NJ_TSLICE</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" href="../../njtbx.css" type="text/css" />
+
+<style type="text/css">
+<!--
+.style1 {color: #003399}
+.style2 {
+	font-size: 10px;
+	font-weight: bold;
+}
+-->
+</style>
+</head>
+<body bgcolor="#ffffff">
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr bgcolor="#ffffff">
+    <td width="62" colspan="1" rowspan="1"><div align="center"><img src="../../images/njtbx-icon.png" alt="njtbx-icon" width="35" height="29" align="bottom" /></div></td>
+     <td height="30" colspan="3" align="center" valign="bottom" nowrap="nowrap" class="style1" id="logosmall"><div align="left"><a href="njfunc.html" class="style1">Netcdf-Java Toolbox <img src="../../images/up.png" border="0" align="bottom" /></a></div></td>
+  
+  </tr>
+
+  <tr bgcolor="#CCDDFF">
+    <td colspan="1" nowrap="nowrap" class="smallText2"></td>
+    
+    <td colspan="2" valign="baseline" nowrap="nowrap" class="smallText3" ><div align="left" ><a href="nj_time_index.html" style="color:#000000"><img src="../../images/b_prev.gif" alt="previous" width="17" height="17" border="0" align="texttop"/> Function nj_time_index</a></div></td>
+    <td colspan="3" valign="baseline" nowrap="nowrap" class="smallText3"><div align="right"><a href="nj_varget.html" style="color:#000000">Function nj_varget <img src="../../images/b_next.gif" alt="Next" width="20" height="17" border="0" align="texttop" class="navText" /></a></div></td>
+    <td width="1" nowrap="nowrap"></td>
+  </tr>
+  <tr bgcolor="#ffffff">
+    <td width="71"><img src="../../images/mm_spacer.gif" alt="" width="25" height="1" border="0" /></td>
+    <td colspan="1" valign="top"><img src="../../images/mm_spacer.gif" alt="" width="305" height="1" border="0" /><br />
+	&nbsp;<br />
+	&nbsp;<br /><table border="0" cellspacing="0" cellpadding="0" width="744">
+        <tr>
+          <td width="372" class="pageName"><div align="left">Function  nj_tslice</div></td>
+		  <td width="372" class="subHeader"><div align="right"><a href="matlab:edit(&#0039;nj_tslice&#0039;)">View Source in Matlab</a></div></td>
+        </tr>
+
+		<tr>
+          <td colspan="2"><a name="_top"></a>
+<!-- # njTools --><!-- # njTBX-2.0 --><!-- menu.html @mDataset -->
+<h3><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../images/up.png"></a></h3>
+<div class="box"><strong>NJ_TSLICE - Get data and coordinates from a CF-compliant file at a specific time step and level</strong></div>
+
+<h3><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../images/up.png"></a></h3>
+<div class="box"><strong>function [data,grd]=nj_tslice(ncRef,var,iTime, level) </strong></div>
+
+<h3><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../images/up.png"></a></h3>
+<div class="fragment">
+  <pre class="comment2">NJ_TSLICE - Get data and coordinates from a CF-compliant file at a specific time step and level
+
+ Usage:
+   [data,grd]=nj_tslice(ncRef,var,[iTime], [level]);
+ where,
+   ncRef - Reference to netcdf file. It can be either of two
+           a. local file name or a URL  or
+           b. An 'mDataset' matlab object, which is the reference to already
+              open netcdf file.
+              [ncRef=mDataset(uri)]
+   var - variable to slice
+   iTime - time step to extract data. Specify 'inf' for max value of timestep. 
+   level - vertical level (if not supplied, volume data is retrieved.)
+           Specify 'inf' for max value of level.
+ returns,          
+   data - data  - matlab array       
+          grd   - structure containing lon,lat,z,jdmat (Matlab datenum)         
+ e.g.,
+   uri ='http://coast-enviro.er.usgs.gov/cgi-bin/nph-dods/models/adria/roms_sed/bora_feb.nc';% NetCDF/OpenDAP/NcML file
+   [data,grd]=nj_tslice(uri,'temp',2, 14) - Retrieve data from level 14 at time step 2
+   [data,grd]=nj_tslice(uri,'temp', inf) - Retrieve 3D data for last time step. 
+   [data,grd]=nj_tslice(uri,'h') - Retrieve 2D non time dependent array 
+</pre>
+</div>
+
+
+<!-- crossreference -->
+<h3><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../images/up.png"></a></h3>
+This function makes following<strong> njTBX API</strong> calls:
+<div class="fragment">
+  <ul style="list-style-image:url(../../images/njtbx-small-icon.png)">
+    <li><a href="../../njTools/njTBX-2.0/@mDataset/mDataset.html" class="code" title="function result = mDataset(ncURI)">mDataset</a> mDataset class constructor - opens a netcdf file and creates a grid or netcdf mDataset object.</li>
+    <li><a href="../../njTools/njTBX-2.0/@mDataset/getGeoGridVar.html" class="code" title="function result = getGeoGridVar(mDatasetObj,varName)">getGeoGridVar</a> mDataset/getGeoGridVar - Get variable into a GeoGrid if it has a Georeferencing coordinate system.</li>
+    <li><a href="../../njTools/njTBX-2.0/@mGeoGridVar/getCoordSys.html" class="code" title="function result = getCoordSys(mGeoGridVarObj)">getCoordSys</a> mGeoGridVar/getCoordSys - Get the Grid Coordinate System associated with the referenced GeoGrid</li>
+    <li><a href="../../njTools/njTBX-2.0/@mGeoGridVar/getData.html" class="code" title="function result = getData(mGeoGridVarObj, timeIndex, vertLevelIndex)">getData</a> mGeoGridVar/getData - get the 3D volume data</li>
+    <li><a href="../../njTools/njTBX-2.0/@mGridCoordinates/getTimes.html" class="code" title="function result = getTimes(mGridCoordinatesObj, timeIndex)">getTimes</a> mGridCoordinates/getTimes - Get time(s) in DATENUM format</li>
+    <li><a href="../../njTools/njTBX-2.0/@mGridCoordinates/getVerticalAxis.html" class="code" title="function result = getVerticalAxis(mGridCoordinatesObj, timeIndex, vertLevel)">getVerticalAxis</a> mGridCoordinates/getVerticalAxis - get vertical coordinate data</li>
+    <li><a href="../../njTools/njTBX-2.0/@mVar/getData.html" class="code" title="function result = getData(mVarObj, start, count, stride)">getData</a> mVar/getData - Read data from variable.</li>
+    <li><a href="../../njTools/njTBX-2.0/@mVar/getTimes.html" class="code" title="function result = getTimes(mVarObj, timeIndex)">getTimes</a> mVar/getTimes - Get time(s) in DATENUM format</li>
+    </ul>
+</div>
+ <br />
+See demos using function<strong> nj_tslice</strong>:
+<div class="fragment">
+  <ul style="list-style-image:url(../../images/demoicon.gif)">
+    <li><a href="../../../examples/html/plot_isosurface.html" class="code" title="">plot_isosurface</a> - Plot isosurface at specified time step.</li>
+    </ul>
+</div>
+<br /> <br />
+</td>
+        </tr>
+      </table></td>
+
+    <td colspan="1" nowrap="nowrap"></td>
+  </tr>
+  <tr bgcolor="#CCDDFF">
+    <td colspan="1" nowrap="nowrap" class="smallText2"></td>
+    
+    <td colspan="2" valign="middle" nowrap="nowrap" class="smallText3"><div align="left"><a href="nj_time_index.html" style="color:#000000"><img src="../../images/b_prev.gif" alt="previous" width="17" height="17" border="0" align="texttop" /> Function nj_time_index</a></div></td>
+    <td colspan="3" valign="middle" nowrap="nowrap" class="smallText3"><div align="right"><a href="nj_varget.html" style="color:#000000">Function nj_varget <img src="../../images/b_next.gif" alt="Next" width="17" height="17" border="0" align="texttop" /></a></div></td>
+    <td width="1" nowrap="nowrap"></td>
+  </tr> 
+    <tr bgcolor="#003399">
+    <td colspan="1" nowrap="nowrap" class="smallText2">&copy; 2006-2009</td>
+    <td colspan="3" nowrap="nowrap" class="smallText2" >&nbsp;&nbsp;Mississippi State University&nbsp;&nbsp;&nbsp;&bull;&nbsp;<a href="../../license.html" style="text-decoration:none; color: #FFFFFF">License Terms</a>&nbsp;&nbsp;&nbsp;&bull;&nbsp;<a href="../../credits.html" style="text-decoration:none; color: #FFFFFF">Credits</a></td>
+   
+    <td colspan="2" nowrap="nowrap" class="smallText2"></td>
+    <td width="1" nowrap="nowrap"></td>
+  </tr>
+  
+</table>
+
+</body>
+</html>

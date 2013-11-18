@@ -1,0 +1,25 @@
+--- rsl-v1.43/wsr88d_m31.c	2013-10-29 10:46:30.000000000 -0400
++++ rsl-v1.43/wsr88d_m31_dan.c	2013-10-29 10:53:44.000000000 -0400
+@@ -385,21 +385,21 @@
+     int i, hdr_size;
+     unsigned short item;
+     float value, scale, offset;
+     unsigned char *data;
+     Range (*invf)(float x);
+     float (*f)(Range x);
+     Ray *ray;
+     int vol_index, waveform;
+     char *type_str;
+ 
+-    int keep_hi_prf_dz = 0; /* TODO: implement an interface for this. */
++    int keep_hi_prf_dz = 1; /* TODO: implement an interface for this. */
+ 
+     enum waveforms {surveillance=1, doppler_w_amb_res, doppler_no_amb_res,
+ 	batch};
+ 
+     nfields = wsr88d_ray->ray_hdr.data_block_count - nconstblocks;
+     field_offset = (int *) &wsr88d_ray->ray_hdr.radial_const;
+     do_swap = little_endian();
+     iray = wsr88d_ray->ray_hdr.azm_num - 1;
+ 
+     for (ifield=0; ifield < nfields; ifield++) {
