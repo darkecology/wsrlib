@@ -13,7 +13,7 @@ cajundir = fileparts(mfilename('fullpath'));
 %%%%%%%%%%%%%%%%%%%%%% 
 fprintf('********** Compiling rsl ************\n\n');
 
-status = system(sprintf('make -C %s/rsl2mat/rsl', cajundir), '-echo');
+status = system(sprintf('make -C %s/lib/rsl2mat/rsl', cajundir), '-echo');
 if status ~= 0
     error('Failed to compile rsl');
 end
@@ -23,15 +23,5 @@ fprintf('\n\nSuccessfully compiled rsl\n\n');
 %%%%%%%%%%%%%%%%%%%%%% 
 % rsl2mat
 %%%%%%%%%%%%%%%%%%%%%% 
-addpath(sprintf('%s/rsl2mat', cajundir));
+addpath(sprintf('%s/lib/rsl2mat', cajundir));
 make_rsl2mat();
-
-%%%%%%%%%%%%%%%%%%%%%% 
-% lightspeed
-%%%%%%%%%%%%%%%%%%%%%%
-
-%fprintf('\n\nCompiling lightspeed toolbox\n\n');
-
-%curdir = cd(sprintf('%s/lightspeed/lightspeed', cajundir));
-%install_lightspeed;
-%cd(curdir);
