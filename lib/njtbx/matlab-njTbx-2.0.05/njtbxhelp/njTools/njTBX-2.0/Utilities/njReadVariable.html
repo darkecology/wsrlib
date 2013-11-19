@@ -1,0 +1,52 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of njReadVariable</title>
+  <meta name="keywords" content="njReadVariable">
+  <meta name="description" content="njReadVariable:  Read data from variable">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2003 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<!-- # njTools --><!-- # njTBX-2.0 --><!-- menu.html Utilities -->
+<h1>njReadVariable
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>njReadVariable:  Read data from variable</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function data=njReadVariable(varID,start, count, stride) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> njReadVariable:  Read data from variable 
+ Usage:    u=njReadVariable(varID,start,count,stride);
+   where:  varID = msstate.cstm.data.JVariable%          
+           start = A 1-based array specifying the position in the file to begin reading or corner of a
+                   hyperslab e.g [1 2 1]. Specify 'inf' for last index.
+                   The values specified must not exceed the size of any
+                   dimension of the data set.
+           count = A 1-based array specifying the length of each dimension to read. e.g [6 10 inf]. 
+                   Specify 'inf' to get all the values from start index.
+           stride = A 1-based array specifying the interval between the
+                    values to read. e.g [1 2 2]</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../njTools/njTBX-2.0/@mGeoGridVar/end.html" class="code" title="function result = end(mGeoGridVarObj, k, n)">end</a>	mGeoGridVar/end -- Evaluate "end" as an index. (overloaded method)</li><li><a href="../../../njTools/njTBX-2.0/@mVar/end.html" class="code" title="function result = end(mVarObj, k, n)">end</a>	mVar/end -- Evaluate "end" as an index. (overloaded method)</li><li><a href="parseINF.html" class="code" title="function [start,count, stride]=parseINF(start, count, stride, shape)">parseINF</a>	Utilties/parseINF - Assign 'inf' the correct dimension value</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../njTools/njTBX-2.0/@mVar/getData.html" class="code" title="function result = getData(mVarObj, start, count, stride)">getData</a>	mVar/getData - Read data from variable.</li></ul>
+<!-- crossreference -->
+
+
+
+<hr><address>Generated on Fri 10-Apr-2009 13:39:58 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" target="_parent">m2html</a></strong> &copy; 2003</address>
+</body>
+</html>

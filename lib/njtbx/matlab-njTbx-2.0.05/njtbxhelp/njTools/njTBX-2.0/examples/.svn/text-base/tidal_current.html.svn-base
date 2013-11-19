@@ -1,0 +1,35 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of tidal_current</title>
+  <meta name="keywords" content="tidal_current">
+  <meta name="description" content="Example">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html &copy; 2003 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<!-- # njTools --><!-- # njTBX-2.0 --><!-- menu.html examples -->
+<h1>tidal_current
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>Example</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Example</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../matlabicon.gif)">
+<li><a href="../../../njTools/njTBX-2.0/@mDataset/close.html" class="code" title="function close(mDatasetObj)">close</a>	mDataset/close -- Close the data file associated with a 'mDataset' object.</li><li><a href="../../../njTools/njTBX-2.0/@mDataset/mDataset.html" class="code" title="function result = mDataset(ncURI)">mDataset</a>	mDataset class constructor - opens a netcdf file and creates a grid or netcdf mDataset object.</li></ul>
+<address></address>
+</body>
+</html>

@@ -1,0 +1,103 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<!-- DW6 -->
+<head>
+<!-- Copyright 2005 Macromedia, Inc. All rights reserved. -->
+<title>Netcdf-Java Toolbox for Matlab (njTBX) - Documentation</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" href="njtbx.css" type="text/css" />
+
+<style type="text/css">
+<!--
+.style1 {color: #003399}
+-->
+</style>
+</head>
+<body bgcolor="#ffffff">
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr bgcolor="#ffffff">
+    <td colspan="1" rowspan="2"><div align="center"><img src="images/njtbx-logo.png" alt="njtbx logo" width="71" height="59" /></div></td>
+    <td height="50" colspan="3" align="center" valign="bottom" nowrap="nowrap" class="style1" id="logo"><div align="left">Netcdf-Java Toolbox</div></td>
+    <td width="7">&nbsp;</td>
+  </tr>
+
+  <tr bgcolor="#ffffff">
+    <td height="25" colspan="3" id="tagline" valign="top" align="center"><div align="left">njTBX</div></td>
+	<td width="7">&nbsp;</td>
+  </tr>
+
+  <tr>
+    <td colspan="7" bgcolor="#003399"><img src="images/mm_spacer.gif" alt="" width="1" height="2" border="0" /></td>
+  </tr>
+
+
+
+  <tr bgcolor="#003399">
+  	<td colspan="7" id="dateformat" height="20"></td>
+  </tr>
+
+
+  <tr>
+    <td colspan="7" bgcolor="#003399"><img src="images/mm_spacer.gif" alt="" width="1" height="2" border="0" /></td>
+  </tr>
+
+ <tr>
+
+    <td width="71"><img src="images/mm_spacer.gif" alt="" width="25" height="1" border="0" /></td>
+    <td colspan="1" valign="top"><img src="images/mm_spacer.gif" alt="" width="305" height="1" border="0" /><br />
+	&nbsp;<br />
+	&nbsp;<br />
+	<table border="0" cellspacing="0" cellpadding="0" width="305">
+        <tr>
+          <td class="pageName">INTRODUCTION</td>
+		</tr>
+
+		<tr>
+          <td class="bodyText"><p>The NJ toolbox (njTBX)  was developed to make it easier for Matlab&copy; users to harness the power of the <a href="http://www.unidata.ucar.edu/software/netcdf-java/" target="_blank" class="style1">NetCDF-Java Library</a> from Unidata.</p>
+<p><strong>njTBX does more than just read Netcdf files!</strong>  </p>
+<p>By implementing a Common Data Model (a generalization of the NetCDF,  OpenDAP and HDF5 data models) it can read both local and remote  NetCDF-3 and NetCDF-4 files, data from OPeNDAP and ADDE servers, as  well as GRIB, GRIB2, HDF4, HDF5, BUFR, URF and TDWR files. It can also  read “virtual datasets” constructed using the NetCDF Markup Language.  Thus njTBX complements and extends both the older ncmex-based toolkits  as well as the newer Matlab 2008b+ built-in toolbox for NetCDF.</p>
+<p>NetCDF-Java also has specialized high level methods for data that can  be understood as belonging to a specific “Scientific Feature Type”,  such as “grid”, “radial”, “trajectory” and “point” data. These high  level methods can be used, for example, to return geospatial coordinate  data (lon, lat, z and time) from “grid data” (uniform, rectilinear, or  curvilinear horizontal coordinates, and fixed level or  terrain-following vertical coordinates), which allows access to a  variety of local and remote bathymetry, remote sensing, atmospheric and  oceanic modeling results. </p>
+<p>njTBX uses only Java and M-files, thus should work on any version of Matlab that supports Java (Matlab 6.5 and later) and on any platform.</p>		</td>
+        </tr>
+      </table>
+	</td>
+
+        <td width="244" valign="top"><br />
+		&nbsp;<br />
+		<table border="0" cellspacing="0" cellpadding="0" width="190" id="leftcol">
+
+	   <tr>
+       <td width="10"><img src="images/mm_spacer.gif" alt="" width="10" height="1" border="0" /></td>
+		<td width="170" class="smallText"><br />
+			<p><span class="subHeader"><a href="getting_started.html">Getting Started</a></span><br />
+			Environment setup and overview of njTBX functionality.</p>
+
+			<p><span class="subHeader"><a href="njTools/userguide/user_guide.html">User Guide</a></span><br />
+			Using the njTBX library to create custom scripts or functions.</p>
+
+			<p><span class="subHeader"><a href="apidoc.html">njTBX Library</a></span><br />
+			API documentation.</p>
+             
+             <p><span class="subHeader"><a href="../examples/html/demos.html">Demos</a></span><br />
+			Examples of njTBX library usage.</p>
+
+			 <br />
+			&nbsp;<br />          </td>
+         <td width="10">&nbsp;</td>
+        </tr>
+      </table>	</td>
+	<td width="357">&nbsp;</td>
+  </tr>
+  <tr bgcolor="#003399">
+    <td width="71" class="smallText2"><div align="right">&copy; 2006-2009</div></td>
+    <td width="307" class="smallText2">&nbsp;&nbsp;Mississippi State University&nbsp;&nbsp;&nbsp;&bull;&nbsp;<a href="license.html" style="text-decoration:none; color: #FFFFFF">License Terms</a>&nbsp;&nbsp;&nbsp;&bull;&nbsp;<a href="credits.html" style="text-decoration:none; color: #FFFFFF">Credits</a></td>
+    <td width="244">&nbsp;</td>
+    <td width="357">&nbsp;</td>
+    <td width="7">&nbsp;</td>
+    <td width="4">&nbsp;</td>
+	<td width="11">&nbsp;</td>
+  </tr>
+</table>
+
+</body>
+</html>

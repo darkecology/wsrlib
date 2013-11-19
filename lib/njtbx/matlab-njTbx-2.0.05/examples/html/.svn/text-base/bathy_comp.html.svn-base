@@ -1,0 +1,142 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<!-- DW6 -->
+<head>
+<!-- Copyright 2005 Macromedia, Inc. All rights reserved. -->
+<title>Netcdf-Java Toolbox for Matlab (njTBX) - Demo bathy_comp</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" href="../../njtbxhelp/njtbx.css" type="text/css" />
+
+<style type="text/css">
+<!--
+.style1 {color: #003399}
+-->
+</style>
+
+
+
+ 
+</head>
+<body bgcolor="#ffffff">
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr bgcolor="#ffffff">
+    <td width="62" colspan="1" rowspan="1"><div align="center"><img src="../../njtbxhelp/images/njtbx-icon.png" alt="njtbx-icon" width="35" height="29" align="bottom" /></div></td>
+    <td height="30" colspan="3" align="center" valign="bottom" nowrap="nowrap" class="style1" id="logosmall"><div align="left"><a href="demos.html" class="style1">Netcdf-Java Toolbox <img src="../../njtbxhelp/images/up.png" border="0" align="bottom" /></a></div></td>
+  
+  </tr>
+
+ 
+
+ 
+
+  
+
+
+  <tr bgcolor="#CCDDFF">
+    <td colspan="1" nowrap="nowrap" class="smallText2"></td>
+    
+    <td colspan="2" valign="baseline" nowrap="nowrap" class="smallText3" ><div align="left" ><a href="demos.html" style="color:#000000"><img src="../../njtbxhelp/images/b_prev.gif" alt="previous" width="17" height="17" border="0" align="texttop"/> Demos</a></div></td>
+    <td colspan="3" valign="baseline" nowrap="nowrap" class="smallText3"><div align="right"><a href="do_interop_bot_temp.html" style="color:#000000">Demo do_interop_bot_temp <img src="../../njtbxhelp/images/b_next.gif" alt="Next" width="20" height="17" border="0" align="texttop" class="navText" /></a></div></td>
+    <td width="1" nowrap="nowrap"></td>
+  </tr>
+  <tr bgcolor="#ffffff">
+    <td width="71"><img src="../../njtbxhelp/images/mm_spacer.gif" alt="" width="25" height="1" border="0" /></td>
+    <td colspan="1" valign="top"><img src="../../njtbxhelp/images/mm_spacer.gif" alt="" width="305" height="1" border="0" /><br />
+	&nbsp;<br />
+	&nbsp;<br /><table border="0" cellspacing="0" cellpadding="0" width="744">
+        <tr>
+          <td width="372" class="pageName"><div align="left">Demo bathy_comp</div></td>
+		  <td width="372" class="subHeader"><div align="right"><a href="matlab:echodemo bathy_comp">Run demo in Matlab</a></div></td>
+        </tr>
+
+		<tr>
+          <td colspan="2"><!-- # njTools -->
+          
+                 <div class="content">
+         <h2>Contents</h2>
+         <div>
+            <ul>
+               <li><a href="#2">Specify input variables</a></li>
+               <li><a href="#3">Call njTBX functions</a></li>
+               <li><a href="#4">Plot data</a></li>
+            </ul>
+         </div><pre class="codeinput"><span class="comment">% BATHY_COMP - plot comparison between two bathymetry datasets</span>
+<span class="comment">%</span>
+<span class="comment">%   uri1 = URI of CF-compliant bathymetry (NetCDF file, OpenDAP)</span>
+<span class="comment">%   uri2 = URI of CF-compliant bathymetry</span>
+<span class="comment">%   ax   = bounding box [lon_min lon_max lat_min lat_max]</span>
+<span class="comment">%                  (decimal degrees east and north)</span>
+<span class="comment">%   cax =  color range [cmin cmax]  (defaults to full range)</span>
+<span class="comment">%</span>
+<span class="comment">% e.g,</span>
+<span class="comment">%   uri1='http://coast-enviro.er.usgs.gov/thredds/dodsC/bathy/srtm30plus_v1.nc';</span>
+<span class="comment">%   uri2='http://coast-enviro.er.usgs.gov/thredds/dodsC/bathy/srtm30plus_v3.nc';</span>
+<span class="comment">%   ax=[-71 -70 41 42];</span>
+<span class="comment">%   cax=[-100 0];</span>
+<span class="comment">%</span>
+<span class="comment">% See: http://coast-enviro.er.usgs.gov/thredds/bathy_catalog.html</span>
+<span class="comment">% for more bathymetry datasets</span>
+<span class="comment">%</span>
+<span class="comment">% rsignell@usgs.gov (28-Apr-2008)</span>
+</pre><h2>Specify input variables<a name="2"></a></h2><pre class="codeinput">  uri1=<span class="string">'http://coast-enviro.er.usgs.gov/thredds/dodsC/bathy/smith_sandwell_v11'</span>;
+  uri2=<span class="string">'http://coast-enviro.er.usgs.gov/thredds/dodsC/bathy/etopo1_bed_g2'</span>;
+  ax=[-71 -70 41 42];
+  cax=[-100 0];
+</pre><h2>Call njTBX functions<a name="3"></a></h2><pre class="codeinput">[h1,g1]=nj_subsetGrid(uri1,<span class="string">'topo'</span>,ax);
+[h2,g2]=nj_subsetGrid(uri2,<span class="string">'topo'</span>,ax);
+</pre><h2>Plot data<a name="4"></a></h2><pre class="codeinput">clf;set(gcf,<span class="string">'color'</span>,<span class="string">'white'</span>);
+ax1=axes(<span class="string">'pos'</span>,[.1 .1 .35 .8]);
+pcolorjw(g1.lon,g1.lat,double(h1));dasp(mean(g1.lat(:)));
+set(gca,<span class="string">'tickdir'</span>,<span class="string">'out'</span>);
+caxis(cax);
+ii=strfind(uri1,<span class="string">'/'</span>);
+<span class="keyword">if</span> ~isempty(ii),
+   title(uri1(ii(end)+1:end),<span class="string">'interpreter'</span>,<span class="string">'none'</span>);
+<span class="keyword">else</span>
+    title(uri1,<span class="string">'interpreter'</span>,<span class="string">'none'</span>);
+<span class="keyword">end</span>
+ax2=axes(<span class="string">'pos'</span>,[.5 .1 .35 .8]);
+pcolorjw(g2.lon,g2.lat,double(h2));dasp(mean(g2.lat(:)));
+set(gca,<span class="string">'tickdir'</span>,<span class="string">'out'</span>);
+set(gca,<span class="string">'yticklabel'</span>,<span class="string">' '</span>);
+caxis(cax);
+ii=strfind(uri2,<span class="string">'/'</span>);
+<span class="keyword">if</span> ~isempty(ii),
+   title(uri2(ii(end)+1:end),<span class="string">'interpreter'</span>,<span class="string">'none'</span>);
+<span class="keyword">else</span>
+    title(uri2,<span class="string">'interpreter'</span>,<span class="string">'none'</span>);
+<span class="keyword">end</span>
+pclegend(cax',[.95 .3 .02 .4],gcf,<span class="string">'m'</span>);
+</pre><img vspace="5" hspace="5" src="bathy_comp_01.png"> <p class="footer"><br>
+            Published with MATLAB&reg; 7.6<br></p>
+      </div>
+
+
+
+<br />
+
+</td>
+        </tr>
+      </table></td>
+
+    <td colspan="1" nowrap="nowrap"></td>
+  </tr>
+  <tr bgcolor="#CCDDFF">
+    <td colspan="1" nowrap="nowrap" class="smallText2"></td>
+    
+    <td colspan="2" valign="middle" nowrap="nowrap" class="smallText3"><div align="left"><a href="demos.html" style="color:#000000"><img src="../../njtbxhelp/images/b_prev.gif" alt="previous" width="17" height="17" border="0" align="texttop" /> Demos</a></div></td>
+    <td colspan="3" valign="middle" nowrap="nowrap" class="smallText3"><div align="right"><a href="do_interop_bot_temp.html" style="color:#000000">Demo do_interop_bot_temp <img src="../../njtbxhelp/images/b_next.gif" alt="Next" width="17" height="17" border="0" align="texttop" /></a></div></td>
+    <td width="1" nowrap="nowrap"></td>
+  </tr> 
+    <tr bgcolor="#003399">
+    <td colspan="1" nowrap="nowrap" class="smallText2">&copy; 2006-2009</td>
+    <td colspan="3" nowrap="nowrap" class="smallText2" >&nbsp;&nbsp;Mississippi State University&nbsp;&nbsp;&nbsp;&bull;&nbsp;<a href="../../njtbxhelp/license.html" style="text-decoration:none; color: #FFFFFF">License Terms</a>&nbsp;&nbsp;&nbsp;&bull;&nbsp;<a href="../../njtbxhelp/credits.html" style="text-decoration:none; color: #FFFFFF">Credits</a></td>
+   
+    <td colspan="2" nowrap="nowrap" class="smallText2"></td>
+    <td width="1" nowrap="nowrap"></td>
+  </tr>
+  
+</table>
+
+</body>
+</html>

@@ -1,0 +1,583 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<!-- DW6 -->
+<head>
+<!-- Copyright 2005 Macromedia, Inc. All rights reserved. -->
+<title>Netcdf-Java Toolbox for Matlab (njTBX) - User Guide</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" href="../../njtbx.css" type="text/css" />
+
+<style type="text/css">
+<!--
+.style1 {color: #003399}
+-->
+</style>
+</head>
+<body bgcolor="#ffffff">
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr bgcolor="#ffffff">
+    <td width="62" colspan="1" rowspan="1"><div align="center"><img src="../../images/njtbx-icon.png" alt="njtbx-icon" width="35" height="29" align="bottom" /></div></td>
+    <td height="30" colspan="3" align="center" valign="bottom" nowrap="nowrap" class="style1" id="logosmall"><div align="left"><a href="../../getting_started.html" class="style1">Netcdf-Java Toolbox <img src="../../images/up.png" border="0" align="bottom" /></a></div></td>
+  
+  </tr>
+
+ <tr bgcolor="#CCDDFF">
+    <td colspan="1" nowrap="nowrap" class="smallText2"></td>
+    
+    <td colspan="2" valign="baseline" nowrap="nowrap" class="smallText3"><div align="left"><a href="../../Simple_examples.html" style="color:#000000"><img src="../../images/b_prev.gif" alt="previous" width="17" height="17" border="0" align="texttop" /> Quick Tutorial</a></div></td>
+    
+    <td colspan="3" valign="baseline" nowrap="nowrap" class="smallText3"><div align="right"><a href="../njFunc/njfunc.html" style="color:#000000">NJ Functions <img src="../../images/b_next.gif" alt="Next" width="17" height="17" border="0" align="texttop" class="navText" /></a></div></td>
+    <td width="1" nowrap="nowrap"></td>
+  </tr>
+  <tr bgcolor="#ffffff">
+    <td width="71"><img src="../../images/mm_spacer.gif" alt="" width="25" height="1" border="0" /></td>
+    <td colspan="1" valign="top"><img src="../../images/mm_spacer.gif" alt="" width="305" height="1" border="0" /><br />
+	&nbsp;<br />
+	&nbsp;<br /><table border="0" cellspacing="0" cellpadding="0" width="880">
+        <tr>
+          <td width="880" class="pageName">User Guide</td>
+		</tr>
+
+		<tr>
+          <td class="bodyText">
+            In the segments below, you will find help on how to create dataset and variable objects, extract data and grid information, and much more. There are three different ways user can extract data and grid information using NJ toolbox (njTBX).  First, making calls to njTBX API, second, accessing data using subscripted refrencing, and third, using high level convenience functions based on njTBX API.
+              The scenarios shown below  describe different ways of using NJ toolbox.
+              <br />
+            
+                       
+            <p class="subHeader2">Scenarios</p>
+            <ul>
+             <li>Accessing API </li>
+             <ul>
+              <li><a href="#create-mdataset">Create a Dataset (mDataset) object and check available methods.</a></li>
+              <li><a href="#create-mgeogridvar">Create a grid variable (mGeoGridVar) object,  extract data and grid infromation.</a></li>
+              <li><a href="#create-mvar">Create a variable (mVar) object and get  attributes associated with the variable.</a></li>
+              <li><a href="#create-gridcoord">Create a Grid Coordinates (mGridCoordinates) object.</a></li>
+              <li><a href="#display-info">Quick display of netcdf data information.</a></li>
+               <li><a href="#subset-grid">Subset a  grid variable based on start, count and stride specifications. </a></li>
+              <li><a href="#extract-time">Extract time values for a variable in matlab datenum format.</a></li> 
+             </ul>
+             <li>Using subscripted refrencing</li>
+             <ul>
+             <li><a href="#array-indexing">Extract variable data using matlab subscripted referencing.</a></li>
+              <li><a href="#grid-array-indexing">Extract gridded-variable data and grid information using matlab subscripted referencing without creating geogrid variable object.</a></li>
+              <li><a href="#attr-indexing">Retrieve specific global and variable attribute value using matlab subscripted referencing.</a></li>              
+             </ul>
+             <li>Using convenience functions</li> 
+             <ul>
+             <li><a href="#nj_attget">Get global and variable attributes.</a></li>
+              <li><a href="#nj_time">Get time values for a variable from any CF-compliant file.</a></li>
+             </ul>            
+            </ul>
+            <ul>
+             
+              
+             
+               
+            </ul>
+            <hr />
+            
+            <!-- Start ordered list from here -->
+                
+                    <ul>
+                        <li id="create-mdataset"><strong>Create a Dataset (mDataset) object and check available methods.</strong>&nbsp;<a href="user_guide.html"><img src="../../images/up.png" border="0" /></a></li>
+                            
+              <ul>
+                                <li>Specify data location. The data location can be local or remote (e.g http, thredds, dods). Note: If working offline, then set 'ncRef' to use file 'examples/data/bora_feb.nc'.</li> 
+                                	<pre class="codeinput">&gt;&gt; ncRef = 'http://coast-enviro.er.usgs.gov/cgi-bin/nph-dods/models/test/bora_feb.nc'</pre>           
+                                <li>Call <a href="../njTBX-2.0/@mDataset/mDataset.html">mDataset</a> class contructor.</li>
+                                	<pre class="codeinput">&gt;&gt; ncObj =  <a href="../njTBX-2.0/@mDataset/mDataset.html">mDataset</a>(ncRef) 
+ncObj = 
+              URI:  'http://coast-enviro.er.usgs.gov/cgi-bin/nph-dods/models/test/bora_feb.nc'
+         numGrids: 19
+    numDimensions: 12
+     numVariables: 80</pre>
+                                <li>Use 'whos' command to see class type for 'njObj' dataset object.</li>
+                                	<pre class="codeinput">&gt;&gt; whos                  
+    Name        Size            Bytes  Class        Attributes
+    ncObj       1x1               934   mDataset              
+    ncRef       1x72              144   char </pre>
+                                <li>Check available methods.</li>
+                                	<pre class="codeinput">&gt;&gt; methods(ncObj)
+ Methods for class  mDataset:
+ close   display   <a href="../njTBX-2.0/@mDataset/getAttributes.html">getAttributes</a>  <a href="../njTBX-2.0/@mDataset/getGeoGridVar.html">getGeoGridVar</a>   <a href="../njTBX-2.0/@mDataset/getInfo.html">getInfo</a>   <a href="../njTBX-2.0/@mDataset/getJDataset.html">getJDataset</a>    <a href="../njTBX-2.0/@mDataset/getVar.html">getVar</a>    <a href="../njTBX-2.0/@mDataset/mDataset.html">mDataset</a>       numel    subsref</pre>
+ 
+                                    <span class="subHeader2">See functions </span>
+                                    <a href="../njFunc/nj_varget.html">nj_varget</a> &nbsp;<a href="../njFunc/nj_tslice.html">nj_tslice</a>&nbsp;<a href="../njFunc/nj_grid_varget.html">nj_grid_varget</a>                                    
+                                    
+                      </ul><br />
+                            
+                        <li id="create-mgeogridvar"><strong>Create a grid variable (mGeoGridVar) object,  extract data and grid infromation.</strong>&nbsp;<a href="user_guide.html"><img src="../../images/up.png" border="0" /></a></li>
+                                                        <ul>
+                                <li>Specify data location. The data location can be local or remote (e.g http, thredds, dods). Note: If working offline, then set 'ncRef' to use file 'examples/data/bora_feb.nc'.</li> 
+                                	<pre class="codeinput">&gt;&gt; ncRef = 'http://coast-enviro.er.usgs.gov/cgi-bin/nph-dods/models/test/bora_feb.nc'</pre>           
+                                <li>Call <a href="../njTBX-2.0/@mDataset/mDataset.html">mDataset</a> class contructor to create mDataset object.</li>
+                                	<pre class="codeinput">&gt;&gt; ncObj =  <a href="../njTBX-2.0/@mDataset/mDataset.html">mDataset</a>(ncRef) 
+ncObj = 
+              URI:  'http://coast-enviro.er.usgs.gov/cgi-bin/nph-dods/models/test/bora_feb.nc'
+         numGrids: 19
+    numDimensions: 12
+     numVariables: 80</pre> 
+                                <li>Set variable 'var = temp'. Call mDataset method 'getGeoGridVar' to create a grid variable object 'mGeoGridVar'.</li>
+                                	<pre class="codeinput">&gt;&gt; var = 'temp';
+&gt;&gt; gVarObj = <a href="../njTBX-2.0/@mDataset/getGeoGridVar.html">getGeoGridVar</a>(ncObj, var) 
+gVarObj = 
+      Variable: 'temp'
+    Dimensions: '[   ocean_time = UNLIMITED;   // (8 currently),    s_rho = 20;,    eta_rho = 60;,    xi_rho = 160;]'</pre>           
+                                <li>Use 'whos' command to see class type for 'gVarObj' grid variable object.</li>
+                                	<pre class="codeinput">&gt;&gt; whos                  
+    Name        Size            Bytes  Class        Attributes
+   gVarObj      1x1               660  mGeoGridVar              
+   ncObj        1x1               934  mDataset                 
+   ncRef        1x72              144  char                     
+   var          1x4                 8  char</pre>
+                                <li>Check available methods.</li>
+                                	<pre class="codeinput">&gt;&gt; methods(gVarObj)
+Methods for class mGeoGridVar:
+display           <a href="../njTBX-2.0/@mGeoGridVar/getAttributes.html">getAttributes</a>     <a href="../njTBX-2.0/@mGeoGridVar/getData.html">getData</a>           <a href="../njTBX-2.0/@mGeoGridVar/getShape.html">getShape</a>          <a href="../njTBX-2.0/@mGeoGridVar/subsetGeoGridVar.html">subsetGeoGridVar</a>  
+end               <a href="../njTBX-2.0/@mGeoGridVar/getCoordSys.html">getCoordSys</a>       <a href="../njTBX-2.0/@mGeoGridVar/getGrid.html">getGrid</a>           <a href="../njTBX-2.0/@mGeoGridVar/mGeoGridVar.html">mGeoGridVar</a>       subsref</pre>
+                                <li>Extract data for 1st time step.</li>
+                                	<pre class="codeinput">&gt;&gt; timeStep = 1;
+&gt;&gt; varData = <a href="../njTBX-2.0/@mGeoGridVar/getData.html">getData</a>(gVarObj, timeStep);
+&gt;&gt; whos varData
+  Name          Size                 Bytes  Class     Attributes
+  varData      20x60x160            768000  single</pre>
+ 	                <li> Get associated grid data (i.e lat, lon and time)</li>            
+            
+                <pre class="codeinput">&gt;&gt; varGrid = <a href="../njTBX-2.0/@mGeoGridVar/getGrid.html">getGrid</a>(gVarObj);
+&gt;&gt; varGrid
+varGrid = 
+     lat: [60x160 double]
+     lon: [60x160 double]
+       z: [4-D double]
+    time: [7.3162e+005 7.3162e+005 7.3163e+005 7.3163e+005 7.3163e+005 7.3163e+005 7.3163e+005 7.3163e+005]
+&gt;&gt; whos varGrid
+  Name         Size               Bytes  Class     Attributes
+  varGrid      1x1             12442160  struct</pre>
+                                    <span class="subHeader2">See functions</span>&nbsp;&nbsp;<a href="../njFunc/nj_grid_varget.html">nj_grid_varget</a> &nbsp; <a href="../njFunc/nj_subsetGrid.html">nj_subsetGrid </a>                                  
+                                                        </ul>
+                                                        <br />
+                             
+                        <li id="create-mvar"><strong>Create a  variable (mVar) object,  and get  atttributes associated with the variable.</strong>&nbsp;<a href="user_guide.html"><img src="../../images/up.png" border="0" /></a></li>
+                        <ul>
+                                                    <li>Specify data location. The data location can be local or remote (e.g http, thredds, dods). Note: If working offline, then set 'ncRef' to use file 'examples/data/bora_feb.nc'.</li> 
+                                	<pre class="codeinput">&gt;&gt; ncRef = 'http://coast-enviro.er.usgs.gov/cgi-bin/nph-dods/models/test/bora_feb.nc'</pre>           
+                                <li>Call <a href="../njTBX-2.0/@mDataset/mDataset.html">mDataset</a> class contructor to create mDataset object.</li>
+                                	<pre class="codeinput">&gt;&gt; ncObj =  <a href="../njTBX-2.0/@mDataset/mDataset.html">mDataset</a>(ncRef) 
+ncObj = 
+              URI:  'http://coast-enviro.er.usgs.gov/cgi-bin/nph-dods/models/test/bora_feb.nc'
+         numGrids: 19
+    numDimensions: 12
+     numVariables: 80</pre> 
+                    <li>Set variable 'var = temp'. Call mDataset method 'getVar' or use subscripted reference to create a  variable object 'mVar'.</li>
+                      <pre class="codeinput">&gt;&gt; var = 'temp';
+&gt;&gt; varObj = <a href="../njTBX-2.0/@mDataset/getVar.html">getVar</a>(ncObj, var) 
+or
+&gt;&gt; varObj = ncObj{var}
+
+varObj = 
+   float temp(ocean_time=8, s_rho=20, eta_rho=60, xi_rho=160);
+     :long_name = "averaged potential temperature";
+     :units = "Celsius";
+     :time = "ocean_time";
+     :coordinates = "lat_rho lon_rho";
+     :field = "temperature, scalar, series";</pre>            
+                <li>Use 'whos' command to see class type for 'varObj' variable object.</li>
+                  <pre class="codeinput">&gt;&gt; whos                  
+    Name        Size            Bytes  Class        Attributes
+   gVarObj      1x1               660  mGeoGridVar              
+   ncObj        1x1               934  mDataset                 
+   ncRef        1x72              144  char                     
+   var          1x4                 8  char
+   varObj       1x1               652  mVar</pre>
+                
+                <li>Check available methods </li>         
+                <pre class="codeinput">&gt;&gt; methods(varObj)
+Methods for class mVar:
+display     end     <a href="../njTBX-2.0/@mVar/getAttributes.html">getAttributes</a>  <a href="../njTBX-2.0/@mVar/getData.html">getData</a>       <a href="../njTBX-2.0/@mVar/getShape.html"> getShape</a>       <a href="../njTBX-2.0/@mVar/getTimes.html">getTimes</a>       <a href="../njTBX-2.0/@mVar/isGridded.html">isGridded </a>    <a href="../njTBX-2.0/@mVar/mVar.html"> mVar</a>    subsref</pre>
+              
+                <li>Use method 'getAttributes' to retrieve variable attributes.</li>         
+                <pre class="codeinput">&gt;&gt; varAttr = <a href="../njTBX-2.0/@mVar/getAttributes.html">getAttributes</a>(varObj)
+varAttr = 
+          field: 'temperature, scalar, series'
+           time: 'ocean_time'
+      long_name: 'averaged potential temperature'
+    coordinates: 'lat_rho lon_rho'
+          units: 'Celsius'</pre>
+ 
+                                    <span class="subHeader2">See functions </span>
+                                    <a href="../njFunc/nj_varget.html">nj_varget</a> &nbsp;<a href="../njFunc/nj_attget.html">nj_attget</a>
+                        </ul>
+                        <br />
+                            
+                        <li id="create-gridcoord"><strong>Create a grid coordinates (mGridCoordinates) object.</strong>&nbsp;<a href="user_guide.html"><img src="../../images/up.png" border="0" /></a></li>
+                        	  <ul>
+                                <li>Specify data location. The data location can be local or remote (e.g http, thredds, dods). Note: If working offline, then set 'ncRef' to use file 'examples/data/bora_feb.nc'.</li> 
+                                	<pre class="codeinput">&gt;&gt; ncRef = 'http://coast-enviro.er.usgs.gov/cgi-bin/nph-dods/models/test/bora_feb.nc'</pre>           
+                                <li>Call <a href="../njTBX-2.0/@mDataset/mDataset.html">mDataset</a> class contructor to create mDataset object.</li>
+                                	<pre class="codeinput">&gt;&gt; ncObj =  <a href="../njTBX-2.0/@mDataset/mDataset.html">mDataset</a>(ncRef) 
+ncObj = 
+              URI:  'http://coast-enviro.er.usgs.gov/cgi-bin/nph-dods/models/test/bora_feb.nc'
+         numGrids: 19
+    numDimensions: 12
+     numVariables: 80</pre> 
+                                <li>Set variable 'var = temp'. Call mDataset method 'getGeoGridVar' to create a grid variable object 'mGeoGridVar'.</li>
+                                	<pre class="codeinput">&gt;&gt; var = 'temp';
+&gt;&gt; gVarObj = <a href="../njTBX-2.0/@mDataset/getGeoGridVar.html">getGeoGridVar</a>(ncObj, var) 
+gVarObj = 
+      Variable: 'temp'
+    Dimensions: '[   ocean_time = UNLIMITED;   // (8 currently),    s_rho = 20;,    eta_rho = 60;,    xi_rho = 160;]'</pre>
+                    <li>Call method 'getCoordSys'.</li>
+                      <pre class="codeinput">&gt;&gt; gridCoordObj = <a href="../njTBX-2.0/@mGeoGridVar/getCoordSys.html">getCoordSys</a>(gVarObj) 
+gridCoordObj = 
+            Grid: 'temp'
+        TimeAxis: 'Yes'
+    VerticalAxis: 'Yes'
+        DateTime: 'Yes'
+&gt;&gt; whos gridCoordObj
+  Name              Size            Bytes  Class               Attributes
+  gridCoordObj      1x1              1316  mGridCoordinates</pre>                                                
+                            </ul>
+                        	  <br />
+                            
+                        <li id="display-info"><strong>Quick display of netcdf data information.</strong>&nbsp;<a href="user_guide.html"><img src="../../images/up.png" border="0" /></a></li>
+<ul>
+                                                    <li>Specify data location. The data location can be local or remote (e.g http, thredds, dods). Note: If working offline, then set 'ncRef' to use file 'examples/data/bora_feb.nc'.</li> 
+                                	<pre class="codeinput">&gt;&gt; ncRef = 'http://coast-enviro.er.usgs.gov/cgi-bin/nph-dods/models/test/bora_feb.nc'</pre>           
+                                <li>Call <a href="../njTBX-2.0/@mDataset/mDataset.html">mDataset</a> class contructor.</li>
+                                	<pre class="codeinput">&gt;&gt; ncObj =  <a href="../njTBX-2.0/@mDataset/mDataset.html">mDataset</a>(ncRef) 
+ncObj = 
+              URI:  'http://coast-enviro.er.usgs.gov/cgi-bin/nph-dods/models/test/bora_feb.nc'
+         numGrids: 19
+    numDimensions: 12
+     numVariables: 80</pre>
+                <li>Call method 'getInfo'.</li> 
+                      <pre class="codeinput">&gt;&gt; info = <a href="../njTBX-2.0/@mDataset/getInfo.html">getInfo</a>(ncObj)
+info =
+Gridset 0 coordSys=(ocean_time lat_v lon_v) t=ocean_time,y=lat_v,x=lon_v,  Projection: LatLon LLbb= ll: 40.04N 11.48E+ ur: 46.05N 20.12E
+Name___________Unit___________hasMissing_____Description
+AKs            meter2 second-1 false    averaged salinity vertical diffusion coefficient
+AKt            meter2 second-1 false    averaged temperature vertical diffusion coefficient
+.......
+.......
+GeoReferencing Coordinate Axes
+Name___________Len__Unit________________Type___Description
+lat_psi 9381 degree_north type=Lat latitude of PSI-points
+lat_rho 9600 degree_north type=Lat latitude of RHO-points
+........
+........
+netcdf dods://coast-enviro.er.usgs.gov/cgi-bin/nph-dods/models/test/bora_feb.nc {
+ dimensions:
+   ocean_time = UNLIMITED;   // (8 currently)
+   s_w = 21;
+   eta_rho = 60;
+   xi_rho = 160;
+.....
+......
+</pre>
+ 
+                <span class="subHeader2">See functions </span>
+                <a href="../njFunc/nj_info.html">nj_info</a>                                    
+                                    
+                      </ul><br />
+                            
+                      <li id="array-indexing"><strong>Extract variable data using matlab subscripted referencing.</strong>&nbsp;<a href="user_guide.html"><img src="../../images/up.png" border="0" /></a></li>
+                        	  <ul>
+                                                    <li>Specify data location. The data location can be local or remote (e.g http, thredds, dods). Note: If working offline, then set 'ncRef' to use file 'examples/data/bora_feb.nc'.</li> 
+                                	<pre class="codeinput">&gt;&gt; ncRef = 'http://coast-enviro.er.usgs.gov/cgi-bin/nph-dods/models/test/bora_feb.nc'</pre>           
+                                <li>Call <a href="../njTBX-2.0/@mDataset/mDataset.html">mDataset</a> class contructor to create mDataset object.</li>
+                                	<pre class="codeinput">&gt;&gt; ncObj =  <a href="../njTBX-2.0/@mDataset/mDataset.html">mDataset</a>(ncRef) 
+ncObj = 
+              URI:  'http://coast-enviro.er.usgs.gov/cgi-bin/nph-dods/models/test/bora_feb.nc'
+         numGrids: 19
+    numDimensions: 12
+     numVariables: 80</pre> 
+                    <li>Set variable 'var = temp'. Call mDataset method 'getVar' or use subscripted reference to create a  variable object 'mVar'.</li>
+                      <pre class="codeinput">&gt;&gt; var = 'temp';
+&gt;&gt; varObj = <a href="../njTBX-2.0/@mDataset/getVar.html">getVar</a>(ncObj, var) 
+or
+&gt;&gt; varObj = ncObj{var}
+
+varObj = 
+   float temp(ocean_time=8, s_rho=20, eta_rho=60, xi_rho=160);
+     :long_name = "averaged potential temperature";
+     :units = "Celsius";
+     :time = "ocean_time";
+     :coordinates = "lat_rho lon_rho";
+     :field = "temperature, scalar, series";</pre>
+                    <li>Check variable shape, and apply subscripted referencing on the variable object to get data as shown below.</li>
+                      <pre class="codeinput">&gt;&gt;  shape = <a href="../njTBX-2.0/@mVar/getShape.html">getShape</a>(varObj)
+shape =
+     8    20    60   160
+
+&gt;&gt; varData = varObj(1,2:2:20,1:59,4:end);
+&gt;&gt; whos varData
+  Name          Size                 Bytes  Class     Attributes
+  varData      10x59x157            370520  single              
+</pre>
+                    
+                <li>One can also extract variable data by directly applying the subcripted referecing on 'mDataset' object as well. Follow scenario-1 to create mDataset object. i.e. ncObj. Apply subscripting reference as shown below.</li>
+                  <pre class="codeinput">&gt;&gt; var = 'temp';
+&gt;&gt; varData = ncObj{var}(1,2:2:20,1:59,4:end);
+&gt;&gt; whos varData
+  Name          Size                 Bytes  Class     Attributes
+  varData      10x59x157            370520  single  
+</pre>
+                       	      </ul>
+                        	  <br />
+                      <li id="grid-array-indexing"><strong>Extract gridded-variable data and grid information using matlab subscripted referencing without creating geogrid variable object.</strong>&nbsp;<a href="user_guide.html"><img src="../../images/up.png" border="0" /></a></li>
+                        	  <ul>
+                                                    <li>Specify data location. The data location can be local or remote (e.g http, thredds, dods). Note: If working offline, then set 'ncRef' to use file 'examples/data/bora_feb.nc'.</li> 
+                                	<pre class="codeinput">&gt;&gt; ncRef = 'http://coast-enviro.er.usgs.gov/cgi-bin/nph-dods/models/test/bora_feb.nc'</pre>           
+                                <li>Call <a href="../njTBX-2.0/@mDataset/mDataset.html">mDataset</a> class contructor.</li>
+                                	<pre class="codeinput">&gt;&gt; ncObj =  <a href="../njTBX-2.0/@mDataset/mDataset.html">mDataset</a>(ncRef) 
+ncObj = 
+              URI:  'http://coast-enviro.er.usgs.gov/cgi-bin/nph-dods/models/test/bora_feb.nc'
+         numGrids: 19
+    numDimensions: 12
+     numVariables: 80</pre>
+                    <li>Set variable 'var = temp'. Apply subscripted referencing as shown below to get a subset of variable data and grid.</li>
+                      <pre class="codeinput">&gt;&gt; var='temp';
+&gt;&gt; varData = ncObj{var}(1,2:2:20,1:59,4:end).data;
+&gt;&gt; whos varData
+  Name          Size                 Bytes  Class     Attributes
+  varData      10x59x157            370520  single             
+
+&gt;&gt; varGrid = ncObj{var}(1,2:2:20,1:59,4:end).grid 
+&gt;&gt; varGrid
+varGrid = 
+
+     lat: [59x157 double]
+     lon: [59x157 double]
+       z: [10x59x157 double]
+    time: 7.3162e+005      
+</pre>
+                    
+                      <li>In order to read the entire dataset and grid information, use the syntax shown below.</li>
+                  <pre class="codeinput">&gt;&gt; varData = ncObj{var}(:).data;
+&gt;&gt; whos varData
+  Name         Size              Bytes  Class     Attributes
+  varData      4-D             6144000  single               
+
+&gt;&gt; varGrid = ncObj{var}(:).grid;
+&gt;&gt; varGrid
+varGrid = 
+
+     lat: [60x160 double]
+     lon: [60x160 double]
+       z: [4-D double]
+    time: [7.3162e+005 7.3162e+005 7.3163e+005 7.3163e+005 7.3163e+005 7.3163e+005 7.3163e+005 7.3163e+005]  
+</pre>
+                       	      </ul>
+                        	  <br />     
+                      <li id="attr-indexing"><strong>Retrieve specific global and variable attribute value using matlab subscripted referencing.</strong>&nbsp;<a href="user_guide.html"><img src="../../images/up.png" border="0" /></a></li>
+                        	<ul>
+                                <li>Specify data location. The data location can be local or remote (e.g http, thredds, dods). Note: If working offline, then set 'ncRef' to use file 'examples/data/bora_feb.nc'.</li> 
+                                	<pre class="codeinput">&gt;&gt; ncRef = 'http://coast-enviro.er.usgs.gov/cgi-bin/nph-dods/models/test/bora_feb.nc'</pre>           
+                                <li>Call <a href="../njTBX-2.0/@mDataset/mDataset.html">mDataset</a> class contructor.</li>
+                                	<pre class="codeinput">&gt;&gt; ncObj =  <a href="../njTBX-2.0/@mDataset/mDataset.html">mDataset</a>(ncRef) 
+ncObj = 
+              URI:  'http://coast-enviro.er.usgs.gov/cgi-bin/nph-dods/models/test/bora_feb.nc'
+         numGrids: 19
+    numDimensions: 12
+     numVariables: 80</pre>
+                    <li>Retrieve value for global attribute 'title'.</li>
+                      <pre class="codeinput">&gt;&gt; globalAttr = ncObj.title
+globalAttr =
+ROMS/TOMS 2.2 - Adria02 Uber Run
+</pre>          
+                <li>Specify var='temp'. Retrieve variable attribute 'long_name'.</li>
+                  <pre class="codeinput">&gt;&gt; var = temp;
+&gt;&gt; varAttr = ncObj{var}.long_name
+varAttr =
+averaged potential temperature
+</pre>
+<li>One can also retrieve variable attribute value from 'mVar' object. See <a href="#create-mvar">scenario-3 </a> to create mVar object i.e. varObj.</li>
+                  <pre class="codeinput">
+&gt;&gt; varAttr = varObj.long_name
+varAttr =
+averaged potential temperature
+</pre>
+                        	</ul>
+                   	  <br />
+                      <li id="subset-grid"><strong>Subset a grid variable based on start, count and stride specifications.</strong>&nbsp;<a href="user_guide.html"><img src="../../images/up.png" border="0" /></a></li>
+                        	<ul>
+                                <li>Specify data location. The data location can be local or remote (e.g http, thredds, dods). Note: If working offline, then set 'ncRef' to use file 'examples/data/bora_feb.nc'.</li> 
+                                	<pre class="codeinput">&gt;&gt; ncRef = 'http://coast-enviro.er.usgs.gov/cgi-bin/nph-dods/models/test/bora_feb.nc'</pre>           
+                                <li>Call <a href="../njTBX-2.0/@mDataset/mDataset.html">mDataset</a> class contructor to create mDataset object.</li>
+                                	<pre class="codeinput">&gt;&gt; ncObj =  <a href="../njTBX-2.0/@mDataset/mDataset.html">mDataset</a>(ncRef) 
+ncObj = 
+              URI:  'http://coast-enviro.er.usgs.gov/cgi-bin/nph-dods/models/test/bora_feb.nc'
+         numGrids: 19
+    numDimensions: 12
+     numVariables: 80</pre> 
+                                <li>Set variable 'var = temp'. Call mDataset method 'getGeoGridVar' to create a grid variable object 'mGeoGridVar'.</li>
+                                	<pre class="codeinput">&gt;&gt; var = 'temp';
+&gt;&gt; gVarObj = <a href="../njTBX-2.0/@mDataset/getGeoGridVar.html">getGeoGridVar</a>(ncObj, var) 
+gVarObj = 
+      Variable: 'temp'
+    Dimensions: '[   ocean_time = UNLIMITED;   // (8 currently),    s_rho = 20;,    eta_rho = 60;,    xi_rho = 160;]'</pre>
+                    <li>Call method 'subsetGeoGridVar'.</li>
+                      <pre class="codeinput">&gt;&gt; subGrid = <a href="../njTBX-2.0/@mGeoGridVar/subsetGeoGridVar.html">subsetGeoGridVar</a>(gVarObj, [1 1 1 1],[1 1 20 inf],[1 1 2 1]);
+&gt;&gt; whos subGrid
+  Name         Size            Bytes  Class          Attributes
+  subGrid      1x1               660  mGeoGridVar              
+
+&gt;&gt; varData = <a href="../njTBX-2.0/@mGeoGridVar/getData.html">getData</a>(subGrid);
+&gt;&gt; whos varData
+  Name          Size             Bytes  Class     Attributes
+  varData      10x160             6400  single              
+
+&gt;&gt; varGrid = <a href="../njTBX-2.0/@mGeoGridVar/getGrid.html">getGrid</a>(subGrid)
+varGrid = 
+     lat: [10x160 double]
+     lon: [10x160 double]
+       z: [10x160 double]
+    time: 7.3162e+005
+</pre>          
+                <li>You can also use subscripted referencing to subset a grid and get data.</li>
+                  <pre class="codeinput">&gt;&gt; subGrid = gVarObj(1:3,1:3,2:10,2:2:end);    %shape[8 20 60 160]
+&gt;&gt; whos subGrid
+  Name         Size            Bytes  Class          Attributes
+  subGrid      1x1               660  mGeoGridVar              
+
+&gt;&gt; varData = <a href="../njTBX-2.0/@mGeoGridVar/getData.html">getData</a>(subGrid);
+or
+&gt;&gt; varData = subGrid.data;
+&gt;&gt; whos varData
+  Name         Size            Bytes  Class     Attributes
+  varData      4-D             25920  single
+                
+
+&gt;&gt; varGrid = <a href="../njTBX-2.0/@mGeoGridVar/getGrid.html">getGrid</a>(subGrid)
+or
+&gt;&gt; varGrid = subGrid.grid
+varGrid =
+     lat: [9x80 double]
+     lon: [9x80 double]
+       z: [4-D double]
+    time: [7.3162e+005 7.3162e+005 7.3163e+005]
+</pre>
+                        	</ul>
+                        	<br />       
+                      <li id="extract-time"><strong>Extract time values for a variable in matlab datenum format.</strong>&nbsp;<a href="user_guide.html"><img src="../../images/up.png" border="0" /></a></li>
+                        	<ul>
+                                                    <li>Specify data location. The data location can be local or remote (e.g http, thredds, dods). Note: If working offline, then set 'ncRef' to use file 'examples/data/bora_feb.nc'.</li> 
+                                	<pre class="codeinput">&gt;&gt; ncRef = 'http://coast-enviro.er.usgs.gov/cgi-bin/nph-dods/models/test/bora_feb.nc'</pre>           
+                                <li>Call <a href="../njTBX-2.0/@mDataset/mDataset.html">mDataset</a> class contructor to create mDataset object.</li>
+                                	<pre class="codeinput">&gt;&gt; ncObj =  <a href="../njTBX-2.0/@mDataset/mDataset.html">mDataset</a>(ncRef) 
+ncObj = 
+              URI:  'http://coast-enviro.er.usgs.gov/cgi-bin/nph-dods/models/test/bora_feb.nc'
+         numGrids: 19
+    numDimensions: 12
+     numVariables: 80</pre> 
+                    <li>Set variable 'var = temp'. Call mDataset method 'getVar' or use subscripted reference to create a  variable object 'mVar'.</li>
+                      <pre class="codeinput">&gt;&gt; var = 'temp';
+&gt;&gt; varObj = <a href="../njTBX-2.0/@mDataset/getVar.html">getVar</a>(ncObj, var) 
+or
+&gt;&gt; varObj = ncObj{var}
+
+varObj = 
+   float temp(ocean_time=8, s_rho=20, eta_rho=60, xi_rho=160);
+     :long_name = "averaged potential temperature";
+     :units = "Celsius";
+     :time = "ocean_time";
+     :coordinates = "lat_rho lon_rho";
+     :field = "temperature, scalar, series";</pre>
+                    <li>Call method 'getTimes'.</li>
+                      <pre class="codeinput">&gt;&gt; times = <a href="../njTBX-2.0/@mVar/getTimes.html">getTimes</a>(varObj);
+&gt;&gt; whos times
+  Name       Size            Bytes  Class     Attributes
+  times      1x8                64  double              
+
+&gt;&gt; times
+times =
+  1.0e+005 *
+    7.3162    7.3162    7.3163    7.3163    7.3163    7.3163    7.3163    7.3163
+</pre>                   
+                <li>You can also get time values from a grid variable object. Follow <a href="#create-mgeogridvar">scenario-2</a> to create mGeoGridVar object i.e. gVarObj.</li>
+                <li>Call method 'getGrid'.</li> 
+                  <pre class="codeinput">&gt;&gt; varGrid = <a href="../njTBX-2.0/@mGeoGridVar/getGrid.html">getGrid</a>(gVarObj);
+&gt;&gt; varGrid
+varGrid =
+     lat: [60x160 double]
+     lon: [60x160 double]
+       z: [4-D double]
+    time: [7.3162e+005 7.3162e+005 7.3163e+005 7.3163e+005 7.3163e+005 7.3163e+005 7.3163e+005 7.3163e+005]
+
+&gt;&gt; times = varGrid.time
+times =
+  1.0e+005 *
+    7.3162    7.3162    7.3163    7.3163    7.3163    7.3163    7.3163    7.3163
+</pre> 
+ 
+                                    <span class="subHeader2">See functions </span>
+                                    <a href="../njFunc/nj_time.html">nj_time</a> &nbsp;&nbsp;<a href="../njFunc/nj_grid_varget.html">nj_grid_varget</a>                                    
+                            </ul>
+                        	<br />
+                            
+                            <li id="nj_attget"><strong>Get global and variable attributes.</strong>&nbsp;<a href="user_guide.html"><img src="../../images/up.png" border="0" /></a></li>
+                        	<ul>
+                                                    <li>Specify data location. The data location can be local or remote (e.g http, thredds, dods). Note: If working offline, then set 'ncRef' to use file 'examples/data/bora_feb.nc'.</li> 
+                                	<pre class="codeinput">&gt;&gt; ncRef = 'http://coast-enviro.er.usgs.gov/cgi-bin/nph-dods/models/test/bora_feb.nc'</pre>           
+                                
+                    <li>Set variable 'var = temp'. Call<a href="../njFunc/nj_attget.html"> nj_attget</a> function to retrieve attributes. </li>
+                      <pre class="codeinput">&gt;&gt; var = 'temp';
+&gt;&gt; attr =<a href="../njFunc/nj_attget.html"> nj_attget</a>(ncRef,'global','title')  % global attribute
+attr =
+ROMS/TOMS 2.2 - Adria02 Uber Run
+
+&gt;&gt; attr =<a href="../njFunc/nj_attget.html"> nj_attget</a>(ncRef,var,'long_name') %variable attribute
+attr =
+averaged potential temperature</pre>
+<li>The parameter 'ncRef' can also be an '<a href="../njTBX-2.0/@mDataset/mDataset.html">mDataset</a>' object. </li>                                                     
+                            </ul>
+                        	<br />                            
+                            <li id="nj_time"><strong>Get time values for a variable from any CF-compliant file.</strong>&nbsp;<a href="user_guide.html"><img src="../../images/up.png" border="0" /></a></li>
+                        	<ul>
+                                                    <li>Specify data location. The data location can be local or remote (e.g http, thredds, dods). Note: If working offline, then set 'ncRef' to use file 'examples/data/bora_feb.nc'.</li> 
+                                	<pre class="codeinput">&gt;&gt; ncRef = 'http://coast-enviro.er.usgs.gov/cgi-bin/nph-dods/models/test/bora_feb.nc'</pre>           
+                                
+                    <li>Set variable 'var = temp'. Call function '<a href="../njFunc/nj_time.html">nj_time</a>'.</li>
+                      <pre class="codeinput">&gt;&gt; var = 'temp';
+&gt;&gt; [times] = <a href="../njFunc/nj_time.html">nj_time</a>(ncRef,var) % all times
+times =
+  1.0e+005 *
+    7.3162    7.3162    7.3163    7.3163    7.3163    7.3163    7.3163    7.3163
+
+&gt;&gt; [times] = <a href="../njFunc/nj_time.html">nj_time</a>(ncRef,var,3) % 3rd time step
+times =
+  7.3163e+005</pre>
+                    <li>The parameter 'ncRef' can also be an '<a href="../njTBX-2.0/@mDataset/mDataset.html">mDataset</a>' object. </li>                                              
+                            </ul>
+                        	
+                    </ul>
+            
+            
+            <br />            
+          </td>
+        </tr>
+      </table></td>
+      
+
+    <td colspan="1" nowrap="nowrap"></td>
+  </tr>
+  <tr bgcolor="#CCDDFF">
+    <td colspan="1" nowrap="nowrap" class="smallText2"></td>
+    
+    <td colspan="2" valign="middle" nowrap="nowrap" class="smallText3"><div align="left"><a href="../../Simple_examples.html" style="color:#000000"><img src="../../images/b_prev.gif" alt="previous" width="17" height="17" border="0" align="texttop" /> Quick Tutorial</a></div></td>
+    <td colspan="3" valign="middle" nowrap="nowrap" class="smallText3"><div align="right"><a href="../njFunc/njfunc.html" style="color:#000000">NJ Functions <img src="../../images/b_next.gif" alt="Next" width="17" height="17" border="0" align="texttop" /></a></div></td>
+    <td width="1" nowrap="nowrap"></td>
+  </tr> 
+    <tr bgcolor="#003399">
+    <td colspan="1" nowrap="nowrap" class="smallText2">&copy; 2006-2009</td>
+    <td colspan="3" nowrap="nowrap" class="smallText2">&nbsp;&nbsp;Mississippi State University&nbsp;&nbsp;&nbsp;&bull;&nbsp;<a href="../../license.html" style="text-decoration:none; color: #FFFFFF">License Terms</a>&nbsp;&nbsp;&nbsp;&bull;&nbsp;<a href="../../credits.html" style="text-decoration:none; color: #FFFFFF">Credits</a></td>
+   
+    <td colspan="2" nowrap="nowrap" class="smallText2"></td>
+    <td width="1" nowrap="nowrap"></td>
+  </tr>
+  
+</table>
+
+</body>
+</html>
