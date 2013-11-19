@@ -1,0 +1,151 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<!-- DW6 -->
+<head>
+<!-- Copyright 2005 Macromedia, Inc. All rights reserved. -->
+<title>Netcdf-Java Toolbox for Matlab (njTBX) - Function NJ_GRID_VARGET</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" href="../../njtbx.css" type="text/css" />
+
+<style type="text/css">
+<!--
+.style1 {color: #003399}
+-->
+</style>
+</head>
+<body bgcolor="#ffffff">
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr bgcolor="#ffffff">
+    <td width="62" colspan="1" rowspan="1"><div align="center"><img src="../../images/njtbx-icon.png" alt="njtbx-icon" width="35" height="29" align="bottom" /></div></td>
+     <td height="30" colspan="3" align="center" valign="bottom" nowrap="nowrap" class="style1" id="logosmall"><div align="left"><a href="njfunc.html" class="style1">Netcdf-Java Toolbox <img src="../../images/up.png" border="0" align="bottom" /></a></div></td>
+  
+  </tr>
+
+ 
+
+ 
+
+  
+
+
+  <tr bgcolor="#CCDDFF">
+    <td colspan="1" nowrap="nowrap" class="smallText2"></td>
+    
+    <td colspan="2" valign="baseline" nowrap="nowrap" class="smallText3" ><div align="left" ><a href="nj_attget.html" style="color:#000000"><img src="../../images/b_prev.gif" alt="previous" width="17" height="17" border="0" align="texttop"/> Function nj_attget</a></div></td>
+    <td colspan="3" valign="baseline" nowrap="nowrap" class="smallText3"><div align="right"><a href="nj_info.html" style="color:#000000">Function nj_info <img src="../../images/b_next.gif" alt="Next" width="20" height="17" border="0" align="texttop" class="navText" /></a></div></td>
+    <td width="1" nowrap="nowrap"></td>
+  </tr>
+  <tr bgcolor="#ffffff">
+    <td width="71"><img src="../../images/mm_spacer.gif" alt="" width="25" height="1" border="0" /></td>
+    <td colspan="1" valign="top"><img src="../../images/mm_spacer.gif" alt="" width="305" height="1" border="0" /><br />
+	&nbsp;<br />
+	&nbsp;<br /><table border="0" cellspacing="0" cellpadding="0" width="744">
+        <tr>
+          <td width="372" class="pageName"><div align="left">Function  nj_grid_varget</div></td>
+		  <td width="372" class="subHeader"><div align="right"><a href="matlab:edit(&#0039;nj_grid_varget&#0039;)">View Source in Matlab</a></div></td>
+        </tr>
+
+		<tr>
+          <td colspan="2"><a name="_top"></a>
+<!-- # njTools --><!-- # njTBX-2.0 --><!-- menu.html @mDataset -->
+<h3><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../images/up.png"></a></h3>
+<div class="box"><strong>NJ_GRID_VARGET - Get gridded variable data and associated grid coordinates</strong></div>
+
+<h3><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../images/up.png"></a></h3>
+<div class="box"><strong>function [data, grid]=nj_grid_varget(ncRef,var,start, count, stride) </strong></div>
+
+<h3><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../images/up.png"></a></h3>
+<div class="fragment">
+  <pre class="comment2">NJ_GRID_VARGET - get variable data and associated grid coordinates from local NetCDF file, NetCDF URL or OpenDAP URL
+
+ Usage:    
+   [data, grid]=nj_grid_varget(file,var,start,count,stride);
+ where,
+   ncRef - Reference to netcdf file. It can be either of two
+           a. local file name or a URL  or
+           b. An 'mDataset' matlab object, which is the reference to already
+              open netcdf file.
+              [ncRef=mDataset(uri)]
+   var  =  variable to extract          
+           start = A 1-based array specifying the position in the file to begin reading or corner of a
+                   hyperslab e.g [1 2 1]. Specify 'inf' for last index.
+                   The values specified must not exceed the size of any
+                   dimension of the data set.
+           count = A 1-based array specifying the length of each dimension to read. e.g [6 10 inf]. 
+                   Specify 'inf' to get all the values from start index.
+           stride = A 1-based array specifying the interval between the
+                    values to read. e.g [1 2 2] 
+        
+     Any of these URI types will work:
+     Local NetCDF:  ncRef='bora_feb.nc';
+     Remote NetCDF: ncRef='http://coast-enviro.er.usgs.gov/models/test/bora_feb.nc';
+     OpenDAP:       ncRef='http://coast-enviro.er.usgs.gov/cgi-bin/nph-dods/models/test/bora_feb.nc';
+     Local NcML:    ncRef='bora_feb.ncml';
+     Remote NcML:   ncRef='http://coast-enviro.er.usgs.gov/models/test/bora_feb.ncml';
+
+   Any of these syntaxes will return the surface temperature values
+   from the first time step: Assuming Array shape is [8,20,60,160]        
+           
+     Using 'start' 'count' 'stride' arrays to specify indexing%
+     [data, grid]=nj_grid_varget(ncRef,'temp',[1 1 1 1],[1 1 30 inf],[1 1 2 2]); % get surface temp from first time step 
+          
+     The following will return the entire longitude variable
+     t=nj_grid_varget(ncRef,'lon_rho');  % get all the lon values</pre>
+</div>
+
+
+<!-- crossreference -->
+<h3><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../images/up.png"></a></h3>
+This function makes following<strong> njTBX API</strong> calls:
+<div class="fragment">
+  <ul style="list-style-image:url(../../images/njtbx-small-icon.png)">
+    <li><a href="../../njTools/njTBX-2.0/@mDataset/mDataset.html" class="code" title="function result = mDataset(ncURI)">mDataset</a> mDataset class constructor - opens a netcdf file and creates a grid or netcdf mDataset object.</li>
+    <li><a href="../../njTools/njTBX-2.0/@mDataset/getVar.html" class="code" title="function result = getVar(mDatasetObj, varName)">getVar</a> mDataset/getVar - Retrieves a matlab variable object.</li>
+    <li><a href="../../njTools/njTBX-2.0/@mDataset/getGeoGridVar.html" class="code" title="function result = getGeoGridVar(mDatasetObj,varName)">getGeoGridVar</a> mDataset/getGeoGridVar - Get variable into a GeoGrid if it has a Georeferencing coordinate system.</li>
+    <li><a href="../../njTools/njTBX-2.0/@mGeoGridVar/getData.html" class="code" title="function result = getData(mGeoGridVarObj, timeIndex, vertLevelIndex)">getData</a> mGeoGridVar/getData - get the 3D volume data</li>
+    <li><a href="../../njTools/njTBX-2.0/@mGeoGridVar/getGrid.html" class="code" title="function result = getGrid(mGeoGridVarObj, timeIndex, vertLevel)">getGrid</a> mGeoGridVar/getGrid - Get grid coordinate and time axes</li>
+    <li><a href="../../njTools/njTBX-2.0/@mGeoGridVar/subsetGeoGridVar.html" class="code" title="function result = subsetGeoGridVar(mGeoGridVarObj, start, count, stride)">subsetGeoGridVar</a> mGeoGridVar/subsetGeoGridVar - subset gridded variable based on start,count and stride.</li>
+    </ul>
+</div>
+ <br />
+See demos using function<strong> nj_grid_varget</strong>:
+<div class="fragment">
+  <ul style="list-style-image:url(../../images/demoicon.gif)">
+    <!--<li><a href="../../../examples/html/comp_temp_data.html" class="code" title="">comp_temp_data</a> - Compare temperature data from various model output and observations</li>-->
+    <li><a href="../../../examples/html/do_interop.html" class="code" title="">do_interop</a> - Model interoperability demo.</li>
+    <li><a href="../../../examples/html/a" class="code" title="">do_interop_bot_temp</a> - Plot modeled and observed bottom temperatures</li>
+    <li><a href="../../../examples/html/do_interop_data.html" class="code" title="">do_interop_data</a> - Demonstrate Model/Data comparison of Profile data</li>
+    <li><a href="../../../examples/html/do_interop_plot3d.html" class="code" title="">do_interop_plot3d</a> - Get a 3D temperature field from different CF-compliant models</li>
+    <li><a href="../../../examples/html/do_interop_salt_comp.html" class="code" title="">do_interop_salt_comp</a> - Compare model forecast surface salinities</li>
+    <li><a href="../../../examples/html/do_interop_temp_comp.html" class="code" title="">do_interop_temp_comp</a> - Compare surface temperature from different models</li>
+    <li><a href="../../../examples/html/gomoos_latest.html" class="code" title="">gomoos_latest</a> - Grab alongshore velocity</li>
+    <li><a href="../../../examples/html/test_plot2D_fvcom.html" class="code" title="">test_plot2D_fvcom</a> - Plot 2d elevation field for fvcom data.</li>
+    <li><a href="../../../examples/html/test_plot3D_fvcom.html" class="code" title="">test_plot3D_fvcom</a> - Plot a 3d field from an FVCOM file at a particular time step</li>
+    </ul>
+</div>
+<br /> <br />
+</td>
+        </tr>
+      </table></td>
+
+    <td colspan="1" nowrap="nowrap"></td>
+  </tr>
+  <tr bgcolor="#CCDDFF">
+    <td colspan="1" nowrap="nowrap" class="smallText2"></td>
+    
+    <td colspan="2" valign="middle" nowrap="nowrap" class="smallText3"><div align="left"><a href="nj_attget.html" style="color:#000000"><img src="../../images/b_prev.gif" alt="previous" width="17" height="17" border="0" align="texttop" /> Function nj_attget</a></div></td>
+    <td colspan="3" valign="middle" nowrap="nowrap" class="smallText3"><div align="right"><a href="nj_info.html" style="color:#000000">Function nj_info <img src="../../images/b_next.gif" alt="Next" width="17" height="17" border="0" align="texttop" /></a></div></td>
+    <td width="1" nowrap="nowrap"></td>
+  </tr> 
+    <tr bgcolor="#003399">
+    <td colspan="1" nowrap="nowrap" class="smallText2">&copy; 2006-2009</td>
+    <td colspan="3" nowrap="nowrap" class="smallText2" >&nbsp;&nbsp;Mississippi State University&nbsp;&nbsp;&nbsp;&bull;&nbsp;<a href="../../license.html" style="text-decoration:none; color: #FFFFFF">License Terms</a>&nbsp;&nbsp;&nbsp;&bull;&nbsp;<a href="../../credits.html" style="text-decoration:none; color: #FFFFFF">Credits</a></td>
+   
+    <td colspan="2" nowrap="nowrap" class="smallText2"></td>
+    <td width="1" nowrap="nowrap"></td>
+  </tr>
+  
+</table>
+
+</body>
+</html>

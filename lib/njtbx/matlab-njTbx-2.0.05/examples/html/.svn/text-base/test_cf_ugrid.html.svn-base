@@ -1,0 +1,175 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<!-- DW6 -->
+<head>
+<!-- Copyright 2005 Macromedia, Inc. All rights reserved. -->
+<title>Netcdf-Java Toolbox for Matlab (njTBX) - Demo test_cf_ugrid</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" href="../../njtbxhelp/njtbx.css" type="text/css" />
+
+<style type="text/css">
+<!--
+.style1 {color: #003399}
+-->
+</style>
+
+
+
+ 
+</head>
+<body bgcolor="#ffffff">
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr bgcolor="#ffffff">
+    <td width="62" colspan="1" rowspan="1"><div align="center"><img src="../../njtbxhelp/images/njtbx-icon.png" alt="njtbx-icon" width="35" height="29" align="bottom" /></div></td>
+   <td height="30" colspan="3" align="center" valign="bottom" nowrap="nowrap" class="style1" id="logosmall"><div align="left"><a href="demos.html" class="style1">Netcdf-Java Toolbox <img src="../../njtbxhelp/images/up.png" border="0" align="bottom" /></a></div></td>
+  </tr>
+
+ 
+
+ 
+
+  
+
+
+  <tr bgcolor="#CCDDFF">
+    <td colspan="1" nowrap="nowrap" class="smallText2"></td>
+    
+    <td colspan="2" valign="baseline" nowrap="nowrap" class="smallText3" ><div align="left" ><a href="test_plot3D_fvcom.html" style="color:#000000"><img src="../../njtbxhelp/images/b_prev.gif" alt="previous" width="17" height="17" border="0" align="texttop"/> Demo test_plot3D_fvcom</a></div></td>
+    <td colspan="3" valign="baseline" nowrap="nowrap" class="smallText3"><div align="right"><a href="../../njtbxhelp/troubleshoot.html" style="color:#000000">Troubleshoot <img src="../../njtbxhelp/images/b_next.gif" alt="Next" width="20" height="17" border="0" align="texttop" class="navText" /></a></div></td>
+    <td width="1" nowrap="nowrap"></td>
+  </tr>
+  <tr bgcolor="#ffffff">
+    <td width="71"><img src="../../njtbxhelp/images/mm_spacer.gif" alt="" width="25" height="1" border="0" /></td>
+    <td colspan="1" valign="top"><img src="../../njtbxhelp/images/mm_spacer.gif" alt="" width="305" height="1" border="0" /><br />
+	&nbsp;<br />
+	&nbsp;<br /><table border="0" cellspacing="0" cellpadding="0" width="744">
+        <tr>
+          <td width="372" class="pageName"><div align="left">Demo test_cf_ugrid</div></td>
+		  <td width="372" class="subHeader"><div align="right"><a href="matlab:echodemo test_cf_ugrid">Run demo in Matlab</a></div></td>
+        </tr>
+
+		<tr>
+          <td colspan="2"><!-- # njTools -->
+          
+          <div class="content">
+         <h2>Contents</h2>
+         <div>
+            <ul>
+               <li><a href="#2">Specify input variables</a></li>
+               <li><a href="#3">Make njTBX API calls &amp; plot data</a></li>
+            </ul>
+         </div><pre class="codeinput"><span class="comment">% TEST_CF_UGRID - Read CF-UGRID convention data from ADCIRC, FVCOM and ELCIRC</span>
+<span class="comment">%</span>
+<span class="comment">% A more general program library would first get</span>
+<span class="comment">% grid attributes, check 0-based vs. 1-based, CCW vs CW, grid location</span>
+<span class="comment">% and convert to standard internal data model, but this script demonstrates</span>
+<span class="comment">% using NcML to convert existing files to the draft UGRID standard which</span>
+<span class="comment">% uses the "grid" attribute to point to the connectivity array.</span>
+<span class="comment">%</span>
+<span class="comment">% This demo uses njTBX API rather than high level functions.</span>
+<span class="comment">%</span>
+<span class="comment">% Rich Signell(rsignell@usgs.gov)</span>
+</pre><h2>Specify input variables<a name="2"></a></h2><pre class="codeinput">uris = {<span class="string">'adcirc.ncml'</span>, <span class="string">'fvcom.ncml'</span>, <span class="string">'elcirc.ncml'</span>, <span class="string">'zirino.ncml'</span>, <span class="string">'selfe.ncml'</span>};
+vars={<span class="string">'zeta'</span>,<span class="string">'zeta'</span>,<span class="string">'zeta'</span>,<span class="string">'zeta'</span>,<span class="string">'zeta'</span>};
+itimes=[30 8 280 2 15];  <span class="comment">% which time steps to read from each file</span>
+</pre><h2>Make njTBX API calls &amp; plot data<a name="3"></a></h2><pre class="codeinput"><span class="keyword">for</span> i=1:length(uris)
+    uri=fullfile(njtbxroot, <span class="string">'examples'</span>, <span class="string">'data'</span>, uris{i});
+    var=vars{i};
+    itime=itimes(i);
+
+    <span class="comment">% SHOULDN'T HAVE TO CHANGE BELOW HERE</span>
+    tic
+    <span class="comment">%initialize dataset object</span>
+    nc=<a href="../../njtbxhelp/njTools/njTBX-2.0/@mDataset/mDataset.html">mDataset</a>(uri);
+    <span class="comment">%get variable object</span>
+    nc_var = nc{var};
+    <span class="comment">% read data at specified time step (all nodes)</span>
+    zeta=nc_var(itime,:);
+
+    <span class="comment">% Find the coordinate variables</span>
+    <span class="comment">% Here we assume the order of coordinate variables in the</span>
+    <span class="comment">% "coordinates" attribute are ordered 'T Y X', which would break</span>
+    <span class="comment">% for any other order, but illustrates finding the coordinate variable</span>
+    <span class="comment">% names by use of the coordinates attribute.   In the future we will</span>
+    <span class="comment">% use a Matlab/NetCDF-Java class that works like that of structured grid, where</span>
+    <span class="comment">% each variable listed is checked to see what type of coordinate variable</span>
+    <span class="comment">% it is, using rules based on what type of units it finds, etc.</span>
+
+    s=getAttributes(nc_var);
+    coords=s.coordinates;
+    ind=strfind(coords,<span class="string">' '</span>);
+
+    Y_var=coords(ind(1)+1:ind(2)-1); <span class="comment">% assume here that Y is 2nd</span>
+    X_var=coords(ind(2)+1:end);  <span class="comment">% assume here that X is third</span>
+
+    <span class="comment">% get lon,lat, time</span>
+    lon=nc{X_var}(:);
+    lat=nc{Y_var}(:);
+    jdmat=getTimes(nc_var,itime);
+
+    <span class="comment">% get grid variable name (inference array)</span>
+    G_var=getAttributes(nc_var,<span class="string">'grid'</span>);
+
+    <span class="comment">% get data from grid variable (connectivity array)</span>
+    grid=nc{G_var}(:);
+    <span class="comment">%grid=nj_varget(uri,G_var);</span>
+    [m,n]=size(grid);
+    <span class="comment">% need to check for orientation of connectivity array</span>
+    <span class="keyword">if</span> m==3,
+        grid=grid.';
+    <span class="keyword">elseif</span> n~=3
+        disp(<span class="string">'Error:Currently handling triangles only'</span>);<span class="keyword">return</span>
+    <span class="keyword">end</span>
+
+
+   <span class="comment">% plot data</span>
+
+    figure(i)
+    lon(abs(lon)&gt;200)=NaN;  <span class="comment">% eliminate any lon/lat outside of range</span>
+    lat(abs(lat)&gt;200)=NaN;
+    trisurf(grid,lon,lat,zeta);shading <span class="string">interp</span>;view(2);colorbar
+    title(sprintf(<span class="string">'%s - %s (%s): %s'</span>,uris{i},var,s.units,datestr(jdmat)));
+
+    <span class="comment">% set aspect ratio for lon/lat plot based on mean latitude</span>
+    set (gca, <span class="string">'DataAspectRatio'</span>, [1 cos(gmean(lat(:))*pi/180) 1] );
+
+      <span class="comment">% cleanup</span>
+    close(nc);
+    toc
+<span class="keyword">end</span>
+</pre>
+<pre class="codeoutput">Elapsed time is 50.852703 seconds.
+Elapsed time is 1.431589 seconds.
+Elapsed time is 19.448760 seconds.
+Elapsed time is 1.910798 seconds.
+Elapsed time is 13.511231 seconds.
+</pre><img vspace="5" hspace="5" src="test_cf_ugrid_01.png"> <img vspace="5" hspace="5" src="test_cf_ugrid_02.png"> <img vspace="5" hspace="5" src="test_cf_ugrid_03.png"> <img vspace="5" hspace="5" src="test_cf_ugrid_04.png"> <img vspace="5" hspace="5" src="test_cf_ugrid_05.png"> <p class="footer"><br>
+            Published with MATLAB&reg; 7.6<br></p>
+      </div>
+<br />
+
+</td>
+        </tr>
+      </table></td>
+
+    <td colspan="1" nowrap="nowrap"></td>
+  </tr>
+  <tr bgcolor="#CCDDFF">
+    <td colspan="1" nowrap="nowrap" class="smallText2"></td>
+    
+    <td colspan="2" valign="middle" nowrap="nowrap" class="smallText3"><div align="left"><a href="test_plot3D_fvcom.html" style="color:#000000"><img src="../../njtbxhelp/images/b_prev.gif" alt="previous" width="17" height="17" border="0" align="texttop" /> Demo test_plot3D_fvcom</a></div></td>
+    <td colspan="3" valign="middle" nowrap="nowrap" class="smallText3"><div align="right"><a href="../../njtbxhelp/troubleshoot.html" style="color:#000000">Troubleshoot <img src="../../njtbxhelp/images/b_next.gif" alt="Next" width="20" height="17" border="0" align="texttop" class="navText" /></a></div></td>
+    <td width="1" nowrap="nowrap"></td>
+  </tr> 
+    <tr bgcolor="#003399">
+    <td colspan="1" nowrap="nowrap" class="smallText2">&copy; 2006-2009</td>
+    <td colspan="3" nowrap="nowrap" class="smallText2" >&nbsp;&nbsp;Mississippi State University&nbsp;&nbsp;&nbsp;&bull;&nbsp;<a href="../../njtbxhelp/license.html" style="text-decoration:none; color: #FFFFFF">License Terms</a>&nbsp;&nbsp;&nbsp;&bull;&nbsp;<a href="../../njtbxhelp/credits.html" style="text-decoration:none; color: #FFFFFF">Credits</a></td>
+   
+    <td colspan="2" nowrap="nowrap" class="smallText2"></td>
+    <td width="1" nowrap="nowrap"></td>
+  </tr>
+  
+</table>
+
+</body>
+</html>

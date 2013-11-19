@@ -1,0 +1,22 @@
+<productinfo
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="optional">
+<?xml-stylesheet type="text/xsl" href="optional"?>
+
+<matlabrelease>2008a</matlabrelease>
+<name>NJ (njTBX)</name>
+<type>toolbox</type>
+<icon>njtbxhelp/images/njtbx-small-icon.png</icon>
+<help_location>njtbxhelp</help_location>
+
+<list>
+
+<listitem>
+<label>Help</label>
+<callback>web(fullfile(njtbxroot,'njtbxhelp','njtbxhelp.html'),'-helpbrowser')</callback>
+<icon>$toolbox/matlab/icons/book_mat.gif</icon>
+</listitem>
+
+</list>
+
+</productinfo>

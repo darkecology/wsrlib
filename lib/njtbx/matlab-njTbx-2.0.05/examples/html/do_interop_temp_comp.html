@@ -1,0 +1,144 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<!-- DW6 -->
+<head>
+<!-- Copyright 2005 Macromedia, Inc. All rights reserved. -->
+<title>Netcdf-Java Toolbox for Matlab (njTBX) - Demo do_interop_temp_comp</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" href="../../njtbxhelp/njtbx.css" type="text/css" />
+
+<style type="text/css">
+<!--
+.style1 {color: #003399}
+-->
+</style>
+
+
+
+ 
+</head>
+<body bgcolor="#ffffff">
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr bgcolor="#ffffff">
+    <td width="62" colspan="1" rowspan="1"><div align="center"><img src="../../njtbxhelp/images/njtbx-icon.png" alt="njtbx-icon" width="35" height="29" align="bottom" /></div></td>
+    <td height="30" colspan="3" align="center" valign="bottom" nowrap="nowrap" class="style1" id="logosmall"><div align="left"><a href="demos.html" class="style1">Netcdf-Java Toolbox <img src="../../njtbxhelp/images/up.png" border="0" align="bottom" /></a></div></td>
+  
+  </tr>
+
+ 
+
+ 
+
+  
+
+
+  <tr bgcolor="#CCDDFF">
+    <td colspan="1" nowrap="nowrap" class="smallText2"></td>
+    
+    <td colspan="2" valign="baseline" nowrap="nowrap" class="smallText3" ><div align="left" ><a href="do_interop_salt_comp.html" style="color:#000000"><img src="../../njtbxhelp/images/b_prev.gif" alt="previous" width="17" height="17" border="0" align="texttop"/> Demo do_interop_salt_comp</a></div></td>
+    <td colspan="3" valign="baseline" nowrap="nowrap" class="smallText3"><div align="right"><a href="gomoos_latest.html" style="color:#000000">Demo gomoos_latest <img src="../../njtbxhelp/images/b_next.gif" alt="Next" width="20" height="17" border="0" align="texttop" class="navText" /></a></div></td>
+    <td width="1" nowrap="nowrap"></td>
+  </tr>
+  <tr bgcolor="#ffffff">
+    <td width="71"><img src="../../njtbxhelp/images/mm_spacer.gif" alt="" width="25" height="1" border="0" /></td>
+    <td colspan="1" valign="top"><img src="../../njtbxhelp/images/mm_spacer.gif" alt="" width="305" height="1" border="0" /><br />
+	&nbsp;<br />
+	&nbsp;<br /><table border="0" cellspacing="0" cellpadding="0" width="744">
+        <tr>
+          <td width="372" class="pageName"><div align="left">Demo do_interop_temp_comp</div></td>
+		  <td width="372" class="subHeader"><div align="right"><a href="matlab:echodemo do_interop_temp_comp">Run demo in Matlab</a></div></td>
+        </tr>
+
+		<tr>
+          <td colspan="2"><!-- # njTools -->
+          
+           <div class="content">
+         <h2>Contents</h2>
+         <div>
+            <ul>
+               <li><a href="#2">Specify input variables</a></li>
+               <li><a href="#3">Call njTBX functions</a></li>
+               <li><a href="#4">Plot data</a></li>
+            </ul>
+         </div><pre class="codeinput"><span class="comment">% DO_INTEROP_TEMP_COMP - Compare surface temperature from different models</span>
+<span class="comment">%</span>
+<span class="comment">% Rich Signell (rsignell@usgs.gov)</span>
+</pre><h2>Specify input variables<a name="2"></a></h2><pre class="codeinput">var=<span class="string">'temp'</span>;
+itime=1;
+
+<span class="comment">% UMASSB (Mass Bay)</span>
+uri1 =<span class="string">'http://coast-enviro.er.usgs.gov/thredds/dodsC/gom_interop/umassb/latest'</span>;
+ilev1=1; <span class="comment">% surface is layer 1</span>
+itime1=37;
+
+<span class="comment">% UMAINE (Gulf Wide)</span>
+uri2 =<span class="string">'http://coast-enviro.er.usgs.gov/thredds/dodsC/gom_interop/umaine/latest'</span>;
+ilev2=1; <span class="comment">% surface is layer 1</span>
+itime2=13;
+</pre><h2>Call njTBX functions<a name="3"></a></h2><pre class="codeinput">[d1,g1] = <a href="../../njtbxhelp/njTools/njFunc/nj_grid_varget.html">nj_grid_varget</a>(uri1,var,[itime1,ilev1,1,1],[1,1,inf,inf]);
+[d2,g2] = <a href="../../njtbxhelp/njTools/njFunc/nj_grid_varget.html">nj_grid_varget</a>(uri2,var,[itime2,ilev2,1,1],[1,1,inf,inf]);
+</pre>
+<h2>Plot data<a name="4"></a></h2><pre class="codeinput"><span class="comment">%cax='auto'</span>
+cax=[6 14];
+
+clf;set(gcf,<span class="string">'color'</span>,<span class="string">'white'</span>);
+ax1=axes(<span class="string">'pos'</span>,[.1 .1 .35 .8]);
+pcolorjw(g1.lon,g1.lat,double(d1));dasp(mean(g1.lat(:)));
+set(gca,<span class="string">'tickdir'</span>,<span class="string">'out'</span>);
+caxis(cax);
+ii=strfind(uri1,<span class="string">'/'</span>);
+<span class="keyword">if</span> ~isempty(ii),
+   title([uri1(ii(end-1)+1:ii(end)-1) <span class="string">':'</span> datestr(g1.time)],<span class="string">'interpreter'</span>,<span class="string">'none'</span>);
+<span class="keyword">else</span>
+    title(uri1,<span class="string">'interpreter'</span>,<span class="string">'none'</span>);
+<span class="keyword">end</span>
+ax1=axis;
+
+ax2=axes(<span class="string">'pos'</span>,[.5 .1 .35 .8]);
+pcolorjw(g2.lon,g2.lat,double(d2));dasp(mean(g2.lat(:)));
+set(gca,<span class="string">'tickdir'</span>,<span class="string">'out'</span>);
+set(gca,<span class="string">'yticklabel'</span>,<span class="string">' '</span>);
+caxis(cax);
+ii=strfind(uri2,<span class="string">'/'</span>);
+<span class="keyword">if</span> ~isempty(ii),
+   title([ uri2(ii(end-1)+1:ii(end)-1) <span class="string">':'</span> datestr(g2.time)],<span class="string">'interpreter'</span>,<span class="string">'none'</span>);
+<span class="keyword">else</span>
+    title(uri2,<span class="string">'interpreter'</span>,<span class="string">'none'</span>);
+<span class="keyword">end</span>
+axis(ax1);
+
+pclegend(cax',[.95 .3 .02 .4],gcf,<span class="string">'ppt'</span>);
+</pre><img vspace="5" hspace="5" src="do_interop_temp_comp_01.png"> <p class="footer"><br>
+            Published with MATLAB&reg; 7.6<br></p>
+      </div>
+
+
+
+
+<br />
+
+</td>
+        </tr>
+      </table></td>
+
+    <td colspan="1" nowrap="nowrap"></td>
+  </tr>
+  <tr bgcolor="#CCDDFF">
+    <td colspan="1" nowrap="nowrap" class="smallText2"></td>
+    
+    <td colspan="2" valign="middle" nowrap="nowrap" class="smallText3"><div align="left"><a href="do_interop_salt_comp.html" style="color:#000000"><img src="../../njtbxhelp/images/b_prev.gif" alt="previous" width="17" height="17" border="0" align="texttop" /> Demo do_interop_salt_comp</a></div></td>
+    <td colspan="3" valign="middle" nowrap="nowrap" class="smallText3"><div align="right"><a href="gomoos_latest.html" style="color:#000000">Demo gomoos_latest <img src="../../njtbxhelp/images/b_next.gif" alt="Next" width="17" height="17" border="0" align="texttop" /></a></div></td>
+    <td width="1" nowrap="nowrap"></td>
+  </tr> 
+    <tr bgcolor="#003399">
+    <td colspan="1" nowrap="nowrap" class="smallText2">&copy; 2006-2009</td>
+    <td colspan="3" nowrap="nowrap" class="smallText2" >&nbsp;&nbsp;Mississippi State University&nbsp;&nbsp;&nbsp;&bull;&nbsp;<a href="../../njtbxhelp/license.html" style="text-decoration:none; color: #FFFFFF">License Terms</a>&nbsp;&nbsp;&nbsp;&bull;&nbsp;<a href="../../njtbxhelp/credits.html" style="text-decoration:none; color: #FFFFFF">Credits</a></td>
+   
+    <td colspan="2" nowrap="nowrap" class="smallText2"></td>
+    <td width="1" nowrap="nowrap"></td>
+  </tr>
+  
+</table>
+
+</body>
+</html>
