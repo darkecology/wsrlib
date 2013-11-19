@@ -1,0 +1,124 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<!-- DW6 -->
+<head>
+<!-- Copyright 2005 Macromedia, Inc. All rights reserved. -->
+<title>Netcdf-Java Toolbox for Matlab (njTBX) - Simple Examples</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" href="njtbx.css" type="text/css" />
+
+<style type="text/css">
+<!--
+.style1 {color: #003399}
+-->
+</style>
+</head>
+<body bgcolor="#ffffff">
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr bgcolor="#ffffff">
+    <td width="62" colspan="1" rowspan="1"><div align="center"><img src="images/njtbx-icon.png" alt="njtbx-icon" width="35" height="29" align="bottom" /></div></td>
+    <td height="30" colspan="3" align="center" valign="bottom" nowrap="nowrap" class="style1" id="logosmall"><div align="left"><a href="getting_started.html" class="style1">Netcdf-Java Toolbox <img src="images/up.png" border="0" align="bottom" /></a></div></td>
+
+  </tr>
+
+
+
+
+
+
+
+
+ <tr bgcolor="#CCDDFF">
+    <td colspan="1" nowrap="nowrap" class="smallText2"></td>
+
+    <td colspan="2" valign="baseline" nowrap="nowrap" class="smallText3"><div align="left"><a href="environment_setup.html" style="color:#000000"><img src="images/b_prev.gif" alt="previous" width="17" height="17" border="0" align="texttop" /> Environment Setup</a></div></td>
+    <td colspan="3" valign="baseline" nowrap="nowrap" class="smallText3"><div align="right"><a href="njTools/userguide/user_guide.html" style="color:#000000">User Guide <img src="images/b_next.gif" alt="Next" width="17" height="17" border="0" align="texttop" class="navText" /></a></div></td>
+    <td width="1" nowrap="nowrap"></td>
+  </tr>
+  <tr bgcolor="#ffffff">
+    <td width="71"><img src="images/mm_spacer.gif" alt="" width="25" height="1" border="0" /></td>
+    <td colspan="1" valign="top"><img src="images/mm_spacer.gif" alt="" width="305" height="1" border="0" /><br />
+	&nbsp;<br />
+	&nbsp;<br /><table border="0" cellspacing="0" cellpadding="0" width="744">
+        <tr>
+          <td width="744" class="pageName">Quick Tutorial</td>
+		</tr>
+
+		<tr>
+          <td class="bodyText"><p>
+          <span id="parent-fieldname-description"> Often you just want to extract some data and attributes from a local NetCDF file or an OpenDAP URL.
+          With the NJ Toolbox there are several ways to do this.  </span><br/><br/>
+          
+          One way is to call <a href="njTools/njFunc/njfunc.html">NJ high level convenience functions</a> as a one line command, specifying the data using a syntax similar to the NetCDF Fortran Interface:
+          [data]=<a href="njTools/njFunc/nj_varget.html">nj_varget</a>(file,variable,corner,edge,stride);
+          using 1-based indexing and using "Inf" to specify the maximum value.
+          Thus
+          <pre class="codeinput">
+ ncRef = 'http://coast-enviro.er.usgs.gov/models/adria/bora_feb_001.nc'
+ data =<a href="njTools/njFunc/nj_varget.html"> nj_varget</a>(ncRef,'temp',[inf 19 1 1],[1 2 inf inf],[1 1 2 2]);
+ att =<a href="njTools/njFunc/nj_attget.html"> nj_attget</a>(ncRef,'temp');</pre>
+      
+ returns the last time step of temperature from a ROMS ocean model result, but from only the 19th and 20th vertical level,
+ and also subsamples the entire lon,lat field by a factor of two.  The second command returns the attributes of "temp" as a structure.<br/><br/>
+ 
+  You could also accomplish the same thing in the NJ Toolbox by using matlab subcripted referencing syntax (i.e. use of '{}', '(), &amp; '.') familiar to users of the NetCDF Toolbox by Chuck Denham:
+  <pre class="codeinput">
+ ncRef = 'http://coast-enviro.er.usgs.gov/models/test/bora_feb.nc'
+ nc = <a href="njTools/njTBX-2.0/@mDataset/mDataset.html">mDataset</a>(ncRef);
+ data = nc{'temp'}(end,19:20,1:2:end,1:2:end).data;  % nc{'temp'}(end,19:20,1:2:end,1:2:end)  for non-gridded var
+ close(nc)</pre>
+
+ If the dataset you are trying to access has CF Compliant metadata, you can use the NJ Toolbox to return the geospatial coordinates (e.g. lon,lat, z and time)
+ along with the data you requested by addding a ".grid" onto the end of the data request.   So in the above example, we could also do:
+
+   <pre class="codeinput">
+  ncRef = 'http://coast-enviro.er.usgs.gov/models/test/bora_feb.nc'
+  nc = <a href="njTools/njTBX-2.0/@mDataset/mDataset.html">mDataset</a>(ncRef);
+  data = nc{'temp'}(end,19:20,1:2:end,1:2:end).data;
+  grid = nc{'temp'}(end,19:20,1:2:end,1:2:end).grid;
+  units = nc{'temp'}.units;    %return the "units" attribute of the variable "temp"
+  close(nc);</pre>
+
+  to also return an object called "grid" containing the "time", "z", "lat" and "lon" values associated with data selected.
+  This removes the
+  need to explicitly determine which coordinates contain latitude and longitude, how to compute
+ vertical positions from stretched coordinate models, and parse units of time.
+
+  As an example, having retrieved the grid object, you could plot just the surface layer temp and title with the time by doing:
+   <pre class="codeinput">
+  pcolor(grid.lon,grid.lat,double(squeeze(data(end,:,:))));shading flat
+  title(['Surface Layer Temp (' units ') at ' datestr(grid.time(end))]);</pre>
+
+  You could also return the data and grid at a particular time step and level with the routine "<a href="njTools/njFunc/nj_tslice.html">nj_tslice</a>".
+  We added these<a href="njTools/njFunc/njfunc.html"> functions</a> just as a convenient shortcut for some common operations.
+  We could return the 3D data and grid  for the last time step by doing:
+
+  <pre class="codeinput">
+  ncRef = 'http://coast-enviro.er.usgs.gov/models/test/bora_feb.nc'
+  [data,grid]=<a href="njTools/njFunc/nj_tslice.html">nj_tslice</a>(ncRef,'temp',inf);</pre>
+For in-depth help on njTBX API and NJ function usage continue to<a href="njTools/userguide/user_guide.html"> user guide section</a>.<br /><br />
+
+        </tr>
+      </table></td>
+
+    <td colspan="1" nowrap="nowrap"></td>
+  </tr>
+  <tr bgcolor="#CCDDFF">
+    <td colspan="1" nowrap="nowrap" class="smallText2"></td>
+
+    <td colspan="2" valign="middle" nowrap="nowrap" class="smallText3"><div align="left"><a href="environment_setup.html" style="color:#000000"><img src="images/b_prev.gif" alt="previous" width="17" height="17" border="0" align="texttop" /> Environment Setup</a></div></td>
+    <td colspan="3" valign="middle" nowrap="nowrap" class="smallText3"><div align="right"><a href="njTools/userguide/user_guide.html" style="color:#000000">User Guide <img src="images/b_next.gif" alt="Next" width="17" height="17" border="0" align="texttop" /></a></div></td>
+    <td width="1" nowrap="nowrap"></td>
+  </tr>
+    <tr bgcolor="#003399">
+    <td colspan="1" nowrap="nowrap" class="smallText2">&copy; 2006-2009</td>
+    <td colspan="3" nowrap="nowrap" class="smallText2">&nbsp;&nbsp;Mississippi State University&nbsp;&nbsp;&nbsp;&bull;&nbsp;<a href="license.html" style="text-decoration:none; color: #FFFFFF">License Terms</a>&nbsp;&nbsp;&nbsp;&bull;&nbsp;<a href="credits.html" style="text-decoration:none; color: #FFFFFF">Credits</a></td>
+
+    <td colspan="2" nowrap="nowrap" class="smallText2"></td>
+    <td width="1" nowrap="nowrap"></td>
+  </tr>
+
+</table>
+
+</body>
+</html>

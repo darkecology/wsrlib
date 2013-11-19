@@ -1,0 +1,182 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<!-- DW6 -->
+<head>
+<!-- Copyright 2005 Macromedia, Inc. All rights reserved. -->
+<title>Netcdf-Java Toolbox for Matlab (njTBX) - API Documentation</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" href="njtbx.css" type="text/css" />
+
+<style type="text/css">
+<!--
+.style1 {color: #003399}
+-->
+</style>
+</head>
+<body bgcolor="#ffffff">
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr bgcolor="#ffffff">
+    <td width="62" colspan="1" rowspan="1"><div align="center"><img src="images/njtbx-icon.png" alt="njtbx-icon" width="35" height="29" align="bottom" /></div></td>
+    <td height="30" colspan="3" align="center" valign="bottom" nowrap="nowrap" class="style1" id="logosmall"><div align="left"><a href="getting_started.html" class="style1">Netcdf-Java Toolbox <img src="images/up.png" border="0" align="bottom" /></a></div></td>
+  
+  </tr>
+
+ 
+
+ 
+
+  
+
+
+ <tr bgcolor="#CCDDFF">
+    <td colspan="1" nowrap="nowrap" class="smallText2"></td>
+    
+    <td colspan="2" valign="baseline" nowrap="nowrap" class="smallText3"><div align="left"><a href="njTools/njFunc/nj_writeNcMLtoFile.html" style="color:#000000"><img src="images/b_prev.gif" alt="previous" width="17" height="17" border="0" align="texttop" /> Function nj_writeNcMLtoFile</a></div></td>
+    <td colspan="3" valign="baseline" nowrap="nowrap" class="smallText3"><div align="right"><a href="njTools/njTBX-2.0/@mDataset/mDataset.html" style="color:#000000">Class mDataset <img src="images/b_next.gif" alt="Next" width="17" height="17" border="0" align="texttop" class="navText" /></a></div></td>
+    <td width="1" nowrap="nowrap"></td>
+  </tr>
+  <tr bgcolor="#ffffff">
+    <td width="71"><img src="images/mm_spacer.gif" alt="" width="25" height="1" border="0" /></td>
+    <td colspan="1" valign="top"><img src="images/mm_spacer.gif" alt="" width="305" height="1" border="0" /><br />
+	&nbsp;<br />
+	&nbsp;<br /><table border="0" cellspacing="0" cellpadding="0" width="744">
+        <tr>
+          <td width="744" class="pageName">API Documentation</td>
+		</tr>
+
+		<tr>
+          <td class="bodyText"><p><span id="parent-fieldname-description">The  NJ toolbox  (njTBX) API is a matlab object API. Follow the navigation links below to know more about  the njTBX objects and methods functionality. </span></p>
+            <table width="736" border="0" cellpadding="0" bgcolor="#f5f5f5">
+              <tr>
+                <td width="180"><div align="center">
+                  <p><strong>Class</strong></p>
+                  </div></td>
+                <td width="550"><div align="center">
+                  <p><strong>Methods</strong></p>
+                  </div></td>
+              </tr>
+            </table>
+            
+            <table width="743" height="138" border="0" cellpadding="0" bordercolor="#000000" bgcolor="#f5f5f5">
+              <tr>
+                <td width="198" rowspan="6"><div align="left"><span class="subHeader"><a href="njTools/njTBX-2.0/@mDataset/mDataset.html" class="subHeader2">mDataset:</a><br />
+</span> Opens a netcdf file and creates a grid or netcdf data object.</div></td>
+                <td width="539"><a href="njTools/njTBX-2.0/@mDataset/close.html">close(nc)</a> - closes the dataset object (clean up). </td>
+              </tr>
+              <tr>
+                <td><a href="njTools/njTBX-2.0/@mDataset/getAttributes.html">getAttributes(nc)</a> - get all global attributes in a
+                matlab structure. </td>
+              </tr>
+              <tr>
+                <td><a href="njTools/njTBX-2.0/@mDataset/getGeoGridVar.html">getGeoGridVar(nc, 'variable_name')</a> - Get variable into a
+                GeoGrid.</td>
+              </tr>
+              <tr>
+                <td><a href="njTools/njTBX-2.0/@mDataset/getInfo.html">getInfo(nc)</a> - Display detailed data information about
+                the dataset, including grid types.</td>
+              </tr>
+              <tr>
+                <td><a href="njTools/njTBX-2.0/@mDataset/getJDataset.html">getJDataset(nc)</a> - Retrieves a java JDataset object.
+                (For experience java users)</td>
+              </tr>
+              <tr>
+                <td><a href="njTools/njTBX-2.0/@mDataset/getVar.html">getVar(nc, 'variable_name')</a> - Retrieves the specified
+                variable into an 'mVar' matlab object/class.</td>
+              </tr>
+              <tr>
+                <td rowspan="8"><div align="left"><span class="subHeader"><a href="njTools/njTBX-2.0/@mGeoGridVar/mGeoGridVar.html" class="subHeader2">mGeoGridVar:<br />
+                </a></span> Creates a GeoGrid Variable object. </div></td>
+                <td>&nbsp;</td>
+              </tr>
+              <tr>
+                <td><a href="njTools/njTBX-2.0/@mGeoGridVar/getAttributes.html">getAttributes(gvar,attName)</a> - get attribute(s) associated with the gridded variable.</td>
+              </tr>
+              <tr>
+                <td><a href="njTools/njTBX-2.0/@mGeoGridVar/getCoordSys.html">getCoordSys(gvar)</a> - Get the Grid Coordinate System associated with the referenced GeoGrid.</td>
+              </tr>
+              <tr>
+                <td><a href="njTools/njTBX-2.0/@mGeoGridVar/getData.html">getData(gvar, timeIndex, vertLevelIndex)</a> - get the 3D volume data.</td>
+              </tr>
+              <tr>
+                <td><a href="njTools/njTBX-2.0/@mGeoGridVar/getGrid.html">getGrid(gvar, timeIndex, vertLevel)</a> - Get grid coordinate and time axes associated with the geogrid.</td>
+              </tr>
+                            <tr>
+                <td><a href="njTools/njTBX-2.0/@mGeoGridVar/getJGeoGridDataset.html">getJGeoGridDataset(gvar)</a> - Retrieves a java JGeoGridDataset object.(For experience java users)</td>
+              </tr>
+              <tr>
+                <td><a href="njTools/njTBX-2.0/@mGeoGridVar/getShape.html">getShape(gvar)</a> - get grid variable shape.</td>
+              </tr>
+
+              
+              
+              <tr>
+                <td><a href="njTools/njTBX-2.0/@mGeoGridVar/subsetGeoGridVar.html">subsetGeoGridVar(gvar, start, count, stride)</a> - subset gridded variable.</td>
+              </tr>
+              
+              <tr>
+                <td rowspan="5"><div align="left"><span class="subHeader2"><a href="njTools/njTBX-2.0/@mGridCoordinates/mGridCoordinates.html" class="subHeader2">mGridCoordinates</a>:<br />
+                </span>Creates a grid coordinates object associated with referenced geogrid. </div></td>
+                <td>&nbsp;</td>
+              </tr>
+              <tr>
+                <td><a href="njTools/njTBX-2.0/@mGridCoordinates/getLatAxis.html">getLatAxis(gcoord)</a> - Get the Latitute points. </td>
+              </tr>
+              <tr>
+                <td><a href="njTools/njTBX-2.0/@mGridCoordinates/getLonAxis.html">getLonAxis(gcoord)</a> - Get the Longitude points.</td>
+              </tr>
+              <tr>
+                <td><a href="njTools/njTBX-2.0/@mGridCoordinates/getTimes.html">getTimes(gcoord)</a> - Get time(s) in DATENUM format </td>
+              </tr>
+              <tr>
+                <td><a href="njTools/njTBX-2.0/@mGridCoordinates/getVerticalAxis.html">getVerticalAxis(gcoord)</a> - get vertical coordinate data.</td>
+              </tr>
+              <tr>
+                <td rowspan="7"><div align="left"><span class="subHeader2"><a href="njTools/njTBX-2.0/@mVar/mVar.html" class="subHeader2">mVar:<br />
+                </a></span>  Creates a netcdf variable (non-gridded/gridded) object.</div></td>
+                <td>&nbsp;</td>
+              </tr>
+              <tr>
+                <td><a href="njTools/njTBX-2.0/@mVar/getAttributes.html">getAttributes(mvar,attName)</a> - get attribute(s) associated with the variable.</td>
+              </tr>
+              <tr>
+                <td><a href="njTools/njTBX-2.0/@mVar/getData.html">getData(mvar, start, count, stride)</a> - get data from variable.</td>
+              </tr>
+              <tr>
+                <td><a href="njTools/njTBX-2.0/@mVar/getJNetcdfDataset.html">getJNetcdfDataset(mvar)</a> - Retrieves a java JNetcdfDataset object.(For experience java users).</td>
+              </tr>
+              <tr>
+                <td><a href="njTools/njTBX-2.0/@mVar/getShape.html">getShape(mvar)</a> - get variable shape.</td>
+              </tr>
+              <tr>
+                <td><a href="njTools/njTBX-2.0/@mVar/getTimes.html">getTimes(mvar, timeIndex)</a> - Get time(s) in DATENUM format. </td>
+              </tr>
+              
+              <tr>
+                <td><a href="njTools/njTBX-2.0/@mVar/isGridded.html">isGridded(mvar)</a> - Is variable a grid variable ?</td>
+              </tr>
+            </table>
+          <p>&nbsp;</p>          </td>
+        </tr>
+      </table></td>
+
+    <td colspan="1" nowrap="nowrap"></td>
+  </tr>
+  <tr bgcolor="#CCDDFF">
+    <td colspan="1" nowrap="nowrap" class="smallText2"></td>
+    
+    <td colspan="2" valign="middle" nowrap="nowrap" class="smallText3"><div align="left"><a href="njTools/njFunc/nj_writeNcMLtoFile.html" style="color:#000000"><img src="images/b_prev.gif" alt="previous" width="17" height="17" border="0" align="texttop" /> Function nj_writeNcMLtoFile</a></div></td>
+    <td colspan="3" valign="middle" nowrap="nowrap" class="smallText3"><div align="right"><a href="njTools/njTBX-2.0/@mDataset/mDataset.html" style="color:#000000">Class mDataset<img src="images/b_next.gif" alt="Next" width="17" height="17" border="0" align="texttop" /></a></div></td>
+    <td width="1" nowrap="nowrap"></td>
+  </tr> 
+    <tr bgcolor="#003399">
+    <td colspan="1" nowrap="nowrap" class="smallText2">&copy; 2006-2009</td>
+    <td colspan="3" nowrap="nowrap" class="smallText2">&nbsp;&nbsp;Mississippi State University&nbsp;&nbsp;&nbsp;&bull;&nbsp;License Terms&nbsp;&nbsp;&nbsp;&bull;&nbsp;Credits</td>
+   
+    <td colspan="2" nowrap="nowrap" class="smallText2"></td>
+    <td width="1" nowrap="nowrap"></td>
+  </tr>
+  
+</table>
+
+</body>
+</html>
