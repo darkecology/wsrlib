@@ -53,7 +53,7 @@ levels = [
 % Solving for pressure in terms of height gives the formula below
 %
 
-pressure = 1013.25 * (1 - height/44307.693960).^5.255302;
+pressure = 1013.25 * (double(1 - height/44307.693960)).^5.255302;
 
 % Reverse indices so pressure levels are inreasing
 pressure_levels = levels(end:-1:1, 2);   
