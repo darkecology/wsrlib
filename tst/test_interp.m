@@ -1,12 +1,12 @@
 
-radar_dir = sprintf('%s/radar/data/KBGM/KBGM-2010-09' , getenv('BIRDCAST_HOME'));
+%radar_dir = sprintf('%s/radar/data/KBGM/KBGM-2010-09' , getenv('BIRDCAST_HOME'));
 
 
-radar_file = [radar_dir '/KBGM20100911_012056_V03.gz'];
-    
+%radar_file = [radar_dir '/KBGM20100911_012056_V03.gz'];
+
+radar_file = '../data/KBGM20100911_012056_V03.gz';
+
 %radar_file = 'data/KDOX20090902_104018_V04.gz';  % Legacy resolution
-
-%radar_file = 'data/KDIX20090902_103042_V03.gz';
 
 % Parse the filename to get the station
 scaninfo = wsr88d_scaninfo(radar_file);
