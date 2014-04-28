@@ -1,7 +1,6 @@
 
 %radar_dir = sprintf('%s/radar/data/KBGM/KBGM-2010-09' , getenv('BIRDCAST_HOME'));
 
-
 %radar_file = [radar_dir '/KBGM20100911_012056_V03.gz'];
 
 radar_file = '../data/KBGM20100911_012056_V03.gz';
@@ -14,7 +13,7 @@ scaninfo = wsr88d_scaninfo(radar_file);
 % Construct options for rsl2mat
 opt = struct();
 opt.cartesian = false;
-opt.max_elev = 5.0;
+opt.max_elev = inf;
 radar = rsl2mat(radar_file, scaninfo.station, opt);
 
 rmax = 100000;

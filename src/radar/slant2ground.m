@@ -1,7 +1,7 @@
 function [ s, h ] = slant2ground( r, thet )
 %SLANT2GROUND Convert from slant range and elevation to ground range and height.
 %
-% [ s, h ] = slant2ground( thet, r )
+% [ s, h ] = slant2ground( r, thet )
 %
 % Input:
 %   r    - range along radar path
