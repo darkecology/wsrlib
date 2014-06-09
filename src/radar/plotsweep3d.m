@@ -1,12 +1,12 @@
 function h = plotsweep3d( sweep, rmax, hmax, scatter, sz, edgealpha )
-%SWEEP2CART Convert sweep to a cartesian coordinates
+%PLOTSWEEP3D Plot data from a sweep in 3-D
 % Input:
-%   sweep - the sweep
-%   n     - # pixels in image
-%   r     - max range
-% Output
-%   sweep - converted sweep (data field is now cartesian)
-%   h     - height of each pixel
+%   sweep     - the sweep
+%   rmax      - max. radius 
+%   hmax      - max height.
+%   scatter   - if true, displays a 3d scatter plot
+%   sz        - resolution (optional)
+%   edgealpha (optional)
 
 if nargin < 5
     sz = [100 180];  % default resolution is 100 range bins and 180 degrees
@@ -37,7 +37,7 @@ J = [J(1:jstep:end) 1];
 az = [az; az(1)+360];      % always include wraparound
 
 
-% Compute cartesian coordinate
+% Compute cartesian coordinates
 r = repmat(dist', 1, n);
 z = repmat(height', 1, n);
 thet = repmat(sweep.azim_v', m, 1);

@@ -21,12 +21,12 @@ rmax = 100000;
 % Paramters for alignSweepsToFixed
 radar = alignSweepsToFixed(radar, 0.5, 250, rmax, true);
 
-F = vol_interp(radar.dz, rmax, 'linear');
+F = vol_interp(radar.dz, rmax, 'nearest');
 
 % Generate an (x,y,z) grid 
-dim = 400;
+dim = 200;
 
-clim = [-5 20];
+clim = [-5 35];
 
 phi = 0;
 %for phi = -30:2:360
@@ -82,70 +82,70 @@ while true
     %    pause;
 end
 
-return
+%return
 
 % Generate an (x,y) grid 
-x1 = linspace (-rmax, rmax, dim);
-y1 = -x1;
+%x1 = linspace (-rmax, rmax, dim);
+%y1 = -x1;
 
 
-x0 =  76*0.5;
-y0 = -97*0.5;
-r = 40;
+%x0 =  76*0.5;
+%y0 = -97*0.5;
+%r = 40;
 
 % Generate an (x,y) grid 
-radius = 30000
-x1 = linspace (-rmax, rmax, dim);
-y1 = -x1;
+%radius = 30000
+%x1 = linspace (-rmax, rmax, dim);
+%y1 = -x1;
 
 % Map (x,y) coordinates to slant radius and azimuth
-[x, y] = meshgrid(x1, y1);
-[phi, s] = cart2pol(x, y);
+%[x, y] = meshgrid(x1, y1);
+%[phi, s] = cart2pol(x, y);
 
 % Azimuth is measured clockwise from north in degrees
-phi = 90-rad2deg(phi); 
-phi(phi > 360) = phi(phi > 360) - 360;
-phi(phi < 0) = phi(phi < 0) + 360;
+%phi = 90-rad2deg(phi); 
+%phi(phi > 360) = phi(phi > 360) - 360;
+%phi(phi < 0) = phi(phi < 0) + 360;
 
 % Now get slant range of each pixel on this elevation
-r = groundElev2slant(s, sweep.elev);
+%r = groundElev2slant(s, sweep.elev);
 
 
 
 
-return
+%return
 
-figure(1);
-clf();
+%figure(1);
+%clf();
 
-rmax = 150000;
-dim = 600;
-opt = displayopts();
+%rmax = 150000;
+%dim = 600;
+%opt = displayopts();
 
-for i=1:4
+%for i=1:4
 
-    z = sweep2cart(radar.dz.sweeps(i), rmax, dim);
+%    z = sweep2cart(radar.dz.sweeps(i), rmax, dim);
     
-    subplot(2, 4, i);
-    h = imagesc(z);
-    set(h, 'alphadata', ~isnan(z));
-    set(gca, 'color', 0*[1 1 1]);
-    colormap(opt.dzmap);
-    freezeColors();
+%    subplot(2, 4, i);
+%    h = imagesc(z);
+%    set(h, 'alphadata', ~isnan(z));
+%    set(gca, 'color', 0*[1 1 1]);
+%    colormap(opt.dzmap);
+%    freezeColors();
 
     
-end
+%end
 
-for i=1:4
+%for i=1:4
 
-    z = sweep2cart(radar.vr.sweeps(i), rmax, dim);
+%    z = sweep2cart(radar.vr.sweeps(i), rmax, dim);
     
-    subplot(2, 4, 4+i);
-    h = imagesc(z);
-    set(h, 'alphadata', ~isnan(z));
-    set(gca, 'color', 0*[1 1 1]);
-    colormap(opt.vrmap);
-    freezeColors();
+%    subplot(2, 4, 4+i);
+%    h = imagesc(z);
+%    set(h, 'alphadata', ~isnan(z));
+%    set(gca, 'color', 0*[1 1 1]);
+%    colormap(opt.vrmap);
+%    freezeColors();
 
-end
+% end
 

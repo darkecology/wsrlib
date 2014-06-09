@@ -1,13 +1,10 @@
-function [ radar ] = alignSweepsToFixed( radar, azResolution, rangeResolution, rmax, interpolate, elevations )
+function [ radar ] = alignSweepsToFixed( radar, azResolution, rangeResolution, rmax, method, interpolate, elevations )
 %alignSweepsToFixed Align all reflectivity and radial velocity sweeps in a
 %volume scan to a fixed grid
 %
-% [radar_aligned] = alignSweepsToFixed(radar, azResolution, rangeResolution, rmax, method, elevations)
+% [radar_aligned] = alignSweepsToFixed(radar, azResolution, rangeResolution, rmax, method, interpolate, elevations)
 %
-% radar                          : radar structure returned by rsl2mat
-% interpolate                    : boolean flag for whether to do interpolation or not. 
-%                                  e.g.  'true' means that the method will
-%                                  interpolate along elevations. 
+% radar                          : radar structure returned by rsl2mat 
 % azResolution (optional)        : the angle increment in azimuths. 
 %                                  e.g. 0.5 indicates a total of 720 measurements and so on. 
 % rangeResolution (optional)     : the resolution in range from the radar in meters. 
@@ -17,6 +14,9 @@ function [ radar ] = alignSweepsToFixed( radar, azResolution, rangeResolution, r
 %                                  e.g. 37500 means a maximum range of 37.5 km.  
 % method (optional)              : the method of interpolation to be used. 
 %                                  Possible values : ['linear', 'nearest', 'cubic', 'spline']
+% interpolate                    : boolean flag for whether to do interpolation or not. 
+%                                  e.g.  'true' means that the method will
+%                                  interpolate along elevations.
 % elevations (optional)          : the list of elevations for the aligned sweeps. 
 %                                  e.g. [0.5 1.5 2.5 3.5 4.5] will consider
 %                                  5 lowest sweeps and match them with the
@@ -34,13 +34,16 @@ function [ radar ] = alignSweepsToFixed( radar, azResolution, rangeResolution, r
 % procedure. 
 
 % Default values for all the optional parameters. 
-if nargin < 6
+if nargin < 7
     elevations = [0.5 1.5 2.5 3.5 4.5];
 end
 
-if nargin < 5
+if nargin < 6
     interpolate = false;
 end
+
+if nargin < 5,
+    method = 'nearest';
 
 if nargin < 4,
     rmax =37500;
@@ -94,7 +97,7 @@ for fi = 1:length(fields)
         data = sweep.data;
         data(data >= FLAG_START) = default_vals{fi};
         
-        F = radarInterpolant(data, az, radial, 'nearest');               % Create the interpolating function
+        F = radarInterpolant(data, az, radial, method);               % Create the interpolating function
         
         % Construct the query points
         r   = rangeResolution:rangeResolution:rmax;
@@ -126,8 +129,8 @@ if interpolate==true,
     VR = radar.vr.sweeps;
     
     % interpolate sweeps to 'elevations'
-    DZ_interp = interpolateSweeps(DZ,elevations);
-    VR_interp = interpolateSweeps(VR,elevations);
+    DZ_interp = interpolateSweeps(DZ,elevations,method);
+    VR_interp = interpolateSweeps(VR,elevations,method);
     
     % assign them to radar_structure
     for i=1:size(elevations,2),

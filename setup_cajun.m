@@ -21,6 +21,7 @@ cajundir = fileparts(mfilename('fullpath'));
 addpath(cajundir);
 addpath(sprintf('%s/lib/m_map', cajundir));
 addpath(sprintf('%s/src/narr', cajundir));
+addpath(sprintf('%s/src/legacy', cajundir)); % Once all bugs are fixed, cajun should no longer depend on methods in this folder
 addpath(sprintf('%s/workflow', cajundir));
 addpath(sprintf('%s/lib/rsl2mat', cajundir));
 addpath(sprintf('%s/tst', cajundir));

@@ -35,7 +35,7 @@ switch method
         end
         
     otherwise
-        error('Only neareast neighbor interpolation is supported now!');       % TODO: If required, come up with other faster interpolation schemes
+        error('Only nearest neighbor interpolation is supported now!');       % TODO: If required, come up with other faster interpolation schemes
 end
         
         
