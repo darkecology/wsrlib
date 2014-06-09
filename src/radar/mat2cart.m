@@ -1,5 +1,5 @@
 function [Z, x, y, F] = mat2cart( data, az, range, dim, rmax, interp_type )
-%SWEEP2CART Convert a sweep to cartesian coordinates
+%MAT2CART Convert a sweep to cartesian coordinates
 % 
 %  [Z, x, y] = mat2cart( data, az, range, dim )
 %
