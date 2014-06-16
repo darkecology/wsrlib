@@ -16,7 +16,7 @@ opt.cartesian = false;
 opt.max_elev = inf;
 radar = rsl2mat(radar_file, scaninfo.station, opt);
 
-rmax = 100000;
+rmax = 37500;
 
 % Paramters for alignSweepsToFixed
 radar = alignSweepsToFixed(radar, 0.5, 250, rmax, true);
@@ -24,18 +24,20 @@ radar = alignSweepsToFixed(radar, 0.5, 250, rmax, true);
 F = vol_interp(radar.dz, rmax, 'nearest');
 
 % Generate an (x,y,z) grid 
-dim = 200;
+dim = 100;
 
 clim = [-5 35];
 
+rdim = 100;
+zdim = 50;
 phi = 0;
 %for phi = -30:2:360
 while true
-    r = linspace (0, rmax, dim);
+    r = linspace (0, rmax, rdim);
 
     xx = r.*cos(deg2rad(90-phi));
     yy = r.*sin(deg2rad(90-phi));
-    zz = linspace(0, 5000, 100);
+    zz = linspace(0, 5000, zdim);
 
     m = length(zz);
     n = length(xx);
