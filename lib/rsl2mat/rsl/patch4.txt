@@ -1,0 +1,25 @@
+--- rsl-v1.43/examples/kwaj_subtract_one_day.c	2011-05-20 13:13:58.000000000 -0400
++++ rsl-v1.43/examples/kwaj_subtract_one_day.c.dan	2014-06-16 14:26:04.000000000 -0400
+@@ -14,21 +14,21 @@
+   fprintf(stderr, "all the way down to the ray.  Output to uf.\n");
+   return;
+ }
+ 
+ /**********************************************************************/
+ /*                                                                    */
+ /*                        subtract_one_day_ray                        */
+ /*                                                                    */
+ /**********************************************************************/
+ #include<time.h>
+-void    *subtract_one_day(int month, int day, int year,
++void    subtract_one_day(int month, int day, int year,
+ 						  int *m, int *d, int *y)
+ {
+   /* Connocialize and subtract. */
+   struct tm *t;
+   time_t the_time;
+ 
+   t = (struct tm *)calloc(1, sizeof(struct tm));
+   t->tm_mon  = month-1;   /* 0 - 11 */
+   t->tm_mday = day-1;       /* 1 - 31 */  /* And, subtract one day. */
+   t->tm_year = year-1900; /* since 1900 */
