@@ -44,6 +44,7 @@ end
 
 if nargin < 5,
     method = 'nearest';
+end
 
 if nargin < 4,
     rmax =37500;
@@ -76,11 +77,12 @@ numBins = round(rmax/rangeResolution);
 
 numDzSweeps = size(radar.dz.sweeps,1);
 numVrSweeps = size(radar.vr.sweeps,1);
-numSweeps   = max(numDzSweeps, numVrSweeps);
+numSwSweeps = size(radar.sw.sweeps,1);
+numSweeps   = max([numDzSweeps, numVrSweeps, numSwSweeps]);
 
-fields         = {'dz' , 'vr'};
-default_vals   = {nan  ,  nan};
-sweepCount    = {numDzSweeps, numVrSweeps}; 
+fields         = {'dz' , 'vr',  'sw'};
+default_vals   = {nan  ,  nan,   nan};
+sweepCount    = {numDzSweeps, numVrSweeps, numSwSweeps}; 
 
 FLAG_START = 131067;
 
