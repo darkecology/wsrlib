@@ -1,19 +1,19 @@
-function install_cajun()
-% INSTALL_CAJUN One-time installation for cajun
+function install_wsrlib()
+% INSTALL_WSRLIB One-time installation for wsrlib
 % 
-% Run this script for one-time compilation, etc. of toolboxes used by cajun
+% Run this script for one-time compilation, etc. of toolboxes used by wsrlib
 % 
 % If you pull in additional toolboxes that need to be compiled for each
 % machine/platform, add their installation commands below.
 
-cajundir = fileparts(mfilename('fullpath'));
+root = fileparts(mfilename('fullpath'));
 
 %%%%%%%%%%%%%%%%%%%%%% 
 % rsl
 %%%%%%%%%%%%%%%%%%%%%% 
 fprintf('********** Compiling rsl ************\n\n');
 
-status = system(sprintf('make -C %s/lib/rsl2mat/rsl', cajundir), '-echo');
+status = system(sprintf('make -C %s/rsl2mat/rsl', root), '-echo');
 if status ~= 0
     error('Failed to compile rsl');
 end
@@ -23,5 +23,5 @@ fprintf('\n\nSuccessfully compiled rsl\n\n');
 %%%%%%%%%%%%%%%%%%%%%% 
 % rsl2mat
 %%%%%%%%%%%%%%%%%%%%%% 
-addpath(sprintf('%s/lib/rsl2mat', cajundir));
+addpath(sprintf('%s/rsl2mat', root));
 make_rsl2mat();
