@@ -24,11 +24,11 @@ addpath(sprintf('%s/lib/m_map', root));
 
 addpath(sprintf('%s/src/grid', root));
 addpath(sprintf('%s/src/narr', root));
-addpath(sprintf('%s/src/legacy', root)); % Once all bugs are fixed, wsrlib should no longer depend on methods in this folder
-addpath(sprintf('%s/src/tst', root));
+addpath(sprintf('%s/src/test', root));
 addpath(sprintf('%s/src/radar', root));
+addpath(sprintf('%s/src/vvp', root));
 addpath(sprintf('%s/src/util', root));
-addpath(sprintf('%s/src/radar/vvp', root));
+addpath(sprintf('%s/src/quarantine', root)); % Once all bugs are fixed, wsrlib should no longer depend on methods in this folder
 addpath(sprintf('%s/src/util/colormaps', root));
 
 % Setup netcdf-java toolbox. Includes java files
