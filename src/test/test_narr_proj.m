@@ -1,11 +1,10 @@
+function test_narr_proj()
+% TEST_NARR_PROJ Test NARR projection routines
 
-wind_file = 'data/merged_AWIP32.2010010321.3D';
+[~, ugrid] = nj_grid_varget(sample_narr_file(), 'u_wind');
 
-[~, ugrid] = nj_grid_varget(wind_file, 'u_wind');
-
-[x,y] = ll2xy(ugrid.lon, ugrid.lat);
-
-[lon, lat] = xy2ll(x, y);
+[x,y] = narr_ll2xy(ugrid.lon, ugrid.lat);
+[lon, lat] = narr_xy2ll(x, y);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Test that lon,lat --> x,y --> lon,lat gives same answer back
@@ -20,8 +19,8 @@ fprintf('Max lat error = %.4e\n', lat_err);
 % Test that lon,lat --> x,y --> i,j gives the cell indices, e.g. for
 %  this small example:
 %
-% j = [ 1 2 3 
-%       1 2 3 
+% j = [ 1 2 3
+%       1 2 3
 %       1 2 3 ]
 %
 % i = [ 1 1 1
@@ -29,17 +28,19 @@ fprintf('Max lat error = %.4e\n', lat_err);
 %       3 3 3 ]
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-[i,j] = xy2ij(x, y);
+[i,j] = narr_xy2ij(x, y);
 
-s = narr_consts;
+s = narr_grid();
 
 row = 1:s.nx;
 if ~isequal(j, repmat(row, s.ny, 1))
     error('xy2ij failed');
 end
 
-% Every column of i should the same
+% Every column of i should be the same
 col = (1:s.ny)';
 if ~isequal(i, repmat(col, 1, s.nx))
     error('xy2ij failed');
+end
+
 end
