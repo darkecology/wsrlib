@@ -1,7 +1,7 @@
-function [ height ] = level2height( k )
-%LEVEL2HEIGHT Convert from mbar level to height for NARR data
+function [ height ] = narr_level2height( k )
+%NARR_LEVEL2HEIGHT Convert from pressure index to height for NARR data
 %
-%   height = level2height( k )
+%   height = narr_level2height( k )
 %
 % Input:
 %   k - vertical index into NARR 3D array
@@ -9,6 +9,7 @@ function [ height ] = level2height( k )
 % Output:
 %   height - matrix of heights (units: m above mean sea level)
 % 
+% See also NARR_HEIGHT2LEVEL, PRESSURE2HEIGHT
 
 % Columns (index, mbar)
 levels = [

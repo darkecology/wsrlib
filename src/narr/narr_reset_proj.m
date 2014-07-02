@@ -1,5 +1,5 @@
-function reset_proj( proj )
-%RESET_PROJ Reset map projection cached value
+function narr_reset_proj( proj )
+%NARR_RESET_PROJ Reset map projection cached value
 
 global MAP_PROJECTION MAP_VAR_LIST MAP_COORDS
 
