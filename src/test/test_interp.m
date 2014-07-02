@@ -1,25 +1,16 @@
 
-%radar_dir = sprintf('%s/radar/data/KBGM/KBGM-2010-09' , getenv('BIRDCAST_HOME'));
-
-%radar_file = [radar_dir '/KBGM20100911_012056_V03.gz'];
-
-radar_file = '../data/KBGM20100911_012056_V03.gz';
-
-%radar_file = 'data/KDOX20090902_104018_V04.gz';  % Legacy resolution
-
-% Parse the filename to get the station
-scaninfo = wsr88d_scaninfo(radar_file);
+[radar_file, station] = sample_radar_file();
 
 % Construct options for rsl2mat
 opt = struct();
 opt.cartesian = false;
 opt.max_elev = inf;
-radar = rsl2mat(radar_file, scaninfo.station, opt);
+radar = rsl2mat(radar_file, station, opt);
 
 rmax = 37500;
 
 % Paramters for alignSweepsToFixed
-radar = alignSweepsToFixed(radar, 0.5, 250, rmax, true);
+radar = alignSweepsToFixed(radar, 0.5, 250, rmax, 'nearest', true);
 
 F = vol_interp(radar.dz, rmax, 'nearest');
 
