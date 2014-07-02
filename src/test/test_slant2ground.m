@@ -9,7 +9,7 @@ opt = struct();
 opt.cartesian = false;
 radar = rsl2mat(file, station, opt);
 
-[az, range] = get_az_range(radar.dz.sweeps(1));
+[~, range] = get_az_range(radar.dz.sweeps(1));
 
 elev = 0.5;
 [s, h] = slant2ground(range, elev);
@@ -24,8 +24,25 @@ elev1_err   = max(abs(elev - elev1));
 range2_err = max(abs(range - range2));
 height_err = max(abs(h - h1));
 
-fprintf('Max range error: %.4e\n', range1_err);
-fprintf('Max elev error: %.4e\n',  
+fprintf('Testing conversions\n');
 
-fprintf('Max range error 2: %.4e\n', 
-fprintf('Max height error: %.4e\n',  
+fprintf('  Max range error: %.4e\n', range1_err);
+fprintf('  Max elev angle error: %.4e\n', elev1_err); 
+fprintf('  Max range error 2: %.4e\n', range2_err);
+fprintf('  Max height error: %.4e\n', height_err);
+
+if range1_err > tol
+    error('Range (1) error exceeds tolerance');
+end
+
+if elev1_err > tol
+    error('Elevation angle error exceeds tolerance');
+end
+
+if range2_err > tol
+    error('Range (2) error exceeds tolerance');
+end
+
+if height_err > tol
+    error('Height error exceeds tolerance');
+end

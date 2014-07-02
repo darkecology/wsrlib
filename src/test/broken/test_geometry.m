@@ -1,8 +1,4 @@
 
-
-
-
-
 earth_radius = 6371200; % from NARR GRIB file
 multiplier = 4/3;
 
