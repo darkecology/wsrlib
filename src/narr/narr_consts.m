@@ -1,5 +1,7 @@
 function [ s ] = narr_consts( )
-%GET_NARR_CONSTS Get constants describing the NARR x,y grid
+%NARR_CONSTS Returns structure describing the NARR x,y grid
+%
+%  s = narr_consts( )
 
 % The code below was genereated by gen_narr_consts.m
 

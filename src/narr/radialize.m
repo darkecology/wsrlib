@@ -1,5 +1,5 @@
 function [ vel ] = radialize( az, elev, u, v )
-%RADIALIZE_VELOCITY Radialize a velocity field
+%RADIALIZE Radialize a velocity field
 %
 %  vel = radialize(az, u, v)
 %

@@ -1,5 +1,5 @@
 function [ height ] = level2height( k )
-%level2height Convert from mbar level to height for NARR data
+%LEVEL2HEIGHT Convert from mbar level to height for NARR data
 %
 %   height = level2height( k )
 %
