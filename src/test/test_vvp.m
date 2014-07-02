@@ -1,15 +1,4 @@
-%radar_file = 'KBGM20110901_114600_V04.gz';
-radar_file = 'KBGM20100911_052711_V03.gz';
-%radar_file = 'KBGM20110925_015712_V03.gz';
-%radar_file = 'KDOX20090902_104018_V04.gz';  % Legacy resolution
-%radar_file = 'KBGM20100930_064817_V03.gz';   % Rain
-
-radar_dir = '/Users/sheldon/projects/data/cajun-test';
-
-filename = sprintf('%s/%s', radar_dir, radar_file);
-
-% Parse the filename to get the station
-scaninfo = wsr88d_scaninfo(filename);
+[filename, station] = sample_radar_file();
 
 % Construct options for rsl2mat
 opt = struct();
@@ -38,7 +27,6 @@ colorbar();
 %
 rmse_thresh = inf;
 [ edges, z, u, v, rmse, nll, ~, cnt] = epvvp(radar, 100, 0, rmax, 5000, 'EP', .1, .08, 200);
-cnt = cnt(1:end-1);
 [radar_dealiased, radar_smoothed] = vvp_dealias(radar, edges, u, v, rmse, rmse_thresh);
 
 figure(2);
@@ -51,7 +39,6 @@ colorbar();
 % 4. Plot velocity profiles
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%
 I = cnt > 10 & rmse < 5 & z < 5000;
 
 [thet,s] = cart2pol(u, v);
