@@ -1,10 +1,7 @@
 [radar_file, station] = sample_radar_file();
 
 % Construct options for rsl2mat
-opt = struct();
-opt.cartesian = false;
-opt.max_elev = 10;
-radar = rsl2mat(radar_file, scaninfo.station, opt);
+radar = rsl2mat(radar_file, station);
 
 figure(1);
 clf();

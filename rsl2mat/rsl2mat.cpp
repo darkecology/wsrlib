@@ -96,8 +96,8 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
     // Default options
     Options opt;
     opt.nsweeps = INT_MAX;
-    opt.max_elev = 1.5;
-    opt.cartesian = 1;
+    opt.max_elev = 90.0;
+    opt.cartesian = 0;
     opt.dim = 600;
     opt.range = 150.0;
     opt.ncappi = 0;
