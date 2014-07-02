@@ -40,13 +40,13 @@ if nargin < 6
 end
 
 %get the coordinates for the radar station
-[x, y] = ll2xy(lon, lat);
-[i, j] = xy2ij(x, y);
+[x, y] = narr_ll2xy(lon, lat);
+[i, j] = narr_xy2ij(x, y);
 
 %create height bins (translate heights to indices)
-start_bin = height2level(min_elev);
-end_bin = height2level(max_elev);
-levels = (start_bin:end_bin)';
+start_bin = narr_height2level(min_elev);
+end_bin   = narr_height2level(max_elev);
+levels    = (start_bin:end_bin)';
 
 %compute the wind velocity at each bin
 u = u_wind(levels, i, j);
@@ -55,6 +55,6 @@ v = v_wind(levels, i, j);
 [theta, radius] = cart2pol(u, v);
 direction = pol2cmp(theta);
 speed = radius;
-elev = level2height(levels);
+elev = narr_level2height(levels);
 
 end

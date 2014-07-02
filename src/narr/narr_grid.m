@@ -1,7 +1,9 @@
-function [ s ] = narr_consts( )
-%NARR_CONSTS Returns structure describing the NARR x,y grid
+function [ s ] = narr_grid( )
+%NARR_GRID Returns struct describing the NARR x,y grid
 %
-%  s = narr_consts( )
+%  s = narr_grid( )
+%
+% See also CREATE_GRID
 
 % The code below was genereated by gen_narr_consts.m
 

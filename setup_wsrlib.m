@@ -1,5 +1,5 @@
 function setup_wsrlib()
-% SETUP_CAJUN Add paths for wsrlib codebase
+% SETUP_WSRLIB Add paths for wsrlib codebase
 %
 % Best practice: place the following commands in your MATLAB startup.m
 % file:
@@ -22,6 +22,7 @@ addpath(root);
 addpath(sprintf('%s/rsl2mat', root));
 addpath(sprintf('%s/lib/m_map', root));
 
+addpath(sprintf('%s/src/grid', root));
 addpath(sprintf('%s/src/narr', root));
 addpath(sprintf('%s/src/legacy', root)); % Once all bugs are fixed, wsrlib should no longer depend on methods in this folder
 addpath(sprintf('%s/src/tst', root));
@@ -29,7 +30,6 @@ addpath(sprintf('%s/src/radar', root));
 addpath(sprintf('%s/src/util', root));
 addpath(sprintf('%s/src/radar/vvp', root));
 addpath(sprintf('%s/src/util/colormaps', root));
-addpath(sprintf('%s/src/radar/clutterMaps', root));
 
 % Setup netcdf-java toolbox. Includes java files
 addpath(genpath(sprintf('%s/lib/njtbx', root)));

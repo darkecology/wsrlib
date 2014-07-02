@@ -1,10 +1,19 @@
 function [ i, j ] = xy2ij( x, y, s )
-%XY2IJ Convert from NARR x,y coordinates to i,j indices into NARR grid
+%XY2IJ Convert from x,y coordinates to i,j grid indices
 %
-% Find the closest grid point to given x,y point
+%   [ i, j ] = xy2ij( x, y, s )
+%
+% Input:
+%    x, y      Vectors or matrices of x,y coordinates
+%    s         Grid struct
+%
+% Output: 
+%    i, j      Grid indices: i is same size as y and j is same size as x
+%
+% See also CREATE_GRID, NARR_GRID
 
 if nargin < 3
-    s = narr_consts();
+    error('Three arguments are required');
 end
 
 i = round((y - s.y0)./s.dy) + 1;

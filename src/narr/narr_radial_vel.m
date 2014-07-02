@@ -43,9 +43,9 @@ sz = size(az);
 lon = lon-360;
 
 % Convert to NARR x,y and then i,j coordinates
-[x, y] = ll2xy(lon, lat);
-[i, j] = xy2ij(x, y);
-k = height2level(height);
+[x, y] = narr_ll2xy(lon, lat);
+[i, j] = narr_xy2ij(x, y);
+k = narr_height2level(height);
 
 % Now do the lookup
 %   First do this using linear indices
