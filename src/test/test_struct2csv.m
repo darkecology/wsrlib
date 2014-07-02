@@ -1,3 +1,5 @@
+function test_struct2csv()
+
 s = struct('a', {1 2 3 4}, 'b', {'w', 'x', 'y', 'z'}, 'c', num2cell(int32([9 10 11 12])));
 
 % Guess the format
@@ -38,3 +40,6 @@ fprintf('Test 7: write to file\n');
 struct2csv(s, fmt, 'foo.csv');
 type foo.csv
 fprintf('\n');
+delete('foo.csv');
+
+end
