@@ -1,30 +1,35 @@
 % Usage
-% 
+%
+%  radar = rsl2mat(filename, callid)
 %  radar = rsl2mat(filename, callid, params)
 % 
 %    filename           radar file
 %    callid             callsign, e.g., KDOX
-%    params             struct to specify additional parameters
+%    params             optional struct to specify additional parameters
 % 
 %  Additional parameters:
 %  
 %    params.cartesian   if 1, return sweep in cartesian coordinates,
 %                       otherwise return raw data (polar coordinates)
-%                       (default: 1)
+%                       (default: 0)
 %  
-%    params.nsweeps     number of sweeps to return, starting with lowest
-%                       elevation angle (default: 1)
+%    params.nsweeps     max number of sweeps to return, starting with 
+%                       lowest elevation angle (default: inf)
 % 
+%    paramx.max_elev    don't return sweeps with elevation angle exceeding
+%                       this value (default: inf)
+%
 %    params.cappi_h     if this parameter is set to a value > 0.0, a 
 %                       cappi (constant altitude plan position indicator)
 %                       is create at the specified height (in km)
 %                       (default 0)
 %
-%  If cartesian is selected, which is usually the case, the following
-%  parameters apply:
+%  If cartesian is selected the following parameters apply:
 % 
-%    params.range       maximum radius in km for cartesian data (default: 150km)
-%    params.n           pixel dimension for cartesian data (n x n)
+%    params.range       maximum radius in km for cartesian data 
+%                       (default: 150km)
+%
+%    params.dim         pixel dimension for cartesian data (n x n)
 %                       (default: 600)
 %  
 %  The returned struct has the following metadata fields:
@@ -58,7 +63,7 @@
 %    volume.type      one of 'DZ', 'VR', or 'SW'
 %    volume.sweeps    vector of sweeps
 % 
-%  A sweep struct has the following fields:
+%  A sweep struct has the following (and more) fields:
 %  
 %    sweep.elev            mean elevation angle for the sweep
 %    sweep.beam_width       
