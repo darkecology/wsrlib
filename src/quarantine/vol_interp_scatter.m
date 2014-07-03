@@ -20,7 +20,7 @@ for i=1:n
     
     sweep = vol.sweeps(i);
     
-    [ data, mask, az, range ] = align_sweeps( {sweep}, inf, 'slant' );
+    [ data, mask, az, range ] = align_sweeps_old( {sweep}, inf, 'slant' );
     
     data = data{:};
     data(~mask) = default_val;

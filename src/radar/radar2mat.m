@@ -15,7 +15,7 @@ function [ data, range, az, elev ] = radar2mat( radar, fields, rmax )
 %
 % NOTE: radar must first be aligned. 
 %
-% See also ALIGNSWEEPSTOFIXED, CHECK_ALIGNED
+% See also ALIGN_SCAN, CHECK_ALIGNED
 
 if nargin < 2
     fields = {'dz', 'vr'};
@@ -27,7 +27,7 @@ end
 
 [is_aligned, msg] = check_aligned(radar, fields);
 if ~is_aligned
-    error('Radar is not aligned: %s\n. Please call alignSweepsToFixed\n', msg);
+    error('Radar is not aligned: %s\n. Please call align_scan\n', msg);
 end
 
 n = numel(fields);

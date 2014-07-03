@@ -1,12 +1,13 @@
-function setup_wsrlib()
-% SETUP_WSRLIB Add paths for wsrlib codebase
+function wsrlib_setup()
+% WSRLIB_SETUP Setup paths for wsrlib
 %
 % Best practice: place the following commands in your MATLAB startup.m
 % file:
 %
 % addpath('/path/to/wsrlib');
-% setup_wsrlib();
-%
+% wsrlib_setup();
+
+
 % If you another subdirectory contains utility functions and should be on
 % the MATLAB path, add it below.
 
@@ -14,7 +15,7 @@ if isdeployed
     return;
 end
 
-root = fileparts(mfilename('fullpath'));
+root = wsrlib_root();
 
 % Add directories non-recursively when possible to avoid slow commands and
 % bloated MATLAB path

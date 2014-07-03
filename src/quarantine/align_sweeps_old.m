@@ -1,7 +1,7 @@
-function [ data, mask, az, range, sweep_error ] = align_sweeps( sweeps, rmax, type, station)
-%ALIGN_SWEEPS Align reflectivity and radial velocity sweeps
-% 
-% [ data, mask, az, range ] = align_sweeps( sweeps, rmax, type )
+function [ data, mask, az, range, sweep_error ] = align_sweeps_old( sweeps, rmax, type, station)
+%ALIGN_SWEEPS_OLD (deprecated) Align reflectivity and radial velocity sweeps
+%                 
+% [ data, mask, az, range ] = align_sweeps_old( sweeps, rmax, type, station )
 %
 
 sweep_error=0;

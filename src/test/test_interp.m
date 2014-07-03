@@ -9,10 +9,11 @@ radar = rsl2mat(radar_file, station, opt);
 
 rmax = 37500;
 
-% Paramters for alignSweepsToFixed
-radar = alignSweepsToFixed(radar, 0.5, 250, rmax, 'nearest', true);
+% Paramters for align_scan
+radar = align_scan(radar, 0.5, 250, rmax, 'nearest', true);
 
-F = vol_interp(radar.dz, rmax, 'nearest');
+F = vol_interp(radar, {'dz'}, 'linear');
+F = F{1};
 
 % Generate an (x,y,z) grid 
 dim = 100;
@@ -72,73 +73,4 @@ while true
     phi = 90 - rad2deg(atan2(-b, a));
     fprintf('a=%.4f, b=%.4f, phi=%.4f\n', a, b, phi);
     
-    %    pause;
 end
-
-%return
-
-% Generate an (x,y) grid 
-%x1 = linspace (-rmax, rmax, dim);
-%y1 = -x1;
-
-
-%x0 =  76*0.5;
-%y0 = -97*0.5;
-%r = 40;
-
-% Generate an (x,y) grid 
-%radius = 30000
-%x1 = linspace (-rmax, rmax, dim);
-%y1 = -x1;
-
-% Map (x,y) coordinates to slant radius and azimuth
-%[x, y] = meshgrid(x1, y1);
-%[phi, s] = cart2pol(x, y);
-
-% Azimuth is measured clockwise from north in degrees
-%phi = 90-rad2deg(phi); 
-%phi(phi > 360) = phi(phi > 360) - 360;
-%phi(phi < 0) = phi(phi < 0) + 360;
-
-% Now get slant range of each pixel on this elevation
-%r = groundElev2slant(s, sweep.elev);
-
-
-
-
-%return
-
-%figure(1);
-%clf();
-
-%rmax = 150000;
-%dim = 600;
-%opt = displayopts();
-
-%for i=1:4
-
-%    z = sweep2cart(radar.dz.sweeps(i), rmax, dim);
-    
-%    subplot(2, 4, i);
-%    h = imagesc(z);
-%    set(h, 'alphadata', ~isnan(z));
-%    set(gca, 'color', 0*[1 1 1]);
-%    colormap(opt.dzmap);
-%    freezeColors();
-
-    
-%end
-
-%for i=1:4
-
-%    z = sweep2cart(radar.vr.sweeps(i), rmax, dim);
-    
-%    subplot(2, 4, 4+i);
-%    h = imagesc(z);
-%    set(h, 'alphadata', ~isnan(z));
-%    set(gca, 'color', 0*[1 1 1]);
-%    colormap(opt.vrmap);
-%    freezeColors();
-
-% end
-

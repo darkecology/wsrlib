@@ -1,12 +1,12 @@
-function install_wsrlib()
-% INSTALL_WSRLIB One-time installation for wsrlib
+function wsrlib_make()
+% WSRLIB_MAKE One-time compile and install for wsrlib
 % 
 % Run this script for one-time compilation, etc. of toolboxes used by wsrlib
 % 
 % If you pull in additional toolboxes that need to be compiled for each
 % machine/platform, add their installation commands below.
 
-root = fileparts(mfilename('fullpath'));
+root = wsrlib_root();
 
 %%%%%%%%%%%%%%%%%%%%%% 
 % rsl

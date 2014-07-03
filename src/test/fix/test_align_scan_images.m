@@ -46,7 +46,7 @@ for i=1:size(scans,1),
     
     try
         radar = rsl2mat(radar_file{1}, scaninfo.station, opt);
-        radar_aligned = alignSweepsToFixed(radar, true, 0.25, 250, 250000);
+        radar_aligned = align_scan(radar, true, 0.25, 250, 250000);
         
         % Note that the velocity sweeps are not dealiased
         
