@@ -1,5 +1,5 @@
 function [ y, I ] = nanmin( X, dim )
-%NANMEAN Return mean of non-NaN elements
+%NANMIN Min of non-NaN elements
 
 if nargin < 2
     dim = 1;

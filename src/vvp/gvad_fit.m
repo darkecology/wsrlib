@@ -1,7 +1,8 @@
 function [ u, v, y, nvalid, resid ] = gvad_fit( nyq_vel, az, elev, vr, beta )
-%GVAD_FIT Fit wind components using gradient-based least squares
+%GVAD_FIT Fit velocity using gradient-based least squares
 %
 % Inputs: 
+%  nyq_vel  Nyquist velocity
 %  az       azimuth in radians
 %  elev     elevation angle in radians
 %  vr       radial velocity

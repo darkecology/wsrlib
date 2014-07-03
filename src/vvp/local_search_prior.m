@@ -1,5 +1,5 @@
 function [ K, b ] = local_search_prior( K0, b0, X, y, nyq_vel, sigma, maxiter, mu0 )
-%LOCAL_SEARCH Perform a local search based on least squares refitting
+%LOCAL_SEARCH_PRIOR Perform a local search with prior via least squares refitting
 
 if nargin < 7
     maxiter = 10;

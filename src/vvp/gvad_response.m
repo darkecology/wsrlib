@@ -1,11 +1,11 @@
 function [az_meas, y] = gvad_response( nyq_vel, az, vr, gamma )
-%GVAD_FIT Fit wind components using gradient-based least squares
+%GVAD_RESPONSE Compute GVAD response variable
 %
 % Inputs: 
+%  nyq_vel  Nyquist velocity
 %  az       azimuth in radians
-%  elev     elevation angle in radians
 %  vr       radial velocity
-%  beta     shift amount in radians
+%  gamma    shift amount in radians
 
 [m, n] = size(az);
 

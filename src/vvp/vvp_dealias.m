@@ -1,5 +1,5 @@
 function [ radar_dealiased, radar_smoothed ] = vvp_dealias( radar, edges, u, v, rmse, rmse_thresh )
-%DEALIAS Dealias a volume using a velocity profile
+%VVP_DEALIAS Dealias a volume using a velocity profile
 
 ntilts = numel(radar.vr.sweeps);
 
@@ -18,7 +18,7 @@ for i=1:ntilts
     [az, range] = get_az_range(sweep);
     az = cmp2pol(az);
     [~, z] = slant2ground(range, sweep.elev);
-    [az, ~, z] = get_pixel_coords(az, range, z);
+    [az, ~, z] = expand_coords(az, range, z);
 
     % Assign pulse volumes to wind levels
     [~, bin] = histc(z, edges);

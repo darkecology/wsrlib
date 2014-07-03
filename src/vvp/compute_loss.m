@@ -1,6 +1,8 @@
 function [ rmse, nll ] = compute_loss( u, v, az, elev, height, vr, nyq_vel, edges, sigma)
-% ASSESS_FIT Measure rmse and wrapped normal neg. log likelihood for
-%            estimated parameters and test data
+% COMPUTE_LOSS Compute rmse and wrapped normal neg. log likelihood 
+%
+%  [ rmse, nll ] = compute_loss( u, v, az, elev, height, vr, nyq_vel, edges, sigma)
+%
 
 m = length(edges)-1;
 [~, bin] = histc(height, edges);

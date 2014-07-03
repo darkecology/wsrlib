@@ -1,4 +1,4 @@
-function [ vel,lon, lat, height ] = narr_radial_vel( u_wind, v_wind, range, az, elev, lon0, lat0, height0 )
+function [ vel, lon, lat, height ] = narr_radial_vel( u_wind, v_wind, range, az, elev, lon0, lat0, height0 )
 %NARR_RADIAL_VEL Get radialized wind velocity from NARR data
 %
 % [ vel,lon,lat ] = narr_radial_vel( u_wind, v_wind, range, az, elev, lon0, lat0, height0 )
@@ -36,7 +36,7 @@ height = height + height0;
 sz = size(az);
 
 % Now compute (az, dist, z) for each pixel
-%[az, dist, height] = get_pixel_coords(az, dist, height);
+%[az, dist, height] = expand_coords(az, dist, height);
 
 % Convert from (az, dist) relative to station to absolute (lat, lon) (aka "reckoning")
 [lon, lat] = m_fdist(lon0, lat0, az(:), dist(:), 'sphere');
