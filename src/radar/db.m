@@ -1,5 +1,5 @@
 function [ dbz ] = db( z )
-%DB Compute decibels
+%DB Compute decibel transform
 %
 %  dbz = db( z )
 %

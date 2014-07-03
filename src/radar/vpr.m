@@ -1,4 +1,9 @@
-function [ avg_z_trimmed, avg_z_med, cnt ] = compute_dz_profile( dz, height, zstep, zmax, dz_max, trim_amt)
+function [ avg_z_trimmed, avg_z_med, cnt ] = vpr( dz, height, zstep, zmax, dz_max, trim_amt)
+%VPR Vertical profile of reflectivity
+%
+% [ avg_z_trimmed, avg_z_med, cnt ] = vpr( dz, height, zstep, zmax, dz_max, trim_amt)
+%
+
 
 if nargin < 3
     zstep = 100;
@@ -38,7 +43,7 @@ for i=1:nbins
     end
     
     bin_dz = dz(bin == i );
-    bin_z = 10.^(bin_dz./10);    
+    bin_z  = idb(bin_dz);    
 
     n = numel(bin_dz);
     

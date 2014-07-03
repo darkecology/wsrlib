@@ -1,8 +1,9 @@
 function [ dbz_out ] = convert_wavelength( dbz_in, lambda_in, lambda_out )
-%CONVERT_DBZ Convert reflectivity factor dBZ from one wavelength to another
+%CONVERT_WAVELENGTH Convert between wavelengths for reflectivity factor (Z/dbZ)
 %
 % dbz_out = convert_wavelength( dbz_in, lambda_in, lambda_out )
 %
+% See also Z_TO_REFL, REFL_TO_Z
 
 % Based on this equation:
 %
@@ -19,7 +20,7 @@ dbz_out = dbz_in + 40*(log10(lambda_out) - log10(lambda_in));
 
 % Another way to do it (gives same answer):
 %
-% z_in    = undb(dbz_in);
+% z_in    = idb(dbz_in);
 % refl    = z_to_refl(z_in, lambda_in);
 % z_out   = refl_to_z(refl, lambda_out);
 % dbz_out = db(z_out);

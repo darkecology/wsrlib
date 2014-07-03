@@ -1,6 +1,5 @@
-function [ nyq_vel, az, range, elev, height, vr, azgvad, ygvad ] = get_pulse_volume_data(radar, rmin, rmax, zmax, gamma, min_vel)
-%GET_PULSE_VOLUME_DATA 
-%  Extract vectorized info about all pulse volumes in a volume scan
+function [ nyq_vel, az, range, elev, height, vr, azgvad, ygvad ] = get_vr_pulse_volumes(radar, rmin, rmax, zmax, gamma, min_vel)
+%GET_VR_PULSE_VOLUMES Extract vectorized info about all pulse volumes in a volume scan
 
 if nargin < 2
     rmin = 5000;
