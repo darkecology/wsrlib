@@ -1,4 +1,4 @@
-% Usage
+% RSL2MAT Ingest a radar file
 %
 %  radar = rsl2mat(filename, callid)
 %  radar = rsl2mat(filename, callid, params)
