@@ -1,5 +1,5 @@
 function [ az, range ] = get_az_range( sweep )
-%AZ_RANGE Get vector of azimuths and ranges for sweep
+%GET_AZ_RANGE Get vector of azimuths and ranges for sweep
 %
 % [ az, range ] = get_az_range( sweep )
 %

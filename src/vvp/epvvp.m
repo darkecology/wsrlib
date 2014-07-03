@@ -85,7 +85,7 @@ maxiter = 10;        % max # of iterations in local search
 % Get data and split into bins
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-[ nyq_vel, az, range, elev, height, vr, azgvad, ygvad ] = get_pulse_volume_data(radar, rmin, rmax, zmax, gamma);
+[ nyq_vel, az, range, elev, height, vr, azgvad, ygvad ] = get_vr_pulse_volumes(radar, rmin, rmax, zmax, gamma);
 
 edges  = (0:zstep:zmax)';
 m = length(edges)-1;

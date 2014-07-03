@@ -1,15 +1,17 @@
 function [ z, dbz ] = refl_to_z( eta, lambda )
-%REFLECTIVITY_TO_Z Convert reflectivity to z
+%REFL_TO_Z Convert from reflectivity to reflectivity factor (z)
 %
-% [ z, dbz ] = reflectivity_to_z( eta, wavelength )
+% [ z, dbz ] = refl_to_z( eta, lambda )
 %
 % Inputs:
 %   eta          Vector of reflectivity values (units: cm^2/km^3 )
-%   wavelength   Radar wavelength (units: meters; default = 0.1071 )
+%   lambda       Radar wavelength (units: meters; default = 0.1071 )
 % Outputs:
 %   z            Vector of Z values (reflectivity factor; units: mm^6/m^3)
 %   dbz          Decibels of Z (10.^(Z/10))
 %
+% See also Z_TO_REFL, CONVERT_WAVELENGTH
+
 % Reference: 
 %  Chilson, P. B., W. F. Frick, P. M. Stepanian, J. R. Shipley, T. H. Kunz, 
 %  and J. F. Kelly. 2012. Estimating animal densities in the aerosphere 
