@@ -1,7 +1,7 @@
-function [ az, dist, z ] = get_pixel_coords( az, dist, z )
-%GET_PIXEL_COORDS Get matrices of coordinates for each pixel
+function [ az, dist, z ] = expand_coords( az, dist, z )
+%EXPAND_COORDS Get matrices of coordinates for each pulse volume
 %
-% [ az, dist, z ] = get_pixel_coords( az, dist, z )
+% [ az, dist, z ] = expand_coords( az, dist, z )
 % 
 % Input:
 %  az   - vector (length n) of azimuths

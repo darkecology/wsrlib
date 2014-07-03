@@ -1,5 +1,5 @@
 function freezeColors(varargin)
-% freezeColors  Lock colors of plot, enabling multiple colormaps per figure. (v2.3)
+% FREEZECOLORS  Lock colors of plot, enabling multiple colormaps per figure. (v2.3)
 %
 %   Problem: There is only one colormap per figure. This function provides
 %       an easy solution when plots using different colomaps are desired 

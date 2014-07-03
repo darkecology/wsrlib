@@ -1,5 +1,5 @@
 function [ K, b ] = local_search_numerical( K0, b0, X, y, nyq_vel, sigma, maxiter, w0 )
-%LOCAL_SEARCH Perform a local search based on least squares refitting
+%LOCAL_SEARCH_NUMERICAL Perform numerical local search
 
 if nargin < 7
     maxiter = 50;

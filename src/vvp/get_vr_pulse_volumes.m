@@ -41,7 +41,7 @@ for i=1:ntilts
     [az, range] = get_az_range(sweep);
     az = cmp2pol(az);
     [~, z] = slant2ground(range, sweep.elev);
-    [az, range, z] = get_pixel_coords(az, range, z);
+    [az, range, z] = expand_coords(az, range, z);
     
     vr = radar.vr.sweeps(i).data;
     vr(abs(vr) < min_vel | vr > 131000) = nan;

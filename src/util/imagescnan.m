@@ -1,5 +1,5 @@
 function [ h ] = imagescnan( varargin )
-%IMAGESCNAN Display a scaled image but treat NaN as transparent
+%IMAGESCNAN imagesc with NaN as transparent
 
 if nargin < 3
     im = varargin{1};

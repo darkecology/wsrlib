@@ -1,7 +1,7 @@
 [filename, station] = sample_radar_file();
 
 % Construct options for rsl2mat
-radar = rsl2mat(filename, station, opt);
+radar = rsl2mat(filename, station);
 
 rmax = 200000;
 dim = 400;

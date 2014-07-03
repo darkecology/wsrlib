@@ -1,5 +1,5 @@
 function [ pot ] = multiply_gausspot( varargin )
-%MUTIPLY_GAUSSPOT Multiply together several potentials of same size
+%MULTIPLY_GAUSSPOT Multiply together several potentials of same size
 
 n = nargin;
 
