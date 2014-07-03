@@ -1,8 +1,7 @@
-function [ radar ] = alignSweepsToFixed( radar, azResolution, rangeResolution, rmax, method, interpolate, elevations )
-%alignSweepsToFixed Align all reflectivity and radial velocity sweeps in a
-%volume scan to a fixed grid
+function [ radar ] = align_scan( radar, azResolution, rangeResolution, rmax, method, interpolate, elevations )
+%ALIGN_SCAN Align volume scan to a fixed resolution grid
 %
-% [radar_aligned] = alignSweepsToFixed(radar, azResolution, rangeResolution, rmax, method, interpolate, elevations)
+% [radar_aligned] = align_scan(radar, azResolution, rangeResolution, rmax, method, interpolate, elevations)
 %
 % radar                          : radar structure returned by rsl2mat 
 % azResolution (optional)        : the angle increment in azimuths. 

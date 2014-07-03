@@ -16,7 +16,7 @@ if nargin < 6
     edgealpha = 0.06;
 end
 
-[datac, mask, az, range] = align_sweeps({sweep}, rmax, 'ground');
+[datac, mask, az, range] = align_sweeps_old({sweep}, rmax, 'ground');
 data = datac{1};
 data(~mask) = 0;
 

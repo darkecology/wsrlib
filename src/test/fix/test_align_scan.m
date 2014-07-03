@@ -1,5 +1,5 @@
-function [ ] = testAlignSweepsToFixed( dataSetName )
-%testAlignSweepsToFixed Unit Test for the alignSweepsToFixed function. 
+function [ ] = test_align_scan( dataSetName )
+%test_align_scan Unit Test for the align_scan function. 
 tic 
 scans = getScans(dataSetName);      %get absolute paths of all scans in the dataset
 log  = fopen('testAlignSweepsToFixedLOG.txt','w+');  %test log file
@@ -21,7 +21,7 @@ for i=1:size(scans,1),
         
     try
         radar = rsl2mat(radar_file{1}, scaninfo.station, opt);
-        radar_aligned = alignSweepsToFixed(radar,true);
+        radar_aligned = align_scan(radar,true);
         fprintf(log,'%s : Aligned.  \n', radar_file{1});
     catch err       
         fprintf(log,'%s : %s \n', radar_file{1}, err.message);
