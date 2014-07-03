@@ -23,6 +23,8 @@ addpath(root);
 addpath(sprintf('%s/rsl2mat', root));
 addpath(sprintf('%s/lib/m_map', root));
 
+addpath(sprintf('%s/examples', root));
+
 addpath(sprintf('%s/src/grid', root));
 addpath(sprintf('%s/src/narr', root));
 addpath(sprintf('%s/src/test', root));
