@@ -1,5 +1,9 @@
-function [ edges, z, u, v, rmse, nll, cov, cnt ] = epvvp( radar, zstep, rmin, rmax, zmax, alg, gamma, sigma, sigma_prior, sigma_noise, verbose )
+function [ edges, z, u, v, rmse, nll, cov, cnt ] = ...
+    epvvp( radar, zstep, rmin, rmax, zmax, alg, gamma, sigma, sigma_prior, sigma_noise, verbose )
 %EPVVP Volume velocity profile based on EP
+%
+% [ edges, z, u, v, rmse, nll, cov, cnt ] = epvvp( radar, zstep, rmin, rmax, zmax, alg, gamma, sigma, sigma_prior, sigma_noise, verbose )
+%
 
 MIN_DATA = 5;       % Height bins with fewer data points are discarded
 
