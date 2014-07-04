@@ -2,7 +2,7 @@
 % Ingest data
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-filename = '../data/KBGM20100911_012056_V03.gz';
+filename = [wsrlib_root() '/data/KBGM20100911_012056_V03.gz'];
 station = 'KBGM';
 
 % Parameters for data ingest
