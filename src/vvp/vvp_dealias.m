@@ -1,5 +1,22 @@
 function [ radar_dealiased, radar_smoothed ] = vvp_dealias( radar, edges, u, v, rmse, rmse_thresh )
 %VVP_DEALIAS Dealias a volume using a velocity profile
+%
+%   radar_dealiased = vvp_dealias( radar, edges, u, v, rmse, rmse_thresh )
+%
+%  [radar_dealiased, radar_smoothed ] = vvp_dealias( radar, edges, u, v, rmse, rmse_thresh )
+% 
+% Inputs:
+%   radar                 Radar struct from rsl2mat
+%   edges, u, v, rmse     Output from epvvp (see also EPVVP)
+%   rmse_thresh           Don't dealias in height bins with rmse exceeding
+%                         this value
+% Outputs:
+%   radar_dealiased       Dealiased radar struct 
+%
+%   radar_smoothed        Optional second output gives predicted values
+%                         under uniform velocity model
+%
+% See also EPVVP
 
 ntilts = numel(radar.vr.sweeps);
 

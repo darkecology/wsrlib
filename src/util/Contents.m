@@ -11,9 +11,9 @@
 %   join_struct       - Join two struct arrays on specified fields
 %   joinstr           - Join strings with a delimiter
 %   logsumexp         - Returns log(sum(exp(a),dim)) while avoiding numerical underflow.
-%   mediannan         - 
 %   nanmax            - Max of non-NaN elements
 %   nanmean           - Return mean of non-NaN elements
+%   nanmedian         - Compute median of non-NaN elements
 %   nanmin            - Min of non-NaN elements
 %   nansum            - Return sum of non-NaN elements
 %   rad2deg           - Convert radians to degrees

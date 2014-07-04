@@ -1,9 +1,61 @@
 function [ edges, z, u, v, rmse, nll, cov, cnt ] = ...
     epvvp( radar, zstep, rmin, rmax, zmax, alg, gamma, sigma, sigma_prior, sigma_noise, verbose )
-%EPVVP Volume velocity profile based on EP
+%EPVVP Expectation Propagation (EP)-based volume velocity profile
 %
-% [ edges, z, u, v, rmse, nll, cov, cnt ] = epvvp( radar, zstep, rmin, rmax, zmax, alg, gamma, sigma, sigma_prior, sigma_noise, verbose )
+% Basic Usage:
+%  [ edges, z, u, v, rmse, nll, cov, cnt ] = epvvp( radar, zstep, rmin, rmax, zmax);
 %
+% Inputs:
+%   radar      Radar struct (from rsl2mat)
+%   zstep      Size of height bins (default: 20m)
+%   rmin       Minimum range in m  (default: 5000)
+%   rmax       Maximum range in m  (default: 40000)
+%   zmax       Maximum height in m (default: 6000)
+%
+% Outputs:
+%
+%   edges      Elevations of bin edges in meters. Vector of length nbins+1.  
+%              Example: if zstep = 20 and zmax = 100, the bin edges will be
+%              [0 20 40 60 80 100]
+%   
+%   Remaining outputs have one row per elevation-bin:
+%
+%   z          Height (m) at center of elevation bin
+%   u          Estimated east-west velocity component (m/s)
+%   v          Estimated north-south velocity component (m/s)
+%   rmse       Root-mean squared residual for pulse volumes in bin
+%   nll        Wrapped-normal negative log-likelihood within bin
+%   cov        Posterior covariance matrix for u and v
+%   cnt        Number of pulse volumes in bin
+%
+% Advanced Usage:
+%  [ edges, z, u, v, rmse, nll, cov, cnt ] = epvvp( radar, zstep, rmin, rmax, zmax, alg, gamma, sigma, sigma_prior, sigma_noise, verbose )
+%
+% Additional inputs:
+%   alg        Algorithm: 'GVAD' | 'GVAD+LOCAL' | 'GVAD+KALMAN' | 
+%                         'EP' | 'EP-NUMERICAL' (default: 'EP')
+%
+%   gamma      Offset for GVAD finite difference in radians (default: 0.1)
+%
+%   sigma      Standard deviation of Gaussian factor that encourages 
+%              velocities to vary slowly with elevation:
+%
+%                      -||w(i+1) - w(i)||^2 
+%                 exp  ---------------------
+%                        -zstep * sigma^2   
+%
+%              w(i) and w(i+1) are velocity vectors in bins i and i+1.
+%              Smaller value of sigma --> more similarity. 
+%              (Default: 0.08)
+%              
+%   sigma_prior  Standard deviation of zero-mean Gaussian prior on velocity vector. 
+%                Default is 50 (very weak prior)
+%
+%   sigma_noise  Noise standard deviation (default: 4)
+%
+%   verbose    Print verbose ouput
+%
+% See also VVP_DEALIAS
 
 MIN_DATA = 5;       % Height bins with fewer data points are discarded
 
