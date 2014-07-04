@@ -1,0 +1,32 @@
+WSRLIB: MATLAB Toolbox for Weather Surveillance Radar
+
+Quick-start
+-----------
+
+1. One-time compile
+
+   Within MATLAB, change to wsrlib directory and type:
+
+   >> wsrlib_make
+
+2. Setup paths
+
+  Each time you start MATLAB, run the setup script:
+
+  >> wsrlib_setup
+
+  A good practice is to add lines like this to your global MATLAB
+  startup.m file so the paths are set automatically:
+
+  addpath('/path/to/wsrlib');
+  wsrlib_setup();
+
+3. Use WSRLIB
+
+   Try looking at and running the following examples (in the examples 
+   subdirectory):
+
+   >> cd examples
+   >> test_vvp
+   >> test_sweep2cart
+
