@@ -4,7 +4,7 @@
 %   alias                  - Alias a value to within interval [-vmax, vmax]
 %   compute_loss           - Compute rmse and wrapped normal neg. log likelihood 
 %   divide_gausspot        - Divide two Guassian potentials
-%   epvvp                  - Volume velocity profile based on EP
+%   epvvp                  - Expectation Propagation (EP)-based volume velocity profile
 %   expand_gausspot        - Expand a potential to more variables
 %   get_vr_pulse_volumes   - Extract vectorized info about all pulse volumes in a volume scan
 %   gvad_fit               - Fit velocity using gradient-based least squares
