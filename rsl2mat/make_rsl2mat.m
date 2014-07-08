@@ -5,14 +5,16 @@ RSL2MAT = fileparts(mfilename('fullpath'));
 
 RSL = sprintf('%s/rsl/install', RSL2MAT);
 
-INCFLAG = sprintf('-I%s/include', RSL);
-LIBFLAG = sprintf('-L%s/lib -lrsl', RSL);
-RPATH   = sprintf('-Wl,-rpath,%s/lib', RSL);
-CXXFLAGS  = 'CXXFLAGS="-fPIC\ -Wno-write-strings"';   % Ignore warnings about deprecated conversion from string const to char *
+INCFLAG  = sprintf('-I%s/include', RSL);
+LIBFLAG  = sprintf('-L%s/lib -lrsl', RSL);
+CXXFLAGS = 'CXXFLAGS="\$CXXFLAGS\ -fPIC\ -Wno-write-strings"';   % Ignore warnings about deprecated conversion from string const to char *
+LDFLAGS  = ['LDFLAGS="\$LDFLAGS\ -rpath,' sprintf('%s/lib"', RSL)];
+
+%RPATH   = sprintf('-Wl,-rpath,%s/lib', RSL);
 
 fprintf('Compiling rsl2mat...');
 curdir = cd(RSL2MAT);
-mex(INCFLAG, LIBFLAG, RPATH, CXXFLAGS, 'rsl2mat.cpp', 'util.c');
+mex(INCFLAG, LIBFLAG, CXXFLAGS, LDFLAGS, 'rsl2mat.cpp', 'util.c');
 cd(curdir);
 
 fprintf(' success!\n');
