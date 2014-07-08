@@ -8,7 +8,7 @@ RSL = sprintf('%s/rsl/install', RSL2MAT);
 INCFLAG  = sprintf('-I%s/include', RSL);
 LIBFLAG  = sprintf('-L%s/lib -lrsl', RSL);
 CXXFLAGS = 'CXXFLAGS="\$CXXFLAGS\ -fPIC\ -Wno-write-strings"';   % Ignore warnings about deprecated conversion from string const to char *
-LDFLAGS  = ['LDFLAGS="\$LDFLAGS\ -rpath,' sprintf('%s/lib"', RSL)];
+LDFLAGS  = ['LDFLAGS="\$LDFLAGS\ -Wl,-rpath,' sprintf('%s/lib"', RSL)];
 
 %RPATH   = sprintf('-Wl,-rpath,%s/lib', RSL);
 
