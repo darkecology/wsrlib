@@ -3,18 +3,13 @@ function make_rsl2mat()
 
 RSL2MAT = fileparts(mfilename('fullpath'));
 
-RSL = sprintf('%s/rsl/install', RSL2MAT);
-
-INCFLAG  = sprintf('-I%s/include', RSL);
-LIBFLAG  = sprintf('-L%s/lib -lrsl', RSL);
-CXXFLAGS = 'CXXFLAGS="\$CXXFLAGS\ -fPIC\ -Wno-write-strings"';   % Ignore warnings about deprecated conversion from string const to char *
-LDFLAGS  = ['LDFLAGS="\$LDFLAGS\ -Wl,-rpath,' sprintf('%s/lib"', RSL)];
-
-%RPATH   = sprintf('-Wl,-rpath,%s/lib', RSL);
-
-fprintf('Compiling rsl2mat...');
+fprintf('Compiling rsl2mat...\n');
 curdir = cd(RSL2MAT);
-mex(INCFLAG, LIBFLAG, CXXFLAGS, LDFLAGS, 'rsl2mat.cpp', 'util.c');
+status = system('make');
 cd(curdir);
 
-fprintf(' success!\n');
+if status
+    error('Compile failed');
+else
+    fprintf('Success!\n');
+end

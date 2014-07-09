@@ -9,13 +9,19 @@ EXT = $(shell $(MATLABDIR)/bin/mexext)
 
 MFLAGS =
 MFLAGS += -largeArrayDims
-MFLAGS += -I${RSL}/include -Iprivate
-MFLAGS += -Wl,-rpath,${RSL}/lib -L${RSL}/lib -lrsl
+MFLAGS += -I${RSL}/include
+MFLAGS += -Iprivate
+MFLAGS += -L${RSL}/lib
+MFLAGS += -lrsl
 
-CFLAGS =
-CFLAGS += -fPIC
+LDFLAGS =
+LDFLAGS += -Wl,-rpath,${RSL}/lib
+
+CXXFLAGS = 
+CXXFLAGS += -fPIC
+CXXFLAGS += -Wno-write-strings
+
 OPT=
-MEXFLAGS = $(MFLAGS) CXX\#$(CPP) CXXFLAGS\#"$(CFLAGS)"
 
 default: opt
 
@@ -33,7 +39,7 @@ opt: OPT += -O3
 opt: all
 
 rsl2mat.$(EXT): rsl2mat.cpp util.c
-	$(MEX) $(MEXFLAGS) rsl2mat.cpp util.c
+	$(MEX) $(MFLAGS) CXXFLAGS='$$CXXFLAGS $(CXXFLAGS)' LDFLAGS='$$LDFLAGS $(LDFLAGS)' rsl2mat.cpp util.c
 
 clean:
 	rm rsl2mat.$(EXT)
