@@ -3,7 +3,7 @@ CWD=$(shell pwd)
 
 RSL ?=$(CWD)/rsl/install
 CPP = g++
-CC  = gcc34
+CC  = /usr/bin/gcc
 MEX = $(MATLABDIR)/bin/mex
 EXT = $(shell $(MATLABDIR)/bin/mexext)
 
@@ -20,7 +20,9 @@ LDFLAGS += -Wl,-rpath,${RSL}/lib
 CXXFLAGS = 
 CXXFLAGS += -fPIC
 CXXFLAGS += -Wno-write-strings
-
+CXXFLAGS += -I${RSL}/include
+CXXFLAGS += -L${RSL}/lib
+CXXFLAGS += -lrsl
 OPT=
 
 default: opt
@@ -38,10 +40,13 @@ opt-debug: all
 opt: OPT += -O3
 opt: all
 
-rsl2mat.$(EXT): rsl2mat.cpp util.c
-	$(MEX) $(MFLAGS) CXXFLAGS='$$CXXFLAGS $(CXXFLAGS)' LDFLAGS='$$LDFLAGS $(LDFLAGS)' rsl2mat.cpp util.c
+util.o: util.c
+	$(MEX) $(MFLAGS) CXXFLAGS='$$CXXFLAGS $(CXXFLAGS)' LDFLAGS='$$LDFLAGS $(LDFLAGS)' -c util.c
+
+rsl2mat.$(EXT): rsl2mat.cpp util.o
+	$(MEX) $(MFLAGS) CXXFLAGS='$$CXXFLAGS $(CXXFLAGS)' LDFLAGS='$$LDFLAGS $(LDFLAGS)' rsl2mat.cpp util.o
 
 clean:
 	rm rsl2mat.$(EXT)
-
+	rm util.o
 .PHONY: opt all debug clean
