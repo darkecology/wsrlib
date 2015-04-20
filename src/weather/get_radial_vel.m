@@ -1,9 +1,10 @@
-function [ vel, lon, lat, height ] = narr_radial_vel( u_wind, v_wind, range, az, elev, lon0, lat0, height0 )
-%NARR_RADIAL_VEL Get radialized wind velocity from NARR data
+function [ vel, lon, lat, height ] = get_radial_vel( weathermodel, u_wind, v_wind, range, az, elev, lon0, lat0, height0 )
+%GET_RADIAL_VEL Get radialized wind velocity from weather model data
 %
-% [ vel,lon,lat ] = narr_radial_vel( u_wind, v_wind, range, az, elev, lon0, lat0, height0 )
+% [ vel,lon,lat ] = get_radial_vel( weathermodel, u_wind, v_wind, range, az, elev, lon0, lat0, height0 )
 %
 % Inputs: 
+%   weathermodel     Weather model struct (for coordinate conversions)
 %   u_wind, v_wind   3D wind components read from NARR file
 %   range, az, elev  Pulse volume coordinates (see below)
 %   lon0             Longitude of radar station
@@ -42,10 +43,12 @@ sz = size(az);
 [lon, lat] = m_fdist(lon0, lat0, az(:), dist(:), 'sphere');
 lon = lon-360;
 
+% TODO: replace all narr_... calls by weather_model... calls
+
 % Convert to NARR x,y and then i,j coordinates
-[x, y] = narr_ll2xy(lon, lat);
-[i, j] = narr_xy2ij(x, y);
-k = narr_height2level(height);
+[x, y] = weathermodel.ll2xy(lon, lat);
+[i, j] = weathermodel.xy2ij(x, y);
+k = weathermodel.height2level(height);
 
 % Now do the lookup
 %   First do this using linear indices

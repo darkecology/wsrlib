@@ -26,7 +26,9 @@ addpath(sprintf('%s/lib/m_map', root));
 addpath(sprintf('%s/examples', root));
 
 addpath(sprintf('%s/src/grid', root));
-addpath(sprintf('%s/src/narr', root));
+addpath(sprintf('%s/src/weather', root));
+addpath(sprintf('%s/src/weather/narr', root));
+addpath(sprintf('%s/src/weather/nam', root));
 addpath(sprintf('%s/src/test', root));
 addpath(sprintf('%s/src/radar', root));
 addpath(sprintf('%s/src/vvp', root));
