@@ -10,17 +10,19 @@ end
 
 function test_narr_wind_file()
 
+nwp = NARR();
+
 % Get 0Z file
 date = datenum('2010-09-11 01:10:00');
 
-if ~strcmp(narr_wind_file(date), 'merged_AWIP32.2010091100.3D')
+if ~strcmp(nwp.get_filename(date), 'merged_AWIP32.2010091100.3D')
     error('Error in narr_wind_file');
 end
 
 % Get 3Z file
 date = datenum('2010-09-11 01:31:00');
 
-if ~strcmp(narr_wind_file(date), 'merged_AWIP32.2010091103.3D')
+if ~strcmp(nwp.get_filename(date), 'merged_AWIP32.2010091103.3D')
     error('Error in narr_wind_file');
 end
 
@@ -28,15 +30,17 @@ end
 
 function test_narr_wind_profile()
 
+nwp = NARR();
+
 wind_file = sample_narr_file();
 
 % KBGM
 lat = 42.1997;
 lon = -75.9847;
 
-[u_wind, v_wind] = narr_read_wind(wind_file);
+[u_wind, v_wind] = nwp.read_wind(wind_file);
 
-[u, v, speed, direction, elev] = narr_wind_profile(u_wind, v_wind, lon, lat);
+[u, v, speed, direction, elev] = nwp.wind_profile(u_wind, v_wind, lon, lat);
 
 expected_direction = [
     134.8586

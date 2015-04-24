@@ -3,8 +3,10 @@ function test_narr_proj()
 
 [~, ugrid] = nj_grid_varget(sample_narr_file(), 'u_wind');
 
-[x,y] = narr_ll2xy(ugrid.lon, ugrid.lat);
-[lon, lat] = narr_xy2ll(x, y);
+nwp = NARR();
+
+[x,y] = nwp.ll2xy(ugrid.lon, ugrid.lat);
+[lon, lat] = nwp.xy2ll(x, y);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Test that lon,lat --> x,y --> lon,lat gives same answer back
@@ -28,9 +30,9 @@ fprintf('Max lat error = %.4e\n', lat_err);
 %       3 3 3 ]
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-[i,j] = narr_xy2ij(x, y);
+[i,j] = nwp.xy2ij(x, y);
 
-s = narr_grid();
+s = nwp.grid();
 
 row = 1:s.nx;
 if ~isequal(j, repmat(row, s.ny, 1))
