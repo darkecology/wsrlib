@@ -2,8 +2,8 @@
 
 % These are more or less properly designed unit tests: they check for the
 % right output and throw an error if the test fails
-test_narr_proj();
-test_narr_wind();
+test_nwp_proj();
+test_nwp_wind();
 test_slant2ground();
 
 % This one prints to terminal... needs checking for proper output
