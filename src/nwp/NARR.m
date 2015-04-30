@@ -122,11 +122,11 @@ classdef NARR < NWP
             three_hours = 3/24;
             rounded_time = round(time/three_hours)*three_hours;
             
-            v = datevec(rounded_time);
+            [y,m,d,h] = datevec(rounded_time);
             
             switch type
                 case '3D'
-                    filename = sprintf('merged_AWIP32.%04d%02d%02d%02d.3D', v(1), v(2), v(3), v(4));
+                    filename = sprintf('%04d/merged_AWIP32.%04d%02d%02d%02d.3D', y, y, m, d, h);
                     
                     % TODO: add other types (sfc, flx, etc.)
                 otherwise

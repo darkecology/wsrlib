@@ -1,13 +1,16 @@
 % For further details on the NAM grid, see 
 %  http://www.nco.ncep.noaa.gov/pmb/docs/on388/tableb.html#GRID218
 
-wind_file = 'test/nam_218_20100801_0000_000.grb2';
+%wind_file = 'test/nam_218_20100801_0000_000.grb2';
 
-[wind, ugrid] = nj_grid_varget(wind_file, 'U-component_of_wind');
+nam = NAM3D_212();
+wind_file = nam.sample_file();
 
-sz = size(wind);
+[uwind, ~, grid] = nam.read_wind(wind_file);
 
-[X, Y] = nam_ll2xy(ugrid.lon, ugrid.lat);
+sz = size(uwind);
+
+[X, Y] = nam.ll2xy(grid.lon, grid.lat);
 
 % Rows of X and cols of Y are identical to ~1e-14
 %    Take average to get "official" x/y spacings
