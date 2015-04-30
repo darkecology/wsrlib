@@ -22,6 +22,37 @@ classdef NWP
     
     methods
         
+        function gen_consts(self)
+            % GEN_CONSTS Generate struct describing the grid in projected
+            %            coordinates. Works by reading the sample file and
+            %            using map projection.
+            
+            wind_file = self.sample_file();            
+            [uwind, ~, grid] = self.read_wind(wind_file);
+            
+            sz = size(uwind);
+            
+            [X, Y] = self.ll2xy(grid.lon, grid.lat);
+            
+            % Rows of X and cols of Y are identical to ~1e-14
+            %    Take average to get "official" x/y spacings
+            
+            x = mean(X,1);
+            y = mean(Y,2);
+            
+            [ny, nx] = size(X);
+            
+            fprintf('s.nx = %d;\n', nx);
+            fprintf('s.ny = %d;\n', ny);
+            fprintf('s.nz = %d;\n', sz(1));
+            fprintf('s.sz = %s;\n', mat2str(sz));
+            fprintf('s.x0 = %.15f;\n', x(1));
+            fprintf('s.y0 = %.15f;\n', y(1));
+            fprintf('s.dx = %.15f;\n', mean(diff(x)));
+            fprintf('s.dy = %.15f;\n', mean(diff(y)));
+        end
+        
+        
         function [ k ] = height2level( self, height )
             %HEIGHT2LEVEL Convert from height to pressure index for NARR data
             %

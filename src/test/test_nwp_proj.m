@@ -1,7 +1,7 @@
-function test_nam_proj()
+function test_nwp_proj()
 % TEST_NAM_PROJ Test NAM projection routines
 
-models = {NAM() NARR()};
+models = {NAM3D_218() NAM3D_212() NARR()};
 
 for i = 1:length(models);
     

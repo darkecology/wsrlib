@@ -23,7 +23,7 @@ classdef NAM3D_212 < NAM3D
             if isempty(s)
                 s = struct();
                 
-                % The code below was genereated by gen_nam_consts.m
+                % The code below was genereated by NAM3D_212().gen_consts()
                 s.nx = 185;
                 s.ny = 129;
                 s.nz = 39;
@@ -79,9 +79,8 @@ classdef NAM3D_212 < NAM3D
             [y,m,d,h] = datevec(rounded_time);
             
             %Example from Kevin: nam.20150415/18/nam.t18z.awip1206.tm00.grib2
-            filename = sprintf('nam.%04d%02d%02d/%02d/nam.t%02dz.awip1206.tm00.grib2', y, m, d, h, h);
+            filename = sprintf('nam.%04d%02d%02d/%02d/nam.t%02dz.awip3d00.tm00.grib2', y, m, d, h, h);
             
-        end
-        
+        end        
     end
 end

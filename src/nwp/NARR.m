@@ -26,7 +26,7 @@ classdef NARR < NWP
             persistent s
             
             if isempty(s)
-                % The code below was genereated by gen_narr_consts.m
+                % The code below was genereated by NARR().gen_consts()
                 s = struct();
                 s.nx = 349;
                 s.ny = 277;
