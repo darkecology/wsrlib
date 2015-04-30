@@ -23,7 +23,7 @@ classdef NAM3D_218 < NAM3D
             if isempty(s)
                 s = struct();
                 
-                % The code below was genereated by gen_nam_consts.m
+                % The code below was genereated by NAM3D_218().gen_consts()
                 s.nx = 614;
                 s.ny = 428;
                 s.nz = 39;

@@ -3,6 +3,8 @@ function test_nwp_wind()
 %
 %  NWP.wind_file, NWP.read_wind, NWP.wind_profile
 
+% TODO: add NAM tests here
+
 test_wind_file(NARR);
 test_narr_wind_profile(NARR);
 
