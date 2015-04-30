@@ -5,7 +5,7 @@ classdef NWP
         [ levels ]               = pressure_levels( );
         [ old_proj ]             = set_proj( );
         [ filename ]             = get_filename( time, type );
-        [ u_varname, v_varname ] = wind_varnames()
+        [ u_varname, v_varname ] = wind_varnames( )
     end
     
     methods (Static)
@@ -49,8 +49,8 @@ classdef NWP
             % Assign input pressure values into bins based on these edges
             [~, k] = histc(pressure, edges);
             
-            % Reverse indices again (29 <--> 1)
-            k = 30 - k;
+            % Reverse indices again
+            k = numel(pressure_levels) - k + 1;
             
         end
         
