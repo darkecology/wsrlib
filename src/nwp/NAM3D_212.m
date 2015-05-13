@@ -74,12 +74,15 @@ classdef NAM3D_212 < NAM3D
             
             % Time is in units of days. Round to closest 3-hour interval
             six_hours = 6/24;
-            rounded_time = round(time/six_hours)*six_hours;
+            truncated_time = floor(time/six_hours)*six_hours;
             
-            [y,m,d,h] = datevec(rounded_time);
+            remainder_in_hours = (time - truncated_time)*24;
+            forecast_hour = round(remainder_in_hours/3)*3;
+                        
+            [y,m,d,h] = datevec(truncated_time);
             
-            %Example from Kevin: nam.20150415/18/nam.t18z.awip1206.tm00.grib2
-            filename = sprintf('nam.%04d%02d%02d/%02d/nam.t%02dz.awip3d00.tm00.grib2', y, m, d, h, h);
+            % Example from Kevin: nam.20150415/18/nam.t18z.awip1206.tm00.grib2
+            filename = sprintf('nam.%04d%02d%02d/%02d/nam.t%02dz.awip3d%02d.tm00.grib2', y, m, d, h, h, forecast_hour);
             
         end        
     end
