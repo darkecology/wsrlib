@@ -1,0 +1,19 @@
+--- rsl-v1.43/rapic.y	2011-05-20 14:40:17.000000000 -0400
++++ rsl-v1.43/rapic.y.new	2015-05-14 16:46:01.381527141 -0400
+@@ -615,10 +615,16 @@
+   binprint(yylval.token.s, yylval.token.len);
+   fprintf(stderr, ">\n");
+   return 1;
+ }
+ 
+ int rapicwrap(char *s)
+ {
+   yywrap(s);
+   return 1;
+ }
++
++int yywrap(char *s)
++{
++  return 1;
++}
++

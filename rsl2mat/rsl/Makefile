@@ -9,6 +9,7 @@ all:
 	patch -p0 < patch2.txt
 	patch -p0 < patch3.txt
 	patch -p0 < patch4.txt
+	patch -p0 < patch5.txt
 	cd $(SUBDIR) && (CFLAGS="-g" ./configure --prefix=$(DIR)/install)
 	cd $(SUBDIR) && ( make; make install )
 
