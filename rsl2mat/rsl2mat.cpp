@@ -191,9 +191,12 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
 			     "dz",	// 15
 			     "vr",	// 16
 			     "sw",	// 17
-    };					// 18
+			     "dr",	// 18
+			     "ph",	// 19
+			     "rh",	// 20
+    };					// 21
 
-    mxArray *radarStruct = mxCreateStructMatrix(1, 1, 18, fields);
+    mxArray *radarStruct = mxCreateStructMatrix(1, 1, 21, fields);
     
 #define SGN(x) (x > 0 ? 1 : -1)
 #define ABS(x) (x > 0 ? x : -x)
@@ -242,6 +245,16 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
 
     if (nvolumes > SW_INDEX && radar->v[SW_INDEX]) 
 	mxSetField(radarStruct, 0, "sw", volumeToStruct(radar, radar->v[SW_INDEX], opt));
+
+    if (nvolumes > DR_INDEX && radar->v[DR_INDEX]) 
+	mxSetField(radarStruct, 0, "dr", volumeToStruct(radar, radar->v[DR_INDEX], opt));
+
+    if (nvolumes > PH_INDEX && radar->v[PH_INDEX]) 
+	mxSetField(radarStruct, 0, "ph", volumeToStruct(radar, radar->v[PH_INDEX], opt));
+
+    if (nvolumes > RH_INDEX && radar->v[RH_INDEX]) 
+	mxSetField(radarStruct, 0, "rh", volumeToStruct(radar, radar->v[RH_INDEX], opt));
+
     
     /*-- Return value and cleanup ---------------------------------*/
     if (nlhs >= 1) plhs[0] = radarStruct;

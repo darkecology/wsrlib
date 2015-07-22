@@ -31,7 +31,7 @@ if ~is_aligned
 end
 
 n = numel(fields);
-data = cell(n);
+data = cell(n,1);
 
 % First compute the coordinates of each pulse volume
 elev = [radar.dz.sweeps.elev]';
