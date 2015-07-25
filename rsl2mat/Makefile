@@ -2,8 +2,8 @@ UNAME=$(shell uname)
 CWD=$(shell pwd)
 
 RSL ?=$(CWD)/rsl/install
-CPP = g++
-CC  = /usr/bin/gcc
+CPP ?= g++
+CC  ?= /usr/bin/gcc
 MEX = $(MATLABDIR)/bin/mex
 EXT = $(shell $(MATLABDIR)/bin/mexext)
 
@@ -27,7 +27,7 @@ OPT=
 
 default: opt
 
-all: rsl2mat.$(EXT) 
+all: rsl2mat.$(EXT)
 
 debug: CFLAGS += -g -DDEBUG
 debug: MFLAGS += -g
@@ -49,4 +49,16 @@ rsl2mat.$(EXT): rsl2mat.cpp util.o
 clean:
 	rm rsl2mat.$(EXT)
 	rm util.o
+	rm rslinfo.o
+	rm rslinfo
+
 .PHONY: opt all debug clean
+
+debug-rslinfo: CFLAGS += -g -DDEBUG
+debug-rslinfo: rslinfo
+
+rslinfo: rslinfo.o
+	$(CC) -v -Wl,-rpath,$(RSL)/lib -L$(RSL)/lib -lrsl rslinfo.o -o $@
+
+rslinfo.o: rslinfo.c
+	$(CC) $(CFLAGS) -c -I$(RSL)/include rslinfo.c -o $@
