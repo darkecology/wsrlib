@@ -6,35 +6,35 @@
 
     Within MATLAB, change to wsrlib directory and type:
 
-    ~~~~~~ {.txt}
+    ~~~~ {.txt}
     >> wsrlib_make
-    ~~~~~~
+    ~~~~
 
 2. Setup paths
 
     Each time you start MATLAB, run the setup script:
 
-    ~~~~~~ {.txt}
+    ~~~~ {.txt}
     >> wsrlib_setup
-    ~~~~~~
+    ~~~~
 
     A good practice is to add lines like this to your global MATLAB
     startup.m file so this will happen automatically whenever MATLAB
     is launched:
 
-    ~~~~~~ {.matlab}
+    ~~~~ {.matlab}
     addpath('/path/to/wsrlib');
     wsrlib_setup();
-    ~~~~~~
+    ~~~~
 
 3. Use WSRLIB
 
     Try looking at and running the following examples (in the examples 
     subdirectory):
 
-    ~~~~~~ {.matlab}
+    ~~~~ {.matlab}
     >> cd examples
     >> test_vvp
     >> test_sweep2cart
-    ~~~~~~
+    ~~~~
 
