@@ -1,6 +1,6 @@
 # WSRLIB: MATLAB Toolbox for Weather Surveillance Radar
 
-## Quick-start
+# Quick-start
 
 ### Step 1: One-time compile
 
