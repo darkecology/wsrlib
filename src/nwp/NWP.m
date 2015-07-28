@@ -1,4 +1,13 @@
 classdef NWP
+
+    % NWP abstract base class for numerical weather model data
+    %
+    % Instantiaions of this class provide a common interface to accessing
+    % data from numerical weather models on different grids.
+    % 
+    % See file for 
+    %
+    % See also NARR, NAM3D, NAM3D_212, NAM3D_218
     
     methods (Abstract,Static)
         [ g ]                    = grid( );

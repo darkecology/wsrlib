@@ -36,8 +36,8 @@ data = cell(n,1);
 % First compute the coordinates of each pulse volume
 elev = [radar.dz.sweeps.elev]';
 [az, range] = get_az_range(radar.dz.sweeps(1));
-az = az(:)';
-range = range(:)';
+az = az(:);
+range = range(:);
 
 I = range < rmax;
 
