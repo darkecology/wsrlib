@@ -18,6 +18,7 @@
 %   refl_to_z          - Convert from reflectivity to reflectivity factor (z)
 %   slant2ground       - Convert from slant range and elevation to ground range and height.
 %   sweep2cart         - Convert a sweep to cartesian coordinates
+%   sweep2mat          - Extract data matrix from sweep
 %   unique_elev_sweeps - Extract one sweep per elevation from volume scan.
 %   vol_interp         - Create an interpolating function for a volume
 %   vpr                - Vertical profile of reflectivity

@@ -1,5 +1,11 @@
 classdef NAM3D < NWP
     
+    % NAM3D abstract base class for NAM (North American Mesoscale) data
+    %
+    % Use NAM3D_212 or NAM3D_218 depending on data source and grid used
+    %
+    % See also NWP, NARR, NAM3D, NAM3D_212, NAM3D_218
+    
     % Most methods are static: these classes are used to switch between two
     % implementations; there is no data stored in the object.
     

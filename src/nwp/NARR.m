@@ -1,5 +1,12 @@
 classdef NARR < NWP
     
+    % NARR class to handle NARR data access
+    %
+    %  NARR = north american regional reanalysis
+    %     http://www.nco.ncep.noaa.gov/pmb/docs/on388/tableb.html#GRID221
+    % 
+    % See also NWP, NARR, NAM3D, NAM3D_212, NAM3D_218
+
     % Most methods are static: these classes are used to switch between two
     % implementations; there is no data stored in the object. 
     

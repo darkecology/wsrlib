@@ -13,10 +13,11 @@
 %   mat2cart           - Convert a sweep to cartesian coordinates
 %   pol2cmp            - Convert from mathematical angle to compass bearing
 %   radar2mat          - Convert an aligned radar volume to 3d-matrix
-%   radarInterpolant   - Create interpolating function for radar data
+%   radarInterpolant   - - Create interpolating function for radar data
 %   refl_to_z          - Convert from reflectivity to reflectivity factor (z)
 %   slant2ground       - Convert from slant range and elevation to ground range and height.
 %   sweep2cart         - Convert a sweep to cartesian coordinates
+%   sweep2mat          - Extract data matrix from sweep
 %   unique_elev_sweeps - Extract one sweep per elevation from volume scan.
 %   vol_interp         - Create an interpolating function for a volume
 %   vpr                - Vertical profile of reflectivity
@@ -42,22 +43,15 @@
 %   vvp_dealias            - Dealias a volume using a velocity profile
 %   wrapped_normal_nll     - Compute the wrapped normal negative log likelihood
 %
-% NARR ingest and manipulation
-%   height2pressure   - Convert from height to atmospheric pressure
-%   narr_grid         - Returns struct describing the NARR x,y grid
-%   narr_height2level - Convert from height to pressure index for NARR data
-%   narr_level2height - Convert from pressure index to height for NARR data
-%   narr_ll2xy        - Convert from lon, lat to NARR x,y coordinates
-%   narr_radial_vel   - Get radialized wind velocity from NARR data
-%   narr_read_wind    - Read u and v wind from NARR 3D file
-%   narr_reset_proj   - Reset map projection cached value
-%   narr_set_proj     - Set m_map to use the NARR projection
-%   narr_wind_file    - Returns the NARR wind filename for given timestamp
-%   narr_wind_profile - Get NARR vertical wind profile for specified location
-%   narr_xy2ij        - Convert from NARR x,y coordinates to i,j indices into NARR grid
-%   narr_xy2ll        - Convert from NARR x,y coordinates to lon,lat
-%   pressure2height   - Convert from atmospheric pressure to height
-%   radialize         - Radialize a velocity field
+% Weather data ingest and manipulation
+%   NAM3D           - abstract base class for NAM (North American Mesoscale) data
+%   NAM3D_212       - Class for NAM data on grid #212
+%   NAM3D_218       - NAM3D_212 Class for NAM data on grid #212
+%   NARR            - class to handle NARR data access
+%   NWP             - abstract base class for numerical weather model data
+%   height2pressure - Convert from height to atmospheric pressure
+%   pressure2height - Convert from atmospheric pressure to height
+%   radialize       - Radialize a velocity field
 %
 % Spatial grids
 %   create_grid - Return a structure defining a 2D spatial grid
@@ -82,7 +76,6 @@
 %   nansum            - Return sum of non-NaN elements
 %   rad2deg           - Convert radians to degrees
 %   rank_order        - Compute rank order of entries in a vector
-%   sample_narr_file  - Path of sample NARR file
 %   sample_radar_file - Path of sample radar file
 %   struct2csv        - Convert struct array to csv file
 %   vec               - Vectorize a matrix

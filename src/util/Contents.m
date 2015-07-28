@@ -18,7 +18,6 @@
 %   nansum            - Return sum of non-NaN elements
 %   rad2deg           - Convert radians to degrees
 %   rank_order        - Compute rank order of entries in a vector
-%   sample_narr_file  - Path of sample NARR file
 %   sample_radar_file - Path of sample radar file
 %   struct2csv        - Convert struct array to csv file
 %   vec               - Vectorize a matrix
