@@ -42,10 +42,9 @@ err_no_arch +=$(shell echo "** was obtained by running 'uname -sm'. Edit the Mak
 err_no_arch +=$(shell echo "** to add the appropriate configuration."                   1>&2)
 
 err_no_matlab = 
-err_no_matlab +=$(shell echo "** Cannot locate MATLAB installation, which is located by "   1>&2)
-err_no_matlab +=$(shell echo "** calling 'which mexext' in the shell to locate MATLAB's "   1>&2)
-err_no_matlab +=$(shell echo "** mexext executable. Please add the matlab binary path  "    1>&2)
-err_no_matlab +=$(shell echo "** <MATLABROOT>/bin to your system path."                     1>&2)
+err_no_matlab +=$(shell echo "** Cannot locate MATLAB installation. Please either call wsrlib_make() "  1>&2)
+err_no_matlab +=$(shell echo "** from within MATLAB, or add <MATLABROOT>/bin to your system path and "      1>&2)
+err_no_matlab +=$(shell echo "** try this Makefile again. "      1>&2)
 
 # --------------------------------------------------------------------
 #  Auto-detect architecture
@@ -72,11 +71,9 @@ endif
 #  Locate MATLAB installation
 # --------------------------------------------------------------------
 
-MEXEXT ?= mexext
-MATLABDIR ?= $(subst /bin/mexext,,$(realpath $(shell which '$(MEXEXT)')))
-MEX = $(MATLABDIR)/bin/mex
+MATLABROOT ?= $(subst /bin/mexext,,$(realpath $(shell which mexext)))
 
-ifeq ($(MATLABDIR),)
+ifeq ($(MATLABROOT),)
 die:=$(error $(err_no_matlab))
 endif
 
@@ -94,7 +91,8 @@ UNAME=$(shell uname)
 CWD=$(shell pwd)
 
 RSL ?=$(CWD)/rsl/install
-EXT = $(shell $(MATLABDIR)/bin/mexext)
+MEX = $(MATLABROOT)/bin/mex
+EXT = $(shell $(MATLABROOT)/bin/mexext)
 
 # --------------------------------------------------------------------
 # Set flags: mex, compiler, and linker
