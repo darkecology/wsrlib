@@ -5,6 +5,7 @@ RSL2MAT = fileparts(mfilename('fullpath'));
 
 fprintf('Compiling rsl2mat...\n');
 curdir = cd(RSL2MAT);
+setenv('MATLABROOT', matlabroot());
 status = system('make');
 cd(curdir);
 
