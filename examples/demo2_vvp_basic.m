@@ -56,6 +56,7 @@ plot(phi, u*cos(phi)*cos(elev) + v*sin(phi)*cos(elev));
 figure(2); clf();
 [data, x, y] = sweep2cart(sweep, 100000, 400); % 50km range, 400 pixels
 imagesc(x, y, data);
+axis xy;
 colormap(vrmap2(32));
 hold on;
 
