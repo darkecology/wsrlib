@@ -1,6 +1,6 @@
 %% 0. Help
 
-help wsrlib
+help wsrlib 
 doc wsrlib
 
 %% 1. Read radar file
@@ -22,28 +22,27 @@ radar.dz.sweeps(1)                        % the first sweep
 
 %% 3. View data matrix from first sweep in polar coordinates
 imagesc(radar.dz.sweeps(1).data, [-5 20])
-colorbar();
+colormap(jet(32)); colorbar();
 
-%% 4. Use sweep2mat to get data in a nicer format
+%% 4. Use sweep2mat to normalize and extract data
 %     - sort radials so angles are increasing
 %     - set special numerical codes to NaN
-
 [data, range, az] = sweep2mat(radar.dz.sweeps(1));
 imagesc(data, [-5 30])
-colorbar();
 
-%% 5. Show image with proper coordinates
+colormap(jet(32)); colorbar();
 
+%% 5. Show image in actual coordinates
 imagesc(az, range, data, [-5 20]);
-colorbar();
+
+colormap(jet(32)); colorbar();
 xlabel('azimuth (degrees)');
 ylabel('range');
 
 %% 6. sweep2cart: view data in cartesian coordinates
 
-rmax      = 150000;   % 150km
-dim       = 600;      % 600 pixel image
-
+rmax         = 150000;  % 150km
+dim          = 600;     % 600 pixel image
 [data, x, y] = sweep2cart(radar.dz.sweeps(1), rmax, dim);
 
 imagesc(x, y, data, [-5 20]);
@@ -111,12 +110,7 @@ range_lim = [20000 22000];
 figure(2); clf();
 for i=1:length(fields)
 
-    field = fields{i};
-    sweep = radar.(field).sweeps(1);
-    [az, range] = get_az_range(sweep);
-    
-    data = sweep.data;
-    data(data>=FLAG) = nan;
+    [data, range, az] = sweep2mat(radar.(field).sweeps(1));
     
     rows = range >= range_lim(1) & range <= range_lim(2);
     
