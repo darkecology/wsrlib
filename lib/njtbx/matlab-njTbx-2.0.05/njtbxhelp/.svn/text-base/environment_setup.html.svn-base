@@ -1,0 +1,127 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<!-- DW6 -->
+<head>
+<!-- Copyright 2005 Macromedia, Inc. All rights reserved. -->
+<title>Netcdf-Java Toolbox for Matlab (njTBX) - Environment Setup</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" href="njtbx.css" type="text/css" />
+
+<style type="text/css">
+<!--
+.style1 {color: #003399}
+-->
+</style>
+</head>
+<body bgcolor="#ffffff">
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr bgcolor="#ffffff">
+    <td width="62" colspan="1" rowspan="1"><div align="center"><img src="images/njtbx-icon.png" alt="njtbx-icon" width="35" height="29" align="bottom" /></div></td>
+    <td height="30" colspan="3" align="center" valign="bottom" nowrap="nowrap" class="style1" id="logosmall"><div align="left"><a href="getting_started.html" class="style1">Netcdf-Java Toolbox <img src="images/up.png" border="0" align="bottom" /></a></div></td>
+
+  </tr>
+
+
+
+
+
+
+
+
+ <tr bgcolor="#CCDDFF">
+    <td colspan="1" nowrap="nowrap" class="smallText2"></td>
+
+    <td colspan="2" valign="baseline" nowrap="nowrap" class="smallText3"><div align="left"><a href="getting_started.html" style="color:#000000"><img src="images/b_prev.gif" alt="previous" width="17" height="17" border="0" align="texttop" /> Getting Started</a></div></td>
+    <td colspan="3" valign="baseline" nowrap="nowrap" class="smallText3"><div align="right"><a href="Simple_examples.html" style="color:#000000">Quick Tutorial <img src="images/b_next.gif" alt="Next" width="17" height="17" border="0" align="texttop" class="navText" /></a></div></td>
+    <td width="1" nowrap="nowrap"></td>
+  </tr>
+  <tr bgcolor="#ffffff">
+    <td width="71"><img src="images/mm_spacer.gif" alt="" width="25" height="1" border="0" /></td>
+    <td colspan="1" valign="top"><img src="images/mm_spacer.gif" alt="" width="305" height="1" border="0" /><br />
+	&nbsp;<br />
+	&nbsp;<br /><table border="0" cellspacing="0" cellpadding="0" width="744">
+        <tr>
+          <td width="744" class="pageName">Environment Setup</td>
+		</tr>
+
+		<tr>
+          <td class="bodyText"><p><span id="parent-fieldname-description">Before using NJ toolbox (njTBX) you need to set up the Java environment and Matlab path</span>. </p>
+            <ul>
+              <li>Setup Matlab Java classpath</li>
+               <ul>
+                  <li>Locate the directory where you have downloaded NJ Toolbox jar files (toolsUI.jar &amp; njTools.jar). </li>
+                  <li>For Matlab 7+:</li>
+                    In Matlab, type &quot;edit startup.m&quot; and add the following lines (modified  for the actual location of your jar files):
+
+                  <pre class="codeinput">javaaddpath('&lt;your_full_path_here&gt;\toolsUI-&lt;version&gt;.jar','-end');
+javaaddpath('&lt;your_full_path_here&gt;\njTools-&lt;version&gt;.jar','-end');</pre>
+
+
+                  <li>For Matlab 6 or 6.5: </li>
+                  Type &quot;edit classpath.txt&quot; in Matlab, add the above jar files to the list.
+                  <li>                  If you have Matlab 2008a or older, fix Matlab's java  classpath. In Matlab, type &quot;edit classpath.txt&quot; and delete this line  <em>$matlabroot/java/jarext/mwucarunits.jar</em> and save your changes.
+                  For  Linux/Unix users: If you can't edit the system classpath.txt file, then copy  it to your home directory and make the edit there. Matlab looks first  for classpath.txt in your home directory, so it will use your edited  version. </li>
+                  <li>Remove any older versions of toolsUI &amp; njTools jar files from the java classpath</li>
+                </ul><br />
+
+                  <li>Setup Matlab path</li>
+                  <ul>
+ <li> In matlab, locate the root folder where you have download the toolbox. Here you will find a script '<strong>njtbxpath.m</strong>'. This is a convenience script, which lists required njTBX path(s) (absolute) to be added to the matlab search path. Add the path manually using matlab set path user interface or using 'addpath' command in your startup.m.<br />
+   <br />
+An example shown below, where njTBX was downloaded in the root folder C:\skbhate\dev\usgs\matlab\m_cmg\new_branch\njTools\</span>', and then 'njtbxpath' script was executed. </li>
+
+  <pre class="codeinput">&gt;&gt; njtbxpath
+-------------------- njTBX-2.0 --------------------------------
+ 
+>>>>> Following directories must be added to the matlab search path in order for toolbox to run properly
+ 
+C:\skbhate\dev\usgs\matlab\m_cmg\new_branch\njTools\
+C:\skbhate\dev\usgs\matlab\m_cmg\new_branch\njTools\examples
+C:\skbhate\dev\usgs\matlab\m_cmg\new_branch\njTools\njFunc
+C:\skbhate\dev\usgs\matlab\m_cmg\new_branch\njTools\njTBX-2.0
+C:\skbhate\dev\usgs\matlab\m_cmg\new_branch\njTools\njTBX-2.0\Utilities
+ 
+
+Locate "Seawater" and "RPSStuff" directories on your system, which you must have downloaded earlier and add to matlab search path.
+These directories are only required for demos, and are NOT required for njTBX to function properly.</pre>
+
+                    <li>After adding the required directories to the matlab search path, exit and restart Matlab.                  </li>
+                    <li>Type &quot;javaclasspath&quot; in Matlab. You should see the two  jar files you added (along with all the Java stuff that comes with  Matlab). </li>
+                    <li>Type 'path' to see toolbox directories are successfully added.</li>                    
+                    </ul><br/>                    
+                  <li>Quick Tests</li>
+              <ul>
+ <li> In matlab, try these commands in order.</li>
+  <pre class="codeinput">&gt;&gt; ncRef = 'http://coast-enviro.er.usgs.gov/thredds/dodsC/bathy/crm_vol1.nc';  % Access an OpenDAP Data URL
+&gt;&gt; [data,geo] = nj_subsetGrid(ncRef,'topo',[-70.9 -70.1 41.15 41.65]);         % Select a lon/lat subset of variable "topo"
+&gt;&gt; imagesc(geo.lon,geo.lat,data); axis xy                                      % Plot it up</pre>                    
+                <li>See if you can access njTBX help and demos in matlab. In matlab, select 'Start -&gt; Toolboxes -&gt; njTBX -&gt; Help' to open njTBX help. Check screengrab of accessing<a href="images/njtbx-start.png"> help</a> and<a href="images/demo-tab.png"> demos</a>.</li>
+              </ul><br />
+
+                    <li>If you encounter errors, refer to the '<a href="troubleshoot.html">troubleshooting</a>' page. </li>
+              </ul>
+          <p>&nbsp;</p></td>
+        </tr>
+      </table></td>
+
+    <td colspan="1" nowrap="nowrap"></td>
+  </tr>
+  <tr bgcolor="#CCDDFF">
+    <td colspan="1" nowrap="nowrap" class="smallText2"></td>
+
+    <td colspan="2" valign="middle" nowrap="nowrap" class="smallText3"><div align="left"><a href="getting_started.html" style="color:#000000"><img src="images/b_prev.gif" alt="previous" width="17" height="17" border="0" align="texttop" /> Getting Started</a></div></td>
+    <td colspan="3" valign="middle" nowrap="nowrap" class="smallText3"><div align="right"><a href="Simple_examples.html" style="color:#000000">Quick Tutorial <img src="images/b_next.gif" alt="Next" width="17" height="17" border="0" align="texttop" /></a></div></td>
+    <td width="1" nowrap="nowrap"></td>
+  </tr>
+    <tr bgcolor="#003399">
+    <td colspan="1" nowrap="nowrap" class="smallText2">&copy; 2006-2009</td>
+    <td colspan="3" nowrap="nowrap" class="smallText2">&nbsp;&nbsp;Mississippi State University&nbsp;&nbsp;&nbsp;&bull;&nbsp;<a href="license.html" style="text-decoration:none; color: #FFFFFF">License Terms</a>&nbsp;&nbsp;&nbsp;&bull;&nbsp;<a href="credits.html" style="text-decoration:none; color: #FFFFFF">Credits</a></td>
+
+    <td colspan="2" nowrap="nowrap" class="smallText2"></td>
+    <td width="1" nowrap="nowrap"></td>
+  </tr>
+
+</table>
+
+</body>
+</html>

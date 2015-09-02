@@ -1,0 +1,150 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<!-- DW6 -->
+<head>
+<!-- Copyright 2005 Macromedia, Inc. All rights reserved. -->
+<title>Netcdf-Java Toolbox for Matlab (njTBX) - Troubleshooting</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" href="njtbx.css" type="text/css" />
+
+<style type="text/css">
+<!--
+.style1 {color: #003399}
+-->
+</style>
+</head>
+<body bgcolor="#ffffff">
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr bgcolor="#ffffff">
+    <td width="62" colspan="1" rowspan="1"><div align="center"><img src="images/njtbx-icon.png" alt="njtbx-icon" width="35" height="29" align="bottom" /></div></td>
+   <td height="30" colspan="3" align="center" valign="bottom" nowrap="nowrap" class="style1" id="logosmall"><div align="left"><a href="getting_started.html" class="style1">Netcdf-Java Toolbox <img src="images/up.png" border="0" align="bottom" /></a></div></td>
+  
+  </tr>
+
+ <tr bgcolor="#CCDDFF">
+    <td colspan="1" nowrap="nowrap" class="smallText2"></td>
+    
+    <td colspan="2" valign="baseline" nowrap="nowrap" class="smallText3"><div align="left"><a href="../examples/html/test_cf_ugrid.html" style="color:#000000"><img src="images/b_prev.gif" alt="previous" width="17" height="17" border="0" align="texttop" /> Demo test_cf_ugrid</a></div></td>
+    <td colspan="3" valign="baseline" nowrap="nowrap" class="smallText3"><div align="right"><a href="njtbxhelp.html" style="color:#000000">Introduction <img src="images/b_next.gif" alt="Next" width="17" height="17" border="0" align="texttop" class="navText" /></a></div></td>
+    <td width="1" nowrap="nowrap"></td>
+  </tr>
+  <tr bgcolor="#ffffff">
+    <td width="71"><img src="images/mm_spacer.gif" alt="" width="25" height="1" border="0" /></td>
+    <td colspan="1" valign="top"><img src="images/mm_spacer.gif" alt="" width="305" height="1" border="0" /><br />
+	&nbsp;<br />
+	&nbsp;<br /><table border="0" cellspacing="0" cellpadding="0" width="880">
+        <tr>
+          <td width="880" class="pageName">Troubleshooting</td>
+		</tr>
+
+		<tr>
+          <td class="bodyText">Here you can find answers to some of the errors you may encounter while using njTBX. If you still having trouble,  then send your questions to <a href="https://lists.sourceforge.net/lists/listinfo/njtbx-users">njtbx-users</a> list.        
+            
+            <ol>
+              <li><a href="#argument-to-import">I am getting 'Arguments to IMPORT must either end with &quot;.*&quot;'  error ?</a></li>
+              <li><a href="#out-of-memory">What is 'java.lang.OutOfMemoryError' error ?</a></li>
+              <li><a href="#not-clearing-java">What does 'Not Clearing Java' message means ?</a></li>
+              <li><a href="#no-help">Unable to see help documentation and demos within matlab ?</a></li>            
+            </ol>
+            <hr />
+            
+            <!-- Start ordered list from here -->
+                
+            <ol>
+                        <li id="argument-to-import"><strong>I am getting 'Arguments to IMPORT must either end with &quot;.*&quot;'  error ?</strong>&nbsp;<a href="troubleshoot.html"><img src="images/up.png" border="0" /></a></li>
+                            
+<ul>
+                                <li>The full extent of the error would be something like this as shown below.</li> 
+                                	<pre class="codeinput">??? Error: File: /home/username/&lt;M-file_name&gt;
+Line: 1651 Column: 8
+Arguments to IMPORT must either end with &quot;.*&quot;
+or else specify a fully qualified class name:
+&quot;&lt;class_name&gt;&quot; fails this test.</pre>           
+                                <li>This error usually occurs because the the import statement is referencing a Java™ class (&lt;class_name&gt;) that it cannot find at run time. In order to fix this problem try the following fixes in order. </li>
+                                <ol>
+                                	<li>Check to see if the JAR file(s) that contains the Java class is  stored in a directory that is on the Java class path. On Matlab prompt,  type </li>
+                                    <pre class="codeinput">&gt;&gt;javaclasspath  
+	...          
+	DYNAMIC JAVA PATH            
+	&lt;your_directory_path_for_jar_files&gt;/toolsUI-&lt;version&gt;.jar            
+	&lt;your_directory_path_for_jar_files&gt;/njTools-&lt;version&gt;.jar</pre>
+    If the 'DYNAMIC JAVA PATH' does not display the correct path or jar entries, then see <a href="environment_setup.html">setup</a> to add jar files to matlab classpath. Also, make sure that you do not have any older version toolsUI/njTools jar files in your classpath.
+    <li>Check your java runtime version on your matlab. You should have  version 1.5 or higher for toolbox to work properly. On Matlab prompt,  type </li>
+    <pre class="codeinput">&gt;&gt;version -java  
+ans =  
+Java 1.6.0_04-b12 with Sun Microsystems Inc. Java HotSpot(TM) Client VM mixed mode</pre>
+    <li>Check to see if you have downloaded the correct  'njTools.jar' file corresponding to the java version you have on your  machine. </li>
+    <li>Check to see if 'jvm' (Java Virtual Machine) is running on your system. On Matlab prompt, type </li>
+    <pre class="codeinput">&gt;&gt;usejava('jvm')    
+'1' - running  '0' - not running</pre>
+If '0', then check matlab starup options to see if '-nojvm' switch is on. If 'on', then set it to off and restart matlab.
+<li>Check to see if the jar files (toolsUI/njTools) are not corrupted or resulted in incomplete download. </li>
+                                </ol>
+                            </ul>
+                            <br />
+                            
+                        <li id="out-of-memory"><strong>What is 'java.lang.OutOfMemoryError' error ?</strong>&nbsp;<a href="troubleshoot.html"><img src="images/up.png" border="0" /></a></li>
+                                                <ul>
+                                <li>The full extent of the error would be something like this as shown below.</li> 
+                                <pre class="codeinput">Java exception occurred:  
+java.lang.OutOfMemoryError: Java heap space</pre>
+                                The error with Java heap space is due to the default virtual memory  settings for java in matlab. You will have to change the virtual memory  settings on your machine. Follow the steps  below.
+<pre class="codeinput"> 1. Create a file name 'java.opts' with these lines        
+-Xms312m      
+-Xmx896m       
+Depending upon the memory specifications of your machine you can set the max runtime memory i.e. -Xmx settings. Right now it's set to '896mb'.      
+2. Save 'java.opts' file in your    	
+$MATLABROOT/bin/$ARCH      
+where,        
+$MATLABROOT can be known by typing in matlab        
+&gt;&gt;matlabroot         
+$ARCH can be know by typing in matlab        
+&gt;&gt;computer('arch')       
+After you save the file, restart matlab. Then type       
+&gt;&gt; java.lang.Runtime.getRuntime.maxMemory       
+It should say (depending on your new memory settings)       
+ans =       
+916062208       
+3. If for some reason (admin rights etc.) you cannot save 'java.opts' file in matlab root directory,      
+then save the java.opts file in matlab startup directory (i.e. where you are running your matlab) and restart matlab.    </pre>                              
+              </ul>
+                             
+                        <li id="not-clearing-java"><strong>What does 'Not Clearing Java' message means ?</strong>&nbsp;<a href="troubleshoot.html"><img src="images/up.png" border="0" /></a></li>
+                        <ul>
+                                                    <li>If older class object(s) still exist and is different from newer object(s) (with same class name)then this error will occur. In order to clear old objects, type</li>
+                                                    <pre class="codeinput">>>clear classes </pre>
+                </ul>
+                <li id="no-help"><strong>Unable to see help documentation and demos within matlab ?</strong>&nbsp;<a href="troubleshoot.html"><img src="images/up.png" border="0" /></a></li>
+                        <ul>
+                                                    <li>In order for help and demos to work within matlab, make sure the NJ toolbox root directory (say $njtbxroot) and '$njtbxroot/examples' are in matlab search path. Run '$njtbxroot/njtbxpath.m' script to know the required path(s) to be added to the matlab search path.</li>                                                  
+                </ul>
+                    </ol>
+            
+            
+            <br />            
+          </td>
+        </tr>
+      </table></td>
+      
+
+    <td colspan="1" nowrap="nowrap"></td>
+  </tr>
+  <tr bgcolor="#CCDDFF">
+    <td colspan="1" nowrap="nowrap" class="smallText2"></td>
+    
+<td colspan="2" valign="middle" nowrap="nowrap" class="smallText3"><div align="left"><a href="../examples/html/test_cf_ugrid.html" style="color:#000000"><img src="images/b_prev.gif" alt="previous" width="17" height="17" border="0" align="texttop" /> Demo test_cf_ugrid</a></div></td>
+    <td colspan="3" valign="middle" nowrap="nowrap" class="smallText3"><div align="right"><a href="njtbxhelp.html" style="color:#000000">Introduction <img src="images/b_next.gif" alt="Next" width="17" height="17" border="0" align="texttop" /></a></div></td>
+    <td width="1" nowrap="nowrap"></td>
+  </tr> 
+    <tr bgcolor="#003399">
+    <td colspan="1" nowrap="nowrap" class="smallText2">&copy; 2006-2009</td>
+    <td colspan="3" nowrap="nowrap" class="smallText2">&nbsp;&nbsp;Mississippi State University&nbsp;&nbsp;&nbsp;&bull;&nbsp;<a href="license.html" style="text-decoration:none; color: #FFFFFF">License Terms</a>&nbsp;&nbsp;&nbsp;&bull;&nbsp;<a href="credits.html" style="text-decoration:none; color: #FFFFFF">Credits</a></td>
+   
+    <td colspan="2" nowrap="nowrap" class="smallText2"></td>
+    <td width="1" nowrap="nowrap"></td>
+  </tr>
+  
+</table>
+
+</body>
+</html>

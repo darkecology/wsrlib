@@ -1,0 +1,25 @@
+--- rsl-v1.47/wsr88d_m31.c	2012-04-09 14:37:39.000000000 -0400
++++ wsr88d_m31.c	2013-07-03 22:24:13.000000000 -0400
+@@ -522,20 +522,22 @@
+     Wsr88d_msg_hdr msghdr;
+     Wsr88d_ray_m31 wsr88d_ray;
+     short non31_seg_remainder[1202]; /* Remainder after message header */
+     int end_of_vos = 0, isweep = 0;
+     int msg_hdr_size, msg_size, n;
+     int prev_elev_num = 1, prev_raynum = 0, raynum = 0;
+     Radar *radar = NULL;
+     enum radial_status {START_OF_ELEV, INTERMED_RADIAL, END_OF_ELEV, BEGIN_VOS,
+         END_VOS};
+ 
++    bzero(&msghdr, sizeof(msghdr));
++    bzero(&wsr88d_ray, sizeof(wsr88d_ray));
+ 
+     /* Message type 31 is a variable length message.  All other types consist of
+      * 1 or more segments of length 2432 bytes.  To handle all types, we read
+      * the message header and check the type.  If not 31, then simply read
+      * the remainder of the 2432-byte segment.  If it is 31, use the size given
+      * in message header to determine how many bytes to read.
+      */
+ 
+     n = fread(&msghdr, sizeof(Wsr88d_msg_hdr), 1, wf->fptr);
+ 

@@ -1,0 +1,53 @@
+--- rsl-v1.47/wsr88d.c	2011-12-02 18:59:10.000000000 -0500
++++ rsl-v1.43/wsr88d.c.dan	2013-07-09 15:34:40.000000000 -0400
+@@ -239,20 +239,21 @@
+   int save_fd;
+ 
+   if ( strcmp(filename, "stdin") == 0 ) {
+     save_fd = dup(0);
+     wf->fptr = fdopen(save_fd,"r");
+   } else {
+     wf->fptr = fopen(filename, "r");
+   }
+ 
+   if (wf->fptr == NULL) return NULL;
++  wf->orig = wf->fptr;
+   wf->fptr = uncompress_pipe(wf->fptr);
+ #define NEW_BUFSIZ 16384
+   setvbuf(wf->fptr,NULL,_IOFBF,(size_t)NEW_BUFSIZ); /* Faster i/o? */
+   return wf;
+ }
+ 
+ 
+ /**********************************************************************/
+ /*                                                                    */
+ /*  done 2/28             wsr88d_perror                               */
+@@ -271,24 +272,25 @@
+   return 0;
+ }
+ 
+ /**********************************************************************/
+ /*                                                                    */
+ /*  done 2/28             wsr88d_close                                */
+ /*                                                                    */
+ /**********************************************************************/
+ int wsr88d_close(Wsr88d_file *wf)
+ {
+-  int rc;
+-  rc = rsl_pclose(wf->fptr);
++  int rc1, rc2;
++  rc1 = rsl_pclose(wf->fptr);
++  rc2 = fclose(wf->orig);
+   free(wf);
+-  return rc;
++  return rc1 && rc2;
+ }
+ 
+ 
+ /**********************************************************************/
+ /*                                                                    */
+ /*                     wsr88d_swap_file_header                        */
+ /*                                                                    */
+ /**********************************************************************/
+ void wsr88d_swap_file_header(Wsr88d_file_header *header)
+ {
