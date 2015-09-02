@@ -94,3 +94,7 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see http://www.gnu.org/
 
 ~~~~
+
+## Acknowledgment
+
+The development of WSRLIB was supported by the National Science Foundation under Grant No. 1125228.
