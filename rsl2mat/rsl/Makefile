@@ -1,4 +1,4 @@
-VERSION=1.48
+VERSION=1.49
 DIR=$(shell pwd)
 SUBDIR=rsl-v$(VERSION)
 
@@ -11,8 +11,9 @@ all:
 #	cd $(SUBDIR) && patch -p1 < ../patch4.txt
 #	cd $(SUBDIR) &&	patch -p1 < ../patch5.txt
 #	cd $(SUBDIR) &&	patch -p1 < ../patch6.txt
-	cd $(SUBDIR) &&	patch -p1 < ../patch7.txt
+#	cd $(SUBDIR) &&	patch -p1 < ../patch7.txt
 	cd $(SUBDIR) &&	patch -p1 < ../patch8.txt
+	cd $(SUBDIR) &&	patch -p1 < ../patch9.txt
 	cd $(SUBDIR) && (CFLAGS="-g" ./configure --prefix=$(DIR)/install)
 	cd $(SUBDIR) && ( make; make install )
 
