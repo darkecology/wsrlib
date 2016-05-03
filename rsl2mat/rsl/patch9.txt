@@ -1,0 +1,26 @@
+--- rsl-v1.48/wsr88d_merge_split_cuts.c	2016-05-03 15:32:11.365986198 -0400
++++ wsr88d_merge_split_cuts.c	2016-05-03 15:33:53.683952649 -0400
+@@ -25,21 +25,22 @@
+ 
+ void wsr88d_remove_extra_refl(Radar *radar)
+ {
+     /* This function removes any extra reflectivity for an elevation angle.
+      * I.e., only keep reflectivity from the surveillance sweep of a split cut.
+      */
+ 
+     int i;
+     float prev_elev;
+ 
+-    prev_elev = radar->v[DZ_INDEX]->sweep[0]->h.elev;
++    if (radar->v[DZ_INDEX]->sweep[0])
++      prev_elev = radar->v[DZ_INDEX]->sweep[0]->h.elev;
+ 
+     for (i=1; i < radar->v[DZ_INDEX]->h.nsweeps; i++) {
+         if (radar->v[DZ_INDEX]->sweep[i]) {
+             if (fabsf(radar->v[DZ_INDEX]->sweep[i]->h.elev - prev_elev) < .2) {
+                 RSL_free_sweep(radar->v[DZ_INDEX]->sweep[i]);
+                 radar->v[DZ_INDEX]->sweep[i] = NULL;
+             }
+             else prev_elev = radar->v[DZ_INDEX]->sweep[i]->h.elev;
+         }
+     }
