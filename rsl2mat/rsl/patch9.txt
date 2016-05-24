@@ -1,0 +1,47 @@
+--- rsl-v1.48/wsr88d.orig.c	2016-05-24 12:20:39.000000000 -0400
++++ rsl-v1.48/wsr88d.c	2016-05-24 12:23:52.000000000 -0400
+@@ -434,38 +434,42 @@
+        */
+       /*
+       if (nrec+1 != ray_num) {
+         fprintf(stderr, "Data says %d is ray_num, but, I've seen %d "
+                 "records.\n", ray_num, nrec+1);
+       }
+       */
+       if (wsr88d_sweep->ray[ray_num] == NULL) {
+         wsr88d_sweep->ray[ray_num] = (Wsr88d_ray *) malloc (sizeof(Wsr88d_ray));
+       }
+-      memcpy(wsr88d_sweep->ray[ray_num], &wsr88d_ray, sizeof(Wsr88d_ray));
++      if (ray_num < MAX_RAYS_IN_SWEEP) {
++          memcpy(wsr88d_sweep->ray[ray_num], &wsr88d_ray, sizeof(Wsr88d_ray));
++      }
+     }
+     n = wsr88d_read_ray(wf, &wsr88d_ray);
+     if (n > 0) nrec++;
+     end_of_volume = wsr88d_ray.ray_status == 2 ||
+                     wsr88d_ray.ray_status == 4 ||
+                     n <= 0;
+   }
+ 
+   /* Process the last packet of the input data. */
+   if ((wsr88d_ray.ray_status == 2 || wsr88d_ray.ray_status == 4) &&
+ 	  (wsr88d_ray.msg_type & 15) == 1) {
+     /* Load this ray into the sweep. */
+     ray_num = wsr88d_ray.ray_num;
+     if (wsr88d_sweep->ray[ray_num] == NULL) {
+       wsr88d_sweep->ray[ray_num] = (Wsr88d_ray *) malloc (sizeof(Wsr88d_ray));
+     }
+-    memcpy(wsr88d_sweep->ray[ray_num], &wsr88d_ray, sizeof(Wsr88d_ray));
++    if (ray_num < MAX_RAYS_IN_SWEEP) {
++        memcpy(wsr88d_sweep->ray[ray_num], &wsr88d_ray, sizeof(Wsr88d_ray));
++    }
+   }
+ 
+   /* Just to be safe, clear all ray pointers left in this sweep to
+    * the maximum MAX_RAYS_IN_SWEEP.  This is required when the 
+    * wsr88d_sweep is reused and not cleared.
+    */
+   free_and_clear_sweep(wsr88d_sweep, ray_num+1, MAX_RAYS_IN_SWEEP);
+   
+ /*
+   fprintf(stderr,"Processed %d records for elevation number %d\n",

@@ -13,6 +13,7 @@ all:
 #	cd $(SUBDIR) &&	patch -p1 < ../patch6.txt
 	cd $(SUBDIR) &&	patch -p1 < ../patch7.txt
 	cd $(SUBDIR) &&	patch -p1 < ../patch8.txt
+	cd $(SUBDIR) &&	patch -p1 < ../patch9.txt
 	cd $(SUBDIR) && (CFLAGS="-g" ./configure --prefix=$(DIR)/install)
 	cd $(SUBDIR) && ( make; make install )
 
