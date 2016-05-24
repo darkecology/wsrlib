@@ -1,4 +1,4 @@
-function [ radar ] = align_scan( radar, azResolution, rangeResolution, rmax, method, interpolate, elevations )
+function [ radar ] = align_scan( radar, azResolution, rangeResolution, rmax, method, interpolate, elevations, default_vals )
 %ALIGN_SCAN Align volume scan to a fixed resolution grid
 %
 % [radar_aligned] = align_scan(radar, azResolution, rangeResolution, rmax, method, interpolate, elevations)
@@ -33,6 +33,11 @@ function [ radar ] = align_scan( radar, azResolution, rangeResolution, rmax, met
 % procedure. 
 
 % Default values for all the optional parameters. 
+
+if nargin < 8 
+    default_vals   = {nan  ,  nan,   nan};
+end
+
 if nargin < 7
     elevations = [0.5 1.5 2.5 3.5 4.5];
 end
@@ -80,7 +85,6 @@ numSwSweeps = size(radar.sw.sweeps,1);
 numSweeps   = max([numDzSweeps, numVrSweeps, numSwSweeps]);
 
 fields         = {'dz' , 'vr',  'sw'};
-default_vals   = {nan  ,  nan,   nan};
 sweepCount    = {numDzSweeps, numVrSweeps, numSwSweeps}; 
 
 FLAG_START = 131067;
