@@ -26,7 +26,14 @@ end
 F = cell(n,1);
 for i=1:n
     F{i} = griddedInterpolant({range, az, elev}, data{i}, type);
+    
+    % We need to disable extrpolation in MATLAB 2013a and later, but
+    % the property does not exist in previous versions
+    if ismember('ExtrapolationMethod', properties('griddedInterpolant'))
+        F{i}.ExtrapolationMethod = 'none';
+    end
 end
+
 
 end
 
