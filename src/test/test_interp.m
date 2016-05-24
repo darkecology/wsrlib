@@ -7,7 +7,7 @@ opt.cartesian = false;
 opt.max_elev = inf;
 radar = rsl2mat(radar_file, station, opt);
 
-rmax = 37500;
+rmax = 300000;
 
 % Paramters for align_scan
 radar = align_scan(radar, 0.5, 250, rmax, 'nearest', true);
@@ -42,7 +42,6 @@ while true
     %[x, y, z] = meshgrid(x, y, z);
 
     [az, range, elev] = xyz2radar(x, y, z);
-
     
     %%% PPI plot
     figure(1); clf();
