@@ -1,4 +1,4 @@
-function [X, Y] = grid_points(s)
+function [X, Y, x, y] = grid_points(s)
 % GRID_POINTS Return all grid points
 %
 %   [X, Y] = grid_points(s)

@@ -49,7 +49,7 @@ if nargin < 3
     cmap = jet(128);
 end
 
-if nargin < 4
+if nargin < 4 || isempty(tick)
     tick = linspace(lim(1), lim(2), 5);
 end
 

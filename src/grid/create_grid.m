@@ -12,7 +12,7 @@ function [ s ] = create_grid( p, q, nx, ny, cornertype )
 %
 % NOTES:
 %   1. Assumes map projection has been set by m_proj() to convert from
-%
+%      lat/lon to x/y
 %
 %   2. The grid is conceptualized as an equally spaced set of *points*, 
 %      not cells. By default, p and q specify the positions of the 
