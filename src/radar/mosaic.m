@@ -24,10 +24,11 @@ end
 pixelWidth = imageSize(1);
 pixelHeight = imageSize(2);
 
-% Create grid
-bottom_left = [lonlim(1), latlim(1)];
-top_right   = [lonlim(2), latlim(2)];
-s = create_grid(bottom_left, top_right, pixelWidth, pixelHeight);
+% Get a bounding box in x/y coordinates that encloses the lat/lon region
+[xrng, yrng] = m_get_bbox(lonlim, latlim);
+
+% Create grid on that bounding box
+s = create_grid(xrng, yrng, pixelWidth, pixelHeight);
 
 % Determine approximate pixel size in km
 x_min = s.x0;

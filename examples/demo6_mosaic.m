@@ -2,8 +2,8 @@
 % Parameters
 %%%%%%%%%%%%%%%%%%%%%
 
-LONLIM = [-82 -65];       % bounding box
-LATLIM = [36 48];
+LONLIM = [-82   -65];       % bounding box
+LATLIM = [ 36.5  48];
 
 IMAGE_SIZE = [600, 600];  % width, height in pixels
 RMAX = 200000;            % max. distance from radar
@@ -45,7 +45,7 @@ for i = 1:numel(files)
 end
 
 % Set map projection, which is used internally by mosaic function
-m_proj('utm', 'long', LONLIM, 'lat', LATLIM, 'rec', 'on');
+m_proj('albers', 'long', LONLIM, 'lat', LATLIM, 'rec', 'on');
 
 max_elev = 1;    % for speed, only process lowest elevation. there are options to combine multiple elevations
 
@@ -58,6 +58,16 @@ max_elev = 1;    % for speed, only process lowest elevation. there are options t
 
 % TODO output world file...
 
+%% 
+[lon1, lat1] = m_xy2ll( x(1), y(1) );      % top left
+[lon2, lat2] = m_xy2ll( x(1),   y(end) );  % bottom left
+[lon3, lat3] = m_xy2ll( x(end), y(1)   );  % top right
+[lon4, lat4] = m_xy2ll( x(end), y(end) );  % bottom right
+
+fprintf('   Top  left: [ %.4f, %.4f ]\n', lon1, lat1);
+fprintf('Bottom  left: [ %.4f, %.4f ]\n', lon2, lat2);
+fprintf('   Top right: [ %.4f, %.4f ]\n', lon3, lat3);
+fprintf('Bottom right: [ %.4f, %.4f ]\n', lon4, lat4);
 
 %%
 %%%%%%%%%%%%%%%%%%%%%

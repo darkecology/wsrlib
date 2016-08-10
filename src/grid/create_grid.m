@@ -1,42 +1,42 @@
-function [ s ] = create_grid( p, q, nx, ny, cornertype )
+function [ s ] = create_grid( xlim, ylim, nx, ny, cornertype )
 %CREATE_GRID Return a structure defining a 2D spatial grid
 %
-%  [ s ] = create_grid( p, q, nx, ny )
+%  [ s ] = create_grid( xlim, ylim, nx, ny )
 %
 % Inputs
-%   p           2-element vector: lon/lat of the bottom left corner
-%   q           2-element vector: lon/lat of the top right corner
+%   p           2-element vector: min/max x coordinates
+%   q           2-element vector: min/max y coordinates
 %   nx          integer: number of grid points in the x direction
 %   ny          integer: number of grid points in the y direction
 %   cornertype  string: 'point' | 'edge' (default: 'point')
 %
-% NOTES:
-%   1. Assumes map projection has been set by m_proj() to convert from
-%      lat/lon to x/y
-%
-%   2. The grid is conceptualized as an equally spaced set of *points*, 
-%      not cells. By default, p and q specify the positions of the 
-%      corner grid points. 
+% NOTE:
+%   The grid is conceptualized as an equally spaced set of *points*, 
+%   not cells. By default, p and q specify the positions of the 
+%   corner grid points. 
 % 
-%      The grid points can be used to define grid cells by identifying each
-%      point with the center of a cell. Use GRID_EDGES to get the grid cell
-%      edges
+%   The grid points can be used to define grid cells by identifying each
+%   point with the center of a cell. Use GRID_EDGES to get the grid cell
+%   edges
 %
-%      Set cornertype='edge' to define the grid spatial extent by the
-%      *corners* of the bottom-left and top-right grid cells instead of 
-%      the centers. 
+%   Set cornertype='edge' to define the grid spatial extent by the
+%   *corners* of the bottom-left and top-right grid cells instead of 
+%   the centers. 
 %
 % See also GRID_EDGES, GRID_POINTS, XY2IJ
 
-if nargin < 5
+if nargin < 5 || isempty(cornertype)
     cornertype = 'point';
 end
 
 s.nx = nx;
 s.ny = ny;
 
-[x0, y0] = m_ll2xy(p(1), p(2));
-[x1, y1] = m_ll2xy(q(1), q(2));
+x0 = xlim(1);
+x1 = xlim(2);
+
+y0 = ylim(1);
+y1 = ylim(2);
 
 switch cornertype
     case 'point'
