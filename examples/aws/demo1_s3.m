@@ -1,7 +1,6 @@
 
 station = 'KBOX';
 
-t = datetime(2016, 8, 1, 13, 0, 0);
 fileinfo = aws_list('KBOX', 2014, 8, 01, 23 );
 
 thefile = fileinfo(1);

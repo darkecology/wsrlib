@@ -9,7 +9,7 @@ tokens = regexp(name, '(\w{4})(\d{4}\d{2}\d{2}_\d{2}\d{2}\d{2})_(\w+)?', 'tokens
 [station, timestamp, v] = tokens{:};
 
 info.station = station;
-info.t = datetime(timestamp, 'InputFormat', 'yyyyMMdd_HHmmss');
+info.t = datenum(timestamp, 'yyyyMMdd_HHmmss');
 info.version = v;
 info.path = path;
 info.name = [name ext];
