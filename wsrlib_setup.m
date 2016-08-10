@@ -7,7 +7,6 @@ function wsrlib_setup()
 % addpath('/path/to/wsrlib');
 % wsrlib_setup();
 
-
 % If you another subdirectory contains utility functions and should be on
 % the MATLAB path, add it below.
 
@@ -22,6 +21,7 @@ root = wsrlib_root();
 addpath(root);
 addpath(sprintf('%s/rsl2mat', root));
 addpath(sprintf('%s/lib/m_map', root));
+addpath(sprintf('%s/lib/jsonlab', root));
 
 addpath(sprintf('%s/examples', root));
 
@@ -31,6 +31,7 @@ addpath(sprintf('%s/src/test', root));
 addpath(sprintf('%s/src/radar', root));
 addpath(sprintf('%s/src/vvp', root));
 addpath(sprintf('%s/src/util', root));
+addpath(sprintf('%s/src/aws', root));
 %addpath(sprintf('%s/src/quarantine', root)); % Once all bugs are fixed, wsrlib should no longer depend on methods in this folder
 addpath(sprintf('%s/src/util/colormaps', root));
 
