@@ -103,4 +103,4 @@ The development of WSRLIB was supported by the National Science Foundation under
 
 WSRLIB is open source software. You are welcome to use the code under the terms of the license for research or commercial purposes. If you use WSRLIB in published research, please acknowledge it with a citation:
 
-Sheldon, Daniel. WSRLIB: MATLAB Toolbox for Weather Surveillance Radar. https://bitbucket.org/dsheldon/wsrlib, 2015.
+Sheldon, Daniel. WSRLIB: MATLAB Toolbox for Weather Surveillance Radar. http://bitbucket.org/dsheldon/wsrlib, 2015.
