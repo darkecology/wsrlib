@@ -105,6 +105,6 @@ WSRLIB is open source software. You are welcome to use the code under the terms 
 
 Sheldon, Daniel. WSRLIB: MATLAB Toolbox for Weather Surveillance Radar. http://bitbucket.org/dsheldon/wsrlib, 2015.
 
-If you use any of the dealiasing or velocity profiling routines from the vvp subdirectory, please cite the original paper that developed these methods:
+If you use any of the dealiasing or velocity profiling routines from the vvp subdirectory, please cite the original paper:
 
 Daniel Sheldon, Andrew Farnsworth, Jed Irvine, Benjamin Van Doren, Kevin Webb, Thomas G. Dietterich, and Steve Kelling. Approximate Bayesian inference for reconstructing velocities of migrating birds from weather radar. In Proc. of the 27th AAAI Conference on Artificial Intelligence (AAAI). The AAAI Press, September 2013.
