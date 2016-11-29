@@ -99,7 +99,7 @@ along with this program.  If not, see http://www.gnu.org/
 
 The development of WSRLIB was supported by the National Science Foundation under Grant No. 1125228.
 
-## Citation
+## How to Cite
 
 WSRLIB is open source software. You are welcome to use the code under the terms of the license for research or commercial purposes. If you use WSRLIB in published research, please acknowledge it with a citation:
 
