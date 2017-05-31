@@ -109,8 +109,7 @@ range_lim = [20000 22000];
 
 figure(2); clf();
 for i=1:length(fields)
-
-    [data, range, az] = sweep2mat(radar.(field).sweeps(1));
+    [data, range, az] = sweep2mat(radar.(fields{i}).sweeps(1));
     
     rows = range >= range_lim(1) & range <= range_lim(2);
     
