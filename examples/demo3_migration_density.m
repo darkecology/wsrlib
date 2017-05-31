@@ -19,7 +19,7 @@ AZ_RES    = 0.5;
 RANGE_RES = 250;
 
 % VVP: extract velocity information
-[ edges, height, u, v ] = epvvp(radar, ZSTEP_M, RMIN_M, RMAX_M, ZMAX_M, 'EP', EP_GAMMA);
+[ edges, height, u, v, rmse ] = epvvp(radar, ZSTEP_M, RMIN_M, RMAX_M, ZMAX_M, 'EP', EP_GAMMA);
 [thet, speed] = cart2pol(u, v);         % get direction and speed
 direction     = pol2cmp(thet);          % convert to compass heading
 
