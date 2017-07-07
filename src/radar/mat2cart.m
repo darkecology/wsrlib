@@ -54,11 +54,7 @@ y = -x;
 % Map (x,y) coordinates to range and azimuth
 [X, Y] = meshgrid(x, y);
 [PHI, R] = cart2pol(X, Y);
-
-% Convert to degrees clockwise from north in the range [0, 360]
-PHI = 90-rad2deg(PHI); 
-PHI(PHI > 360) = PHI(PHI > 360) - 360;
-PHI(PHI < 0) = PHI(PHI < 0) + 360;
+PHI = pol2cmp(PHI);  % convert from radians to compass heading
 
 % Interpolate
 Z = F(R, PHI);
