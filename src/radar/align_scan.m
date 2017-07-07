@@ -9,7 +9,7 @@ function [ radar ] = align_scan( radar, azResolution, rangeResolution, rmax, met
 % rangeResolution (optional)     : the resolution in range from the radar in meters. 
 %                                  e.g. 250 means a gate size of 250m.  Defaults to 250. 
 % rmax (optional)                : the maximum range for the aligned reflectiviy and 
-%                                  radial velocity sweeps in meters. 
+%                                  radial ve locity sweeps in meters. 
 %                                  e.g. 37500 means a maximum range of 37.5 km.  
 % method (optional)              : the method of interpolation to be used. 
 %                                  Possible values : ['linear', 'nearest', 'cubic', 'spline']
