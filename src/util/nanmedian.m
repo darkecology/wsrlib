@@ -1,6 +1,6 @@
-function [ med ] = nanmedian( X )
+function [ med ] = nanmedian( varargin )
 %NANMEDIAN Compute median of non-NaN elements
 
-med = median(X(~isnan(X)));
+med = median(varargin{:}, 'omitnan');
 
 end
