@@ -1,0 +1,16 @@
+VERSION=1.42
+DIR=$(shell pwd)
+SUBDIR=rsl-v$(VERSION)
+
+all: $(SUBDIR)/Makefile
+	mkdir -p $(DIR)/install
+	cd $(SUBDIR) && ( make; make install )
+
+
+$(SUBDIR)/Makefile:
+	cd $(SUBDIR) && (CFLAGS="-g" ./configure --prefix=$(DIR)/install)
+
+clean:
+	make -C $(SUBDIR) clean
+	rm $(SUBDIR)/Makefile
+	rm -rf $(DIR)/install
