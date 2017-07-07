@@ -21,6 +21,7 @@ radar.dz.sweeps(1)                        % the first sweep
 
 
 %% 3. View data matrix from first sweep in polar coordinates
+figure(1)
 imagesc(radar.dz.sweeps(1).data, [-5 20])
 colormap(jet(32)); colorbar();
 
@@ -110,6 +111,7 @@ range_lim = [20000 22000];
 figure(2); clf();
 for i=1:length(fields)
 
+    field = fields{i};
     [data, range, az] = sweep2mat(radar.(field).sweeps(1));
     
     rows = range >= range_lim(1) & range <= range_lim(2);
