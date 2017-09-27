@@ -250,7 +250,7 @@ if ~IsOctave,
    %%a=ver('matlab');  % Ver doesn't return stuff under v5!
    a=version;
    %if  (sscanf(a(1:3),'%f') >6.0 & sscanf(a(1:3),'%f') <7.4)  & ~ispc,
-     patch('xdata',X(:),'ydata',Y(:),'zdata',-bitmax*ones(size(X(:))),'facecolor',gbackcolor,...
+     patch('xdata',X(:),'ydata',Y(:),'zdata',-flintmax*ones(size(X(:))),'facecolor',gbackcolor,...
 	   'edgecolor','k','linestyle','none','tag','m_grid_color');
    %
    %else
