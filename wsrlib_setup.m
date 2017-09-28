@@ -23,6 +23,10 @@ addpath(sprintf('%s/rsl2mat', root));
 addpath(sprintf('%s/lib/m_map', root));
 addpath(sprintf('%s/lib/jsonlab', root));
 
+% The wsr88d_decode_ar2v executable must be on the system path. Add it here.
+rsl_bin_dir = sprintf('%s/rsl2mat/rsl/install/bin', root);
+setenv('PATH',  sprintf('%s:%s', getenv('PATH'), rsl_bin_dir) );
+
 addpath(sprintf('%s/examples', root));
 
 addpath(sprintf('%s/src/grid', root));
