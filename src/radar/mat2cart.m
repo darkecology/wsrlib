@@ -1,4 +1,4 @@
-function [Z, x, y, F] = mat2cart( data, az, range, dim, rmax, interp_type )
+function [Z, x, y, F] = mat2cart( data, az, range, dim, rmax, interp_type, trim_polar)
 %MAT2CART Convert a sweep to cartesian coordinates
 % 
 %  [Z, x, y] = mat2cart( data, az, range, dim )
@@ -9,6 +9,7 @@ function [Z, x, y, F] = mat2cart( data, az, range, dim, rmax, interp_type )
 %   range - vector or matrix of ranges (*)
 %   rmax  - maximum range (default: max(range))
 %   dim   - # of pixels of the cartesian image
+%   trim_polar - if true the trim polar to given rmax
 %
 % Outputs:
 %   Z - cartesian data (i.e., image)
@@ -40,10 +41,16 @@ if nargin < 6
     interp_type = 'linear';
 end
 
+if nargin < 7
+    trim_polar = true;
+end
+
 % Trim data beyond rmax
-I = range < rmax;
-range = range(I);
-data = data(I,:);
+if trim_polar
+    I = range < rmax;
+    range = range(I);
+    data = data(I,:);
+end
 
 F = radarInterpolant(data, az, range, interp_type);
 
