@@ -6,6 +6,10 @@ syntax:glob
 rsl2mat/rsl2mat.mex*
 rsl2mat/rsl/install/**
 rsl2mat/rsl/rsl-v**
+rsl2mat/*.o
 
 # files created when njtbx reads grib files
 data/*.gbx
+
+# Emacs backup files
+*~
