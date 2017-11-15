@@ -6,7 +6,7 @@ function [ sweeps ] = unique_elev_sweeps( radar, field )
 %
 % Inputs:
 %    radar     The radar struct
-%    field     'dz' | 'vr' | 'sw'. The type of sweep to extract
+%    field     'dz' | 'vr' | 'sw' | 'dr' | 'ph' | 'rh'. The type of sweep to extract
 % Outputs:
 %    sweeps    Sweep array with unique elevations
 %
@@ -32,7 +32,7 @@ for i = 1:n_sweeps
     members = find(I==i);             % all sweeps with this elevation
 
     switch field
-        case 'dz'
+        case {'dz', 'dr', 'ph', 'rh'}    
             [~, j] = min(prf(members));    % pick the one with smallest prf
         case {'vr', 'sw'}
             [~, j] = max(prf(members));

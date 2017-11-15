@@ -48,7 +48,7 @@ for i=1:nbins
     n = numel(bin_dz);
     
     % AVERAGE Z
-    %   1. Trim 25% of values on left/right tails
+    %   1. Trim some fraction of values on left/right tails
     %   2. Average remaining Z values
     % (Following Buler and Diehl 2009)
     rnk = rank_order(bin_z);
