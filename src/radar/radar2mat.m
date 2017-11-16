@@ -18,9 +18,10 @@ function [ data, x1, x2, x3, fields ] = radar2mat( radar, varargin )
 %   sweep_elevs  if set, select sweeps by elevation angle instead of
 %                number, using nearest-neighbor interpolation to match to
 %                the desired elevations
-%  
+%   output_format  cell | struct
+
 % Outputs:
-%   data         cell array of 3D data matrices of size m x n x p
+%   data         struct or cell array of 3D data matrices of size m x n x p
 %   x1           vector of coordinates for first dimension (m x 1)
 %   x2           vector of coordinates for second dimension (n x 1)
 %   x3           vector of coordinates for third dimension (p x 1)

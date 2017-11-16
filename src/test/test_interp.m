@@ -1,18 +1,12 @@
-
 [radar_file, station] = sample_radar_file();
 
 % Construct options for rsl2mat
-opt = struct();
-opt.cartesian = false;
-opt.max_elev = inf;
-radar = rsl2mat(radar_file, station, opt);
+radar = rsl2mat(radar_file, station);
 
-rmax = 300000;
+rmax = 37500;
 
 % Paramters for align_scan
-radar = align_scan(radar, 0.5, 250, rmax, 'nearest', true);
-
-F = vol_interp(radar, {'dz'}, 'linear');
+F = vol_interp(radar, {'dz'}, 'nearest');
 F = F{1};
 
 % Generate an (x,y,z) grid 
@@ -20,8 +14,8 @@ dim = 100;
 
 clim = [-5 35];
 
-rdim = 100;
-zdim = 50;
+rdim = 200;
+zdim = 100;
 phi = 0;
 %for phi = -30:2:360
 while true

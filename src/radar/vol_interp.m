@@ -11,7 +11,7 @@ end
 
 n = length(fields);
 
-[data, range, az, elev] = radar2mat(radar, fields);
+[data, range, az, elev] = radar2mat(radar, 'fields', fields, 'output_format', 'cell');
 
 % Repeat the first and last radials w/ azimuth += 360 degrees to get
 % propert interpolation at boundary
