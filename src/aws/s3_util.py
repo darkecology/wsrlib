@@ -269,15 +269,20 @@ def get_scans_by_station_time(date_ranges, stations, time_increment=None, max_co
                         if  o.key >= start_key
                         and o.key <= end_key ]
                 
-                #print(keys)
-                if max_count is not None and keys is not None:
-                    indices = np.arange(len(keys))
-                    random_sample = sorted(np.random.choice(indices, max_count, replace=False))
-                    keys = [keys[i] for i in random_sample]
+                if len(keys) > 0:
 
-                # Add to running lists
-                #all_keys.extend(keys)
-                keys_by_station_time[station][t].extend(keys)
+                    if max_count is not None:
+                        indices = np.arange(len(keys))
+                        random_sample = sorted(np.random.choice(indices, min(max_count, len(indices)), replace=False))
+                        keys = [keys[i] for i in random_sample]
+
+                    keys_by_station_time[station][t].extend(keys)
+
+    #convert back to regular dict so we can pickle
+    for station in keys_by_station_time:
+        keys_by_station_time[station] = dict(keys_by_station_time[station])
+    keys_by_station_time = dict(keys_by_station_time)
+
     return keys_by_station_time
 
 def test():
