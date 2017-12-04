@@ -1,6 +1,8 @@
 syntax:glob
 
 .DS_Store
+.idea
+*.pyc
 
 # rsl2mat build files
 rsl2mat/rsl2mat.mex*

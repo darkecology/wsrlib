@@ -1,21 +1,26 @@
-from datetime import datetime, timedelta
+from datetime import datetime
 from dateutil.relativedelta import relativedelta
 import pickle
 
-import s3_util
+from key_list_generation import get_random_scans_by_station_time
+from key_list_generation import get_focused_scans_by_station_time
 
 def gen_training_set():
 
-    stations = get_station_locations().keys()[:1]
+    NEXRAD_LOCATIONS = get_station_locations()
 
     # create focused data set
     focus_range = [(datetime(2016, 04, 15), datetime(2016, 05, 15)), (datetime(2016, 9, 15), datetime(2016, 10, 15))]
-    focused_scans = s3_util.get_scans_by_station_time(focus_range, stations, max_count=165)
+    focused_scans = get_focused_scans_by_station_time(focus_range, NEXRAD_LOCATIONS)
 
     # create random data set
     random_range = [(datetime(2016, 01, 01), datetime(2016, 12, 31))]
-    random_scans = s3_util.get_scans_by_station_time(random_range, stations, time_increment=relativedelta(months=1), max_count=13)
+    random_scans = get_random_scans_by_station_time(random_range, NEXRAD_LOCATIONS, time_increment=relativedelta(months=1), max_count=13)
+
+    save_files(focused_scans, random_scans)
     
+def save_files(focused_scans, random_scans):
+
     out_file = 'focused_and_random_datasets.pkl'
     scans_dict = {'focused' : focused_scans, 'random' : random_scans }
     with open(out_file, 'wb') as f:

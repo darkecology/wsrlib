@@ -232,58 +232,7 @@ def download_cajun_out_profiles(scan_keys, out_dir):
                 #Just move to the next file
                 pass
 
-def get_scans_by_station_time(date_ranges, stations, time_increment=None, max_count=None):
-    #################
-    # First get a list of all keys that are within the desired time period
-    # and divide by station 
-    #################
 
-    keys_by_station_time = defaultdict(lambda : defaultdict(list))
-    
-    if not time_increment:
-        time_increment = timedelta(days=1)
-        
-    for tup in date_ranges:
-        start_time = tup[0]
-        end_time = tup[1]
-        
-        for station in stations:
-            print('Processing for station %s'%station)
-            
-            for t in datetime_range( start_time, end_time, time_increment, inclusive=True ):
-                        
-                # Set filter
-                prefix = s3_prefix(t, station)
-                #print prefix
-                        
-                start_key = s3_key(start_time, station)
-                end_key   = s3_key(  end_time, station)
-                
-                # Get s3 objects for this day
-                objects = bucket.objects.filter(Prefix=prefix)
-                
-                #print([o.key for o in objects])
-                #print(start_key, end_key)
-                # Select keys that fall between our start and end time
-                keys = [o.key for o in objects
-                        if  o.key >= start_key
-                        and o.key <= end_key ]
-                
-                if len(keys) > 0:
-
-                    if max_count is not None:
-                        indices = np.arange(len(keys))
-                        random_sample = sorted(np.random.choice(indices, min(max_count, len(indices)), replace=False))
-                        keys = [keys[i] for i in random_sample]
-
-                    keys_by_station_time[station][t].extend(keys)
-
-    #convert back to regular dict so we can pickle
-    for station in keys_by_station_time:
-        keys_by_station_time[station] = dict(keys_by_station_time[station])
-    keys_by_station_time = dict(keys_by_station_time)
-
-    return keys_by_station_time
 
 def test():
     start_time = datetime(2016, 04, 15)
