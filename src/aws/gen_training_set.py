@@ -1,25 +1,49 @@
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
 import pickle
+import os
+import time
 
 from key_list_generation import get_random_scans_by_station_time
 from key_list_generation import get_focused_scans_by_station_time
 
+
 def gen_training_set():
+
+    log_file = setup_log_file()
 
     NEXRAD_LOCATIONS = get_station_locations()
 
     # create focused data set
     focus_range = [(datetime(2016, 04, 15), datetime(2016, 05, 15)), (datetime(2016, 9, 15), datetime(2016, 10, 15))]
-    focused_scans = get_focused_scans_by_station_time(focus_range, NEXRAD_LOCATIONS)
+    focused_scans = get_focused_scans_by_station_time(focus_range, NEXRAD_LOCATIONS, log_file=log_file)
 
     # create random data set
     random_range = [(datetime(2016, 01, 01), datetime(2016, 12, 31))]
-    random_scans = get_random_scans_by_station_time(random_range, NEXRAD_LOCATIONS, time_increment=relativedelta(months=1), max_count=13)
+    random_scans = get_random_scans_by_station_time(random_range,
+                                                    NEXRAD_LOCATIONS,
+                                                    time_increment=relativedelta(months=1),
+                                                    max_count=13,
+                                                    log_file=log_file)
 
-    save_files(focused_scans, random_scans)
+    save_files(focused_scans, random_scans, log_file=log_file)
+
+def setup_log_file():
+
+    log_dir = 'logs/'
+    if not os.path.isdir(log_dir):
+        os.makedirs(log_dir)
+
+    day = time.strftime("%x").replace('/', '-')
+    seconds = str(int(round((time.time() - 18000) % 86400)))
+    log_file = '%s/%s_%s.log' % (log_dir, day, seconds)
+
+    with open(log_file, 'w+'):
+        pass
+
+    return log_file
     
-def save_files(focused_scans, random_scans):
+def save_files(focused_scans, random_scans, log_file=None):
 
     out_file = 'focused_and_random_datasets.pkl'
     scans_dict = {'focused' : focused_scans, 'random' : random_scans }
@@ -28,19 +52,25 @@ def save_files(focused_scans, random_scans):
 
     focused_scans_list = []
     for station_scans in focused_scans.values():
-        for date_scans in station_scans.values():
-            focused_scans_list.extend(date_scans)
+        for date_range_scans in station_scans:
+            for date_scans in date_range_scans:
+                focused_scans_list.extend(date_scans)
     out_file = 'focused_dataset.txt'
     with open(out_file, 'w+') as f:
         f.write('\n'.join(focused_scans_list))
 
     random_scans_list = []
     for station_scans in random_scans.values():
-        for date_scans in station_scans.values():
-            random_scans_list.extend(date_scans)
+        for date_range_scans in station_scans:
+            for date_scans in date_range_scans.values():
+                random_scans_list.extend(date_scans)
     out_file = 'random_dataset.txt'
     with open(out_file, 'w+') as f:
         f.write('\n'.join(random_scans_list))
+
+    msg = '\nSaved out txt and pkl files'
+    with open(log_file, 'a') as f:
+        f.write(msg)
 
 
 def get_station_locations():

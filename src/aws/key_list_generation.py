@@ -3,7 +3,7 @@ from datetime import timedelta
 from datetime import datetime
 import boto3
 import numpy as np
-import astral
+import astral # pip install astral
 import pytz
 import warnings
 
@@ -15,11 +15,21 @@ bucket = boto3.resource('s3', region_name='us-east-2').Bucket('noaa-nexrad-level
 darkecology_bucket = boto3.resource('s3', region_name='us-east-2').Bucket('cajun-batch-test')
 
 
-def get_focused_scans_by_station_time(date_ranges, NEXRAD_LOCATIONS):
+def get_focused_scans_by_station_time(date_ranges, NEXRAD_LOCATIONS, log_file=None):
 
     keys = defaultdict(lambda: [list() for _ in range(len(date_ranges))])
 
+    msg = '\nGetting keys for focused data set'
+    print msg
+    write_to_log(msg, log_file)
+
+    station_ind = 1
     for station in NEXRAD_LOCATIONS:
+
+        msg = '\t%s (%d/%d)' % (station, station_ind, len(NEXRAD_LOCATIONS))
+        station_ind += 1
+        write_to_log(msg, log_file)
+
         for d, date_range in enumerate(date_ranges):
 
             extended_start_time = date_range[0] - timedelta(days=2)
@@ -45,8 +55,17 @@ def get_focused_scans_by_station_time(date_ranges, NEXRAD_LOCATIONS):
 
     selected_keys = defaultdict(lambda: [list() for _ in range(len(date_ranges))])
 
+    msg = '\nDown selecting keys for focused data set'
+    print msg
+    write_to_log(msg, log_file)
+
     a = astral.Astral()
+    station_ind = 1
     for station, station_keys in keys.items():
+
+        msg = '\t%s (%d/%d)' % (station, station_ind, len(NEXRAD_LOCATIONS))
+        station_ind += 1
+        write_to_log(msg, log_file)
 
         for d, date_range_keys in enumerate(station_keys):
 
@@ -101,25 +120,37 @@ def get_focused_scans_by_station_time(date_ranges, NEXRAD_LOCATIONS):
                           % (station, abs(target_datetime - closest_datetime), target_datetime, closest_datetime)
                     warnings.warn(msg)
 
+    # convert back to regular dict so we can pickle
+    selected_keys = dict(selected_keys)
+
     return selected_keys
 
-def get_random_scans_by_station_time(date_ranges, NEXRAD_LOCATIONS, time_increment=None, max_count=None):
+def get_random_scans_by_station_time(date_ranges, NEXRAD_LOCATIONS, time_increment=None, max_count=None, log_file=None):
     #################
     # First get a list of all keys that are within the desired time period
     # and divide by station
     #################
 
-    keys_by_station_time = defaultdict(lambda: defaultdict(list))
+    msg = '\nGetting keys for random data set'
+    print msg
+    write_to_log(msg, log_file)
+
+    # keys_by_station_time[station][date_range_index][datetime]
+    keys_by_station_time = defaultdict(lambda: [defaultdict(list) for _ in range(len(date_ranges))])
 
     if not time_increment:
         time_increment = timedelta(days=1)
 
-    for tup in date_ranges:
-        start_time = tup[0]
-        end_time = tup[1]
+    station_ind = 1
+    for station in NEXRAD_LOCATIONS:
 
-        for station in NEXRAD_LOCATIONS:
-            print('Processing for station %s' % station)
+        msg = '\t%s (%d/%d)' % (station, station_ind, len(NEXRAD_LOCATIONS))
+        station_ind += 1
+        write_to_log(msg, log_file)
+
+        for d, tup in enumerate(date_ranges):
+            start_time = tup[0]
+            end_time = tup[1]
 
             for t in datetime_range(start_time, end_time, time_increment, inclusive=True):
 
@@ -143,11 +174,22 @@ def get_random_scans_by_station_time(date_ranges, NEXRAD_LOCATIONS, time_increme
                         random_sample = sorted(np.random.choice(indices, min(max_count, len(indices)), replace=False))
                         keys = [keys[i] for i in random_sample]
 
-                    keys_by_station_time[station][t].extend(keys)
+                    keys_by_station_time[station][d][t].extend(keys)
 
     # convert back to regular dict so we can pickle
     for station in keys_by_station_time:
-        keys_by_station_time[station] = dict(keys_by_station_time[station])
+        for d in range(len(keys_by_station_time[station])):
+            keys_by_station_time[station][d] = dict(keys_by_station_time[station][d])
     keys_by_station_time = dict(keys_by_station_time)
 
     return keys_by_station_time
+
+def write_to_log(msg, log_file, num_newlines=1):
+
+    if log_file is not None:
+
+        with open(log_file, 'a') as f:
+            f.write(msg)
+
+            if num_newlines > 0:
+                f.write(''.join(['\n']*num_newlines))
