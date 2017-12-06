@@ -54,7 +54,7 @@ def gen_training_set():
         random_scans = get_random_scans_by_station_time(random_range,
                                                         NEXRAD_LOCATIONS,
                                                         time_increment=relativedelta(months=1),
-                                                        max_count=13,
+                                                        max_count=15,
                                                         log_file=log_file)
 
         random_scans_list = consolidate_random_into_list(random_scans)
@@ -250,24 +250,7 @@ def get_station_locations():
     "KVNX": {'lat': 36.74083, 'lon': -98.1275, 'elev': 1210},
     "KVTX": {'lat': 34.41167, 'lon': -119.17861, 'elev': 2726},
     "KVWX": {'lat': 38.2600, 'lon': -87.7247, 'elev': -99999},
-    "KYUX": {'lat': 32.49528, 'lon': -114.65583, 'elev': 174},
-    "LPLA": {'lat': 38.73028, 'lon': -27.32167, 'elev': 3334},
-    "PABC": {'lat': 60.79278, 'lon': -161.87417, 'elev': 162},
-    "PACG": {'lat': 56.85278, 'lon': -135.52917, 'elev': 270},
-    "PAEC": {'lat': 64.51139, 'lon': -165.295, 'elev': 54},
-    "PAHG": {'lat': 60.725914, 'lon': -151.35146, 'elev': 243},
-    "PAIH": {'lat': 59.46194, 'lon': -146.30111, 'elev': 67},
-    "PAKC": {'lat': 58.67944, 'lon': -156.62944, 'elev': 63},
-    "PAPD": {'lat': 65.03556, 'lon': -147.49917, 'elev': 2593},
-    "PGUA": {'lat': 13.45444, 'lon': 144.80833, 'elev': 264},
-    "PHKI": {'lat': 21.89417, 'lon': -159.55222, 'elev': 179},
-    "PHKM": {'lat': 20.12556, 'lon': -155.77778, 'elev': 3812},
-    "PHMO": {'lat': 21.13278, 'lon': -157.18, 'elev': 1363},
-    "PHWA": {'lat': 19.095, 'lon': -155.56889, 'elev': 1370},
-    "RKJK": {'lat': 35.92417, 'lon': 126.62222, 'elev': 78},
-    "RKSG": {'lat': 36.95972, 'lon': 127.01833, 'elev': 52},
-    "RODN": {'lat': 26.30194, 'lon': 127.90972, 'elev': 218},
-    "TJUA": {'lat': 18.1175, 'lon': -66.07861, 'elev': 2794},
+    "KYUX": {'lat': 32.49528, 'lon': -114.65583, 'elev': 174}
 }
 
 if __name__ == '__main__':

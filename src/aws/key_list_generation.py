@@ -29,7 +29,7 @@ def get_focused_scans_by_station_time(date_ranges, NEXRAD_LOCATIONS, log_file=No
     station_ind = 1
     for station in NEXRAD_LOCATIONS:
 
-        msg = '\t%s (%d/%d) (%d seconds)' % (station, station_ind, len(NEXRAD_LOCATIONS), (time.time() - start))
+        msg = '\tselecting %s (%d/%d) (%d seconds)' % (station, station_ind, len(NEXRAD_LOCATIONS), (time.time() - start))
         station_ind += 1
         write_to_log(msg, log_file)
 
@@ -76,10 +76,11 @@ def downselect_focused_dataset(keys, date_ranges, log_file, NEXRAD_LOCATIONS):
     station_ind = 1
     for station, station_keys in keys.items():
 
-        msg = '\t%s (%d/%d) (%d seconds)' % (station, station_ind, len(NEXRAD_LOCATIONS), (time.time() - start))
+        msg = '\tdownselecting %s (%d/%d) (%d seconds)' % (station, station_ind, len(NEXRAD_LOCATIONS), (time.time() - start))
         station_ind += 1
         write_to_log(msg, log_file)
 
+        station_keys = [date_range_keys for date_range_keys in station_keys if date_range_keys] # filter empty lists
         for d, date_range_keys in enumerate(station_keys):
 
             # compile date times of all scans in this station/daterange combo
@@ -161,7 +162,7 @@ def get_random_scans_by_station_time(date_ranges, NEXRAD_LOCATIONS, time_increme
     station_ind = 1
     for station in NEXRAD_LOCATIONS:
 
-        msg = '\t%s (%d/%d) (%d seconds)' % (station, station_ind, len(NEXRAD_LOCATIONS), (time.time() - start))
+        msg = '\trandom scans for %s (%d/%d) (%d seconds)' % (station, station_ind, len(NEXRAD_LOCATIONS), (time.time() - start))
         station_ind += 1
         write_to_log(msg, log_file)
 
