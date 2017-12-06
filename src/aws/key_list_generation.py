@@ -6,6 +6,7 @@ import numpy as np
 import astral # pip install astral
 import pytz
 import warnings
+import time
 
 from s3_util import datetime_range
 from s3_util import s3_prefix
@@ -23,10 +24,12 @@ def get_focused_scans_by_station_time(date_ranges, NEXRAD_LOCATIONS, log_file=No
     print msg
     write_to_log(msg, log_file)
 
+    start = time.time()
+
     station_ind = 1
     for station in NEXRAD_LOCATIONS:
 
-        msg = '\t%s (%d/%d)' % (station, station_ind, len(NEXRAD_LOCATIONS))
+        msg = '\t%s (%d/%d) (%d seconds)' % (station, station_ind, len(NEXRAD_LOCATIONS), (time.time() - start))
         station_ind += 1
         write_to_log(msg, log_file)
 
@@ -63,7 +66,7 @@ def get_focused_scans_by_station_time(date_ranges, NEXRAD_LOCATIONS, log_file=No
     station_ind = 1
     for station, station_keys in keys.items():
 
-        msg = '\t%s (%d/%d)' % (station, station_ind, len(NEXRAD_LOCATIONS))
+        msg = '\t%s (%d/%d) (%d seconds)' % (station, station_ind, len(NEXRAD_LOCATIONS), (time.time() - start))
         station_ind += 1
         write_to_log(msg, log_file)
 
@@ -96,15 +99,17 @@ def get_focused_scans_by_station_time(date_ranges, NEXRAD_LOCATIONS, log_file=No
 
                 # night time scan
                 indices_of_datetimes_during_night = [i for i, kd in enumerate(key_datetimes) if yesterday_sunset_datetime < kd < today_sunrise_datetime]
-                nighttime_scan_index = np.random.choice(indices_of_datetimes_during_night)
-                nighttime_scan = date_range_keys[nighttime_scan_index]
-                selected_keys[station][d].append(nighttime_scan)
+                if indices_of_datetimes_during_night:
+                    nighttime_scan_index = np.random.choice(indices_of_datetimes_during_night)
+                    nighttime_scan = date_range_keys[nighttime_scan_index]
+                    selected_keys[station][d].append(nighttime_scan)
 
                 # day time scan
                 indices_of_datetimes_during_day = [i for i, kd in enumerate(key_datetimes) if today_sunrise_datetime < kd < today_sunset_datetime]
-                daytime_scan_index = np.random.choice(indices_of_datetimes_during_day)
-                daytime_scan = date_range_keys[daytime_scan_index]
-                selected_keys[station][d].append(daytime_scan)
+                if indices_of_datetimes_during_day:
+                    daytime_scan_index = np.random.choice(indices_of_datetimes_during_day)
+                    daytime_scan = date_range_keys[daytime_scan_index]
+                    selected_keys[station][d].append(daytime_scan)
 
                 # scan +3 hours after sunset
                 target_datetime = today_sunset_datetime + timedelta(hours=3)  # want scans 3 hours after sunset
@@ -131,6 +136,8 @@ def get_random_scans_by_station_time(date_ranges, NEXRAD_LOCATIONS, time_increme
     # and divide by station
     #################
 
+    start = time.time()
+
     msg = '\nGetting keys for random data set'
     print msg
     write_to_log(msg, log_file)
@@ -144,7 +151,7 @@ def get_random_scans_by_station_time(date_ranges, NEXRAD_LOCATIONS, time_increme
     station_ind = 1
     for station in NEXRAD_LOCATIONS:
 
-        msg = '\t%s (%d/%d)' % (station, station_ind, len(NEXRAD_LOCATIONS))
+        msg = '\t%s (%d/%d) (%d seconds)' % (station, station_ind, len(NEXRAD_LOCATIONS), (time.time() - start))
         station_ind += 1
         write_to_log(msg, log_file)
 

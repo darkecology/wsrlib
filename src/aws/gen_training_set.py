@@ -6,27 +6,51 @@ import time
 
 from key_list_generation import get_random_scans_by_station_time
 from key_list_generation import get_focused_scans_by_station_time
+from key_list_generation import write_to_log
 
 
 def gen_training_set():
+
+    focused = True
+    random = True
 
     log_file = setup_log_file()
 
     NEXRAD_LOCATIONS = get_station_locations()
 
     # create focused data set
-    focus_range = [(datetime(2016, 04, 15), datetime(2016, 05, 15)), (datetime(2016, 9, 15), datetime(2016, 10, 15))]
-    focused_scans = get_focused_scans_by_station_time(focus_range, NEXRAD_LOCATIONS, log_file=log_file)
+    if focused:
+        focus_range = [(datetime(2016, 04, 15), datetime(2016, 05, 15)), (datetime(2016, 9, 15), datetime(2016, 10, 15))]
+        focused_scans = get_focused_scans_by_station_time(focus_range, NEXRAD_LOCATIONS, log_file=log_file)
+
+        focused_scans_list = consolidate_focused_into_list(focused_scans)
+
+        out_file = 'focused_dataset.txt'
+        with open(out_file, 'w+') as f:
+            f.write('\n'.join(focused_scans_list))
+
+        msg = '\tSaved focused data set to %s' % out_file
+        print msg
+        write_to_log(msg, log_file)
 
     # create random data set
-    random_range = [(datetime(2016, 01, 01), datetime(2016, 12, 31))]
-    random_scans = get_random_scans_by_station_time(random_range,
-                                                    NEXRAD_LOCATIONS,
-                                                    time_increment=relativedelta(months=1),
-                                                    max_count=13,
-                                                    log_file=log_file)
+    if random:
+        random_range = [(datetime(2016, 01, 01), datetime(2016, 12, 31))]
+        random_scans = get_random_scans_by_station_time(random_range,
+                                                        NEXRAD_LOCATIONS,
+                                                        time_increment=relativedelta(months=1),
+                                                        max_count=13,
+                                                        log_file=log_file)
 
-    save_files(focused_scans, random_scans, log_file=log_file)
+        random_scans_list = consolidate_random_into_list(random_scans)
+
+        out_file = 'random_dataset.txt'
+        with open(out_file, 'w+') as f:
+            f.write('\n'.join(random_scans_list))
+
+        msg = '\tSaved random data set to %s' % out_file
+        print msg
+        write_to_log(msg, log_file)
 
 def setup_log_file():
 
@@ -42,35 +66,27 @@ def setup_log_file():
         pass
 
     return log_file
-    
-def save_files(focused_scans, random_scans, log_file=None):
 
-    out_file = 'focused_and_random_datasets.pkl'
-    scans_dict = {'focused' : focused_scans, 'random' : random_scans }
-    with open(out_file, 'wb') as f:
-        pickle.dump(dict(scans_dict), f)
+def consolidate_focused_into_list(focused_scans):
 
     focused_scans_list = []
     for station_scans in focused_scans.values():
         for date_range_scans in station_scans:
             for date_scans in date_range_scans:
-                focused_scans_list.extend(date_scans)
-    out_file = 'focused_dataset.txt'
-    with open(out_file, 'w+') as f:
-        f.write('\n'.join(focused_scans_list))
+                focused_scans_list.append(date_scans)
+
+    return focused_scans_list
+
+
+def consolidate_random_into_list(random_scans):
 
     random_scans_list = []
     for station_scans in random_scans.values():
         for date_range_scans in station_scans:
             for date_scans in date_range_scans.values():
                 random_scans_list.extend(date_scans)
-    out_file = 'random_dataset.txt'
-    with open(out_file, 'w+') as f:
-        f.write('\n'.join(random_scans_list))
 
-    msg = '\nSaved out txt and pkl files'
-    with open(log_file, 'a') as f:
-        f.write(msg)
+    return random_scans_list
 
 
 def get_station_locations():
