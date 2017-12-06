@@ -56,6 +56,16 @@ def get_focused_scans_by_station_time(date_ranges, NEXRAD_LOCATIONS, log_file=No
                 # Add to running lists
                 keys[station][d].extend(cur_keys)
 
+    # turn back to regular dict so we can pickle
+    keys = dict(keys)
+
+    return keys
+
+
+def downselect_focused_dataset(keys, date_ranges, log_file, NEXRAD_LOCATIONS):
+
+    start = time.time()
+
     selected_keys = defaultdict(lambda: [list() for _ in range(len(date_ranges))])
 
     msg = '\nDown selecting keys for focused data set'

@@ -6,12 +6,14 @@ import time
 
 from key_list_generation import get_random_scans_by_station_time
 from key_list_generation import get_focused_scans_by_station_time
+from key_list_generation import downselect_focused_dataset
 from key_list_generation import write_to_log
 
 
 def gen_training_set():
 
-    focused = True
+    focused_keys = True
+    focused_downselect = True
     random = True
 
     log_file = setup_log_file()
@@ -19,11 +21,24 @@ def gen_training_set():
     NEXRAD_LOCATIONS = get_station_locations()
 
     # create focused data set
-    if focused:
-        focus_range = [(datetime(2016, 04, 15), datetime(2016, 05, 15)), (datetime(2016, 9, 15), datetime(2016, 10, 15))]
+    all_focused_keys_file = 'all_focused_keys.pkl'
+    focus_range = [(datetime(2016, 04, 15), datetime(2016, 05, 15)), (datetime(2016, 9, 15), datetime(2016, 10, 15))]
+    if focused_keys:
+
         focused_scans = get_focused_scans_by_station_time(focus_range, NEXRAD_LOCATIONS, log_file=log_file)
 
-        focused_scans_list = consolidate_focused_into_list(focused_scans)
+        with open(all_focused_keys_file, 'wb') as f:
+            pickle.dump(focused_scans, f)
+
+    if focused_downselect:
+
+        if not focused_keys:
+            with open(all_focused_keys_file, 'rb') as f:
+                focused_scans = pickle.load(f)
+
+        downselected_focused_scans = downselect_focused_dataset(focused_scans, focus_range, log_file, NEXRAD_LOCATIONS)
+
+        focused_scans_list = consolidate_focused_into_list(downselected_focused_scans)
 
         out_file = 'focused_dataset.txt'
         with open(out_file, 'w+') as f:
