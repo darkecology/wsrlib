@@ -35,12 +35,22 @@ THETA = cmp2pol(AZ);
 % Convert to X,Y coordinates of each pulse volume
 [X, Y] = pol2cart(THETA, GROUND_RANGE); 
 
-%% Another coordinate conversion: get distance of each PV from roost center
 
-% roost location and radius
-x0 = -6909;
-y0 = 68397.5;
-r  = 10560.28723;
+%% Roost location
+x0 = -6909;        % offset in meters from radar station
+y0 = 68397.5;      % offset in meters from radar station (image coordinates)
+r  = 10560.28723;  % meters
+
+%% Convert roost location to lat / lon
+
+[angle, dist_from_radar] = cart2pol(x0, y0);
+bearing = pol2cmp(angle);
+[roost_lon, roost_lat] = m_fdist(radar.lon, radar.lat, bearing, dist_from_radar);
+roost_lon = alias(roost_lon, 180);
+fprintf('lat,lon=%.4f,%.4f\n', roost_lat, roost_lon)
+
+
+%% Another coordinate conversion: get distance of each PV from roost center
 
 DIST = sqrt( (X-x0).^2 + (Y-y0).^2 );
 
