@@ -113,7 +113,7 @@ thresh_in_minutes  = 20
 
 # Get s3 Bucket resource
 bucket = boto3.resource('s3', region_name='us-east-2').Bucket('noaa-nexrad-level2');
-darkecology_bucket = boto3.resource('s3', region_name='us-east-2').Bucket('cajun-batch-test')
+darkecology_bucket = boto3.resource('s3', region_name='us-east-2').Bucket('darkeco-cajun')
 def get_scans(start_time, end_time, stations, select_by_time=False, time_increment=None, with_station=True):
     #################
     # First get a list of all keys that are within the desired time period
@@ -207,14 +207,14 @@ def download_scans(keys, data_dir):
         if not os.path.isfile(local_file):
             bucket.download_file(key, local_file)
 
-def download_cajun_out_profiles(scan_keys, out_dir):
+def download_cajun_out_profiles(scan_keys, out_dir, exp_tag):
     out_files = ['profile.csv', 'scan.csv']
     for scan in scan_keys:
         for out_file in out_files:
             key = '%s/%s'%(scan,out_file)
             
             #Download files
-            url = 'dark_ecology/cajun/north_east_aug_dec_2010/%s'%key
+            url = '%s/%s'%(exp_tag,key)
             local_file = '%s/%s'%(out_dir,key)
             local_path, filename = os.path.split( local_file )
             #Check if file exists, if yes then download it
@@ -233,7 +233,27 @@ def download_cajun_out_profiles(scan_keys, out_dir):
                 pass
 
 
+def get_processed_scans(scan_keys, exp_tag):
+    
+    
+    return processed_scans
 
+def yield_failed_scans(scan_keys, exp_tag):
+    out_file = 'scan.csv'
+    processed_scans = []
+    for scan in scan_keys:
+        key = '%s/%s'%(scan, out_file)
+        url = 'dark_ecology/%s/%s'%(exp_tag,key)
+        try:
+            #Check if file exists, if yes then add to processed_scans
+            #If file doesn't exists this call will fail with 404. Ref - https://stackoverflow.com/a/33843019/1026535
+            darkecology_bucket.Object(url).load()
+            #If we reach here, then file exists
+            processed_scans.append(scan)
+        except botocore.exceptions.ClientError:
+            #A failed scan, yield right of computation
+            yield scan
+            
 def test():
     start_time = datetime(2016, 04, 15)
     end_time = datetime(2016, 05, 15)
