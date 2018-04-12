@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta
 from collections import defaultdict
+from glob import glob
 
 import boto3
 import botocore
@@ -8,7 +9,7 @@ import os.path
 import errno    
 import os
 import sys
-
+import shutil
 import numpy as np
 
 
@@ -232,12 +233,54 @@ def download_cajun_out_profiles(scan_keys, out_dir, exp_tag):
                 #Just move to the next file
                 pass
 
+def copy_cajun_out_profiles(scan_keys, out_dir, exp_tag, src_dir):
+    for scan in scan_keys:
+        bname = os.path.basename(scan)
+        dest_path = '%s/%s'%(out_dir,bname)
+        src_path = scan
+        print('Copying %s to %s'%(src_path, dest_path))
+        shutil.copytree(src_path, dest_path)
 
-def get_processed_scans(scan_keys, exp_tag):
+def get_local_profiles(sunrise, sunset, current_date, station, src_dir):    
+    res = []
     
-    
-    return processed_scans
+    day1_profiles = profiles(current_date, station, src_dir, sunset, True)
+    res.extend(day1_profiles)
 
+    day2_profiles = profiles(current_date+timedelta(days=1), station, src_dir, sunrise, False)
+    res.extend(day2_profiles)
+    
+    return res
+    
+def profiles(date, station, src_dir, time_limit=None, limit_after=True):
+    date_str_ar = date.strftime("%Y-%m-%d").split("-")
+    year = date_str_ar[0]
+    month = date_str_ar[1]
+    day = date_str_ar[2]
+    
+    src_path = '%s/%s/%s/%s/%s'%(src_dir, year, month, day, station)
+    #print(src_path)
+    profiles = glob('%s/*/'%src_path)
+    profiles = [profile[:-1] for profile in profiles] #remove trailing slash
+    
+    #print(profiles)
+    
+    if time_limit:
+        profiles = [profile for profile in profiles if key_in_time(profile, time_limit, limit_after)]
+    
+    #print(profiles, time_limit.strftime('%Y%m%d_%H%M%S'))
+    
+    return profiles
+
+def key_in_time(key, time_limit, limit_after=True):
+    #print(key)
+    bname = os.path.basename(key)
+    bname = bname[4:] #ignore station code
+    
+    key_time = datetime.strptime(bname[:15], '%Y%m%d_%H%M%S')
+    
+    return key_time >= time_limit if limit_after else key_time <= time_limit 
+    
 def yield_failed_scans(scan_keys, exp_tag):
     out_file = 'scan.csv'
     processed_scans = []
