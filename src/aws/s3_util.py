@@ -115,6 +115,13 @@ thresh_in_minutes  = 20
 # Get s3 Bucket resource
 bucket = boto3.resource('s3', region_name='us-east-2').Bucket('noaa-nexrad-level2');
 darkecology_bucket = boto3.resource('s3', region_name='us-east-2').Bucket('darkeco-cajun')
+
+'''
+Get a list of scans that fall within the start and end time, corresponding to the list of stations
+select_by_time - if True, returns a dictionary of list of scans grouped by time
+time_increment - the increment in time between start_time and end_time. Default is 1 day.
+with_station   - appends a station code to each scan and returns the list of strings.
+'''
 def get_scans(start_time, end_time, stations, select_by_time=False, time_increment=None, with_station=True):
     #################
     # First get a list of all keys that are within the desired time period
@@ -193,7 +200,7 @@ def get_scans(start_time, end_time, stations, select_by_time=False, time_increme
                         selected_keys.append(k)
     return selected_keys if not select_by_time else selected_by_time
 
-
+#Download a list of AWS keys to a local directory
 def download_scans(keys, data_dir):
     #################
     # Download files into hierarchy
@@ -208,6 +215,7 @@ def download_scans(keys, data_dir):
         if not os.path.isfile(local_file):
             bucket.download_file(key, local_file)
 
+#Download a list of output profiles corresponding to AWS keys
 def download_cajun_out_profiles(scan_keys, out_dir, exp_tag):
     out_files = ['profile.csv', 'scan.csv']
     for scan in scan_keys:
@@ -233,6 +241,10 @@ def download_cajun_out_profiles(scan_keys, out_dir, exp_tag):
                 #Just move to the next file
                 pass
 
+#Copy selected profiles from a local src_dir to local out_dir
+#An alternative to the above `download_cajun_out_profiles` is
+#to just sync everything (using `aws s3 sync ...`) and then
+#copy the files you need to a new dir using this function
 def copy_cajun_out_profiles(scan_keys, out_dir, exp_tag, src_dir):
     for scan in scan_keys:
         bname = os.path.basename(scan)
@@ -251,7 +263,10 @@ def get_local_profiles(sunrise, sunset, current_date, station, src_dir):
     res.extend(day2_profiles)
     
     return res
-    
+
+#Get local profiles corresponding to a date
+#time_limit - a time bound indicating to get scans before/after this time
+#limit_after - True if need to get scans after this time, False if before
 def profiles(date, station, src_dir, time_limit=None, limit_after=True):
     date_str_ar = date.strftime("%Y-%m-%d").split("-")
     year = date_str_ar[0]
@@ -272,6 +287,7 @@ def profiles(date, station, src_dir, time_limit=None, limit_after=True):
     
     return profiles
 
+#Returns true if the scan is before/after the given time limit (specificed by limit_after)
 def key_in_time(key, time_limit, limit_after=True):
     #print(key)
     bname = os.path.basename(key)
@@ -280,7 +296,8 @@ def key_in_time(key, time_limit, limit_after=True):
     key_time = datetime.strptime(bname[:15], '%Y%m%d_%H%M%S')
     
     return key_time >= time_limit if limit_after else key_time <= time_limit 
-    
+
+#Yield scans which are currently not in output bucket
 def yield_failed_scans(scan_keys, exp_tag):
     out_file = 'scan.csv'
     processed_scans = []
