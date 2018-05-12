@@ -6,14 +6,18 @@ function [ info ] = aws_parse_key( key )
 
 tokens = regexp(name, '(\w{4})(\d{4}\d{2}\d{2}_\d{2}\d{2}\d{2})_(\w+)?', 'tokens', 'once');
 
-[station, timestamp, v] = tokens{:};
+if isempty(tokens)
+    info = [];
+else
+    [station, timestamp, v] = tokens{:};
 
-info.station = station;
-info.t = datenum(timestamp, 'yyyyMMdd_HHmmss');
-info.version = v;
-info.path = path;
-info.name = [name ext];
-info.key = key;
+    info.station = station;
+    info.t = datenum(timestamp, 'yyyyMMdd_HHmmss');
+    info.version = v;
+    info.path = path;
+    info.name = [name ext];
+    info.key = key;
+end
 
 end
 

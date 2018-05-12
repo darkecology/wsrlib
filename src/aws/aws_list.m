@@ -24,6 +24,8 @@ end
 
 filedata = loadjson( result );
 
-fileinfo  = cellfun ( @(c) aws_parse_key( c.Key ), filedata, 'UniformOutput', true );
+fileinfo = cellfun ( @(c) aws_parse_key( c.Key ), filedata, 'UniformOutput', false );
+fileinfo = fileinfo(~cellfun('isempty', fileinfo));
+fileinfo = [fileinfo{:}];
 
 end
