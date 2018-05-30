@@ -97,7 +97,7 @@ end
 % Check that the same elevation angles are available for all products
 available_elevs = [radar.(fields{1}).sweeps.elev];
 for f=1:n_fields
-    if ~isequal([radar.(fields{f}).sweeps.elev], available_elevs)
+    if any(abs([radar.(fields{f}).sweeps.elev] - available_elevs) > 0.2)
         error('Product %s has different elevations angles\n', fields{f});
     end
 end
