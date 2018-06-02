@@ -107,11 +107,11 @@ MEXFLAGS =
 MEXFLAGS += -largeArrayDims
 MEXFLAGS += -I${RSL}/include
 MEXFLAGS += -Iprivate
-#MEXFLAGS += -L${RSL}/lib
-#MEXFLAGS += -lrsl
+MEXFLAGS += -L${RSL}/lib
+MEXFLAGS += -lrsl
 
 LDFLAGS =
-#LDFLAGS += -Wl,-rpath,${RSL}/lib
+LDFLAGS += -Wl,-rpath,${RSL}/lib
 
 CXXFLAGS = 
 CXXFLAGS += -fPIC
@@ -145,10 +145,10 @@ endif
 all: rsl2mat.$(EXT)
 
 util.o: util.c
-	$(MEX) $(MEXFLAGS) CXXFLAGS='$$CXXFLAGS $(CXXFLAGS)' LDFLAGS='$$LDFLAGS $(LDFLAGS)' -c util.c ${RSL}/lib/librsl.a
+	$(MEX) $(MEXFLAGS) CXXFLAGS='$$CXXFLAGS $(CXXFLAGS)' LDFLAGS='$$LDFLAGS $(LDFLAGS)' -c util.c
 
 rsl2mat.$(EXT): rsl2mat.cpp util.o
-	$(MEX) $(MEXFLAGS) CXXFLAGS='$$CXXFLAGS $(CXXFLAGS)' LDFLAGS='$$LDFLAGS $(LDFLAGS)' rsl2mat.cpp util.o ${RSL}/lib/librsl.a
+	$(MEX) $(MEXFLAGS) CXXFLAGS='$$CXXFLAGS $(CXXFLAGS)' LDFLAGS='$$LDFLAGS $(LDFLAGS)' rsl2mat.cpp util.o
 
 clean:
 	-rm rsl2mat.$(EXT)
@@ -157,7 +157,7 @@ clean:
 	-rm rslinfo
 
 rslinfo: rslinfo.o
-	$(CC) -Wl,-rpath,$(RSL)/lib -L$(RSL)/lib -lrsl rslinfo.o -o $@ ${RSL}/lib/librsl.a
+	$(CC) -Wl,-rpath,$(RSL)/lib -L$(RSL)/lib -lrsl rslinfo.o -o $@
 
 rslinfo.o: rslinfo.c
-	$(CC) -g -DDEBUG -c -I$(RSL)/include rslinfo.c -o $@ ${RSL}/lib/librsl.a
+	$(CC) -g -DDEBUG -c -I$(RSL)/include rslinfo.c -o $@
