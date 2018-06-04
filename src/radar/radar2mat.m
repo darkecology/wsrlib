@@ -15,7 +15,7 @@ function [ data, x1, x2, x3, fields ] = radar2mat( radar, varargin )
 %   az_res       azimuth resolution (default: 0.5)
 %   dim          pixel dimension for Cartesian data (default: 500)
 %   sweeps       the sweep indices to select (default: [1, 2, 3, 4, 5])
-%   sweep_elevs  if set, select sweeps by elevation angle instead of
+%   elevs        if set, select sweeps by elevation angle instead of
 %                number, using nearest-neighbor interpolation to match to
 %                the desired elevations
 %   output_format  cell | struct
@@ -94,21 +94,27 @@ for f = 1:n_fields
     radar.(fields{f}).sweeps = unique_elev_sweeps(radar, fields{f});
 end
 
-% Check that the same elevation angles are available for all products
-available_elevs = [radar.(fields{1}).sweeps.elev];
-for f=1:n_fields
-    if any(abs([radar.(fields{f}).sweeps.elev] - available_elevs) > 0.2)
-        error('Product %s has different elevations angles\n', fields{f});
-    end
-end
-
 % Find the indices of the desired sweeps
 sweeps = params.sweeps;
+available_elevs = [radar.(fields{1}).sweeps.elev];
 if ~isempty(params.elevs)
     % For each requested elevation (in params.elevs), find index of nearest 
     % available elevation (in elevs)
-    inds = 1:num(available_elevs);
+    inds = 1:length(available_elevs);
     sweeps = interp1(available_elevs, inds, params.elevs, 'nearest'); 
+    if any(isnan(sweeps))
+        warning('Unable to match requested sweeps, removing unmatched sweeps.')
+        sweeps = sweeps(~isnan(sweeps));
+    end
+end
+
+% If not interpolating, check that the same elevation angles are available for all products
+if isempty(params.elevs)
+    for f=1:n_fields
+        if any(abs([radar.(fields{f}).sweeps.elev] - available_elevs) > 0.2)
+            error('Product %s has different elevations angles\n', fields{f});
+        end
+    end
 end
 
 n_sweeps = numel(sweeps);
