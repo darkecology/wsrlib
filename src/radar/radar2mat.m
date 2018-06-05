@@ -101,7 +101,7 @@ if ~isempty(params.elevs)
     % For each requested elevation (in params.elevs), find index of nearest 
     % available elevation (in elevs)
     inds = 1:length(available_elevs);
-    sweeps = interp1(available_elevs, inds, params.elevs, 'nearest'); 
+    sweeps = interp1(available_elevs, inds, params.elevs, 'nearest', 'extrap'); 
     if any(isnan(sweeps))
         warning('Unable to match requested sweeps, removing unmatched sweeps.')
         sweeps = sweeps(~isnan(sweeps));
