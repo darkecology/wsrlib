@@ -14,7 +14,7 @@ if m > 1
     az = az(1,:);
 end
     
-az_diff = alias(diff(az), pi);
+az_diff = do_alias(diff(az), pi);
 vel_res = nanmedian(az_diff);
 
 lag = round(gamma/vel_res);
@@ -26,10 +26,10 @@ I = mod(I-1, n) + 1;
 J = mod(J-1, n) + 1;
 
 delta = vr(:,I) - vr(:,J);
-gamma_meas = alias((az(I)-az(J))/2, pi);
+gamma_meas = do_alias((az(I)-az(J))/2, pi);
 az_meas = az(I) - gamma_meas;
 
-delta = alias(delta, nyq_vel);
+delta = do_alias(delta, nyq_vel);
 y = bsxfun(@rdivide, delta, (2*sin(gamma_meas)));
 
 % Restore to original dimension of az

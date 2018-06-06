@@ -22,7 +22,7 @@ for i = 1:m
     
     if n > 0
 
-        resid = alias(mu - y, nyq_vel(I));
+        resid = do_alias(mu - y, nyq_vel(I));
         rmse(i) = sqrt(nanmean(resid.^2));
 
         if nargin < 9

@@ -21,7 +21,7 @@ if nargin < 5
     k = 2;
 end
 
-resid = alias(mu(:) - y(:), nyq_vel(:));
+resid = do_alias(mu(:) - y(:), nyq_vel(:));
 
 % NOTE: outer product in expression for offsets
 %   offsets(i,j) is the jth offset for nyquist velocity nyq_vel(i)

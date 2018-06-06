@@ -22,7 +22,7 @@ delta = vr(I) - vr(J);
 beta_meas = (az(I)-az(J))/2;
 az_meas   = az(I) + beta_meas;
 
-delta = alias(delta, nyq_vel);
+delta = do_alias(delta, nyq_vel);
 
 X = [-cos(elev) .* sin(az_meas), ...
       cos(elev) .* cos(az_meas)];

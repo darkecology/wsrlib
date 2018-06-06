@@ -1,4 +1,4 @@
-function [ x ] = alias( x, vmax )
+function [ x ] = do_alias( x, vmax )
 %ALIAS Alias a value to within interval [-vmax, vmax]
 %
 % x = aliax(x, vmax);
