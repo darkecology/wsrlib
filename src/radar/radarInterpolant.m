@@ -53,7 +53,7 @@ data = [data(:,end)   data data(:,1)   ];
 
 %Simple check to ensure strict monotonicity
 n_mon = find(diff(az)==0);
-for i=1:size(n_mon),
+for i=1:size(n_mon)
      az(n_mon(i)+1) =  az(n_mon(i)+1)+0.001;
 end
 
