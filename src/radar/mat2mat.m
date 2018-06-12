@@ -1,12 +1,11 @@
 function [ newdata, y1, y2, y3 ] = mat2mat( indata, x1, x2, elev, varargin )
 %MAT2MAT Resample a 3d-matrix to a different coordinate system
 %
-% [ data, x1, x2, x3 ] = mat2mat( radar, fields, r_max, varargin )
+% [ newdata, y1, y2, y3 ] = mat2mat( indata, x1, x2, x3, varargin )
 %
 % Inputs:
-%   radar        radar struct (required)
-%   fields       cell array of fields to return (default: {'dz', 'vr'})
-%   r_max        max radius for polar or cartesian data in meters (default: 150000m = 150km)
+%   indata       radar data as 3D arrays output from radar2mat (can be cell or struct)
+%   x1, x2, x3   coordinate vectors in meshgrid format
 %
 % Named inputs
 %   in_coords   'polar' | 'cartesian' (default: 'polar')
@@ -22,7 +21,7 @@ function [ newdata, y1, y2, y3 ] = mat2mat( indata, x1, x2, elev, varargin )
 %   x2           vector of coordinates for second dimension (n x 1)
 %   x3           vector of coordinates for third dimension (p x 1)
 %
-% For polar coordinates the dimension order is az, range, elev
+% For polar coordinates the dimension order is range, az, elev
 %
 % For Cartesian, the dimension order is y, x, z. The y dimension is
 % "flipped" to the y coordinates are in descending order, so it displays
@@ -66,7 +65,7 @@ switch params.out_coords
         r  = params.r_min  : params.r_res  : params.r_max;
         phi = params.az_res : params.az_res : 360;
 
-        [R, PHI, ELEV] = meshgrid(r, phi, elev);
+        [PHI, R, ELEV] = meshgrid(phi, r, elev);
         
         [y1, y2, y3] = deal(r, phi, elev);
         
