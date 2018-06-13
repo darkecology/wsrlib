@@ -1,0 +1,154 @@
+--- rsl-v1.50/gzip.c	2012-11-28 18:19:36.000000000 -0500
++++ rsl-v1.50-devel/gzip.c	2018-06-13 17:21:42.000000000 -0400
+@@ -67,27 +67,62 @@
+   else return !0;
+ }
+ 
+-FILE *uncompress_pipe (FILE *fp)
++FILE *uncompress_pipe_helper (FILE *fp,
++                              char *test_cmd,
++                              char *err_msg,
++                              char *uncompress_cmd)
+ {
+-  /* Pass the file pointed to by 'fp' through the gzip pipe. */
+ 
+-  FILE *fpipe;
+-  int save_fd;
++  /* Pass the file pointed to by 'fp' through the uncompress pipe. */
+ 
+-  if (no_command("gzip --version > /dev/null 2>&1")) return fp;
+-  save_fd = dup(0);
+-  close(0); /* Redirect stdin for gzip. */
+-  dup(fileno(fp));
++  FILE *fpipe = NULL;
++  int save_fd;
++  int rc;
++  
++  if (no_command(test_cmd)) {
++    fprintf(stderr, "%s\n", err_msg);
++    close(fp);
++    return NULL;
++  }
++
++  /* Create temporary copy of stdin */
++  save_fd = dup(STDIN_FILENO);
++
++  /* Set stdin = fd for radar file */
++  rc = dup2(fileno(fp), STDIN_FILENO);
++
++  /* If dup fails, close active fds and return NULL */
++  if ( rc == -1 ) {
++      perror("dup2");
++      fclose(fp);
++      close(save_fd);
++      return NULL;
++  }
+ 
+-  fpipe = popen("gzip -q -d -f --stdout", "r");
++  /* Run uncompress program (with stdin=fp, stdout=fpipe) */
++  fpipe = popen(uncompress_cmd, "r");
+   if (fpipe == NULL) perror("uncompress_pipe");
+-  close(0);
+-  dup(save_fd);
++
++  /* Restore stdin and close fds we are done with */
++  rc = dup2(save_fd, STDIN_FILENO);
++  if ( rc == -1 ) {
++      perror("uncompress_pipe: dup2: could not restore stdin");
++  }
+   close(save_fd);
+   fclose(fp);
++  
+   return fpipe;
+ }
+ 
++FILE *uncompress_pipe (FILE *fp) {
++    return uncompress_pipe_helper(
++        fp,
++        "gzip --version > /dev/null 2>&1",
++        "gzip not found",
++        "gzip -q -d -f --stdout");
++}
++
++
+ FILE *compress_pipe (FILE *fp)
+ {
+   /* Pass the file pointed to by 'fp' through the gzip pipe. */
+--- rsl-v1.50/rsl.h	2018-06-13 17:34:28.000000000 -0400
++++ rsl-v1.50-devel/rsl.h	2018-06-13 16:51:32.000000000 -0400
+@@ -755,6 +755,8 @@
+ Histogram *RSL_read_histogram(char *infile);
+ 
+ int no_command (char *cmd);
++FILE *uncompress_pipe_helper (FILE *fp, char *test_cmd,
++                              char *err_msg, char *uncompress_cmd);
+ FILE *uncompress_pipe (FILE *fp);
+ FILE *compress_pipe (FILE *fp);
+ int rsl_pclose(FILE *fp);
+--- rsl-v1.50/wsr88d.c	2018-06-13 17:34:09.000000000 -0400
++++ rsl-v1.50-devel/wsr88d.c	2018-06-13 17:25:45.000000000 -0400
+@@ -232,26 +232,13 @@
+ // adapted from uncompress_pipe in gzip.c
+ FILE *uncompress_pipe_ar2v (FILE *fp)
+ {
+-  /* Pass the file pointed to by 'fp' through the bzip2 pipe. */
+-
+-  FILE *fpipe;
+-  int save_fd;
+-
+-  if (no_command("wsr88d_decode_ar2v > /dev/null")){
+-    fprintf(stderr, "wsr88d_decode_ar2v not found, aborting ...\n");
+-    return fp;
+-  }
+-  save_fd = dup(0);
+-  close(0); /* Redirect stdin for gzip. */
+-  dup(fileno(fp));
+-
+-  fpipe = popen("wsr88d_decode_ar2v --stdout", "r");
+-  if (fpipe == NULL) perror("uncompress_pipe_ar2v");
+-  close(0);
+-  dup(save_fd);
+-  close(save_fd);
+-  fclose(fp);
+-  return fpipe;
++    FILE *fpipe = uncompress_pipe_helper(
++        fp,
++        "wsr88d_decode_ar2v > /dev/null",
++        "wsr88d_decode_ar2v not found",
++        "wsr88d_decode_ar2v --stdout");
++    
++    return fpipe;
+ }
+ 
+ 
+@@ -301,7 +288,9 @@
+   } else {
+      wf->fptr = fopen(filename, "r");
+   }
+- 
++
++  if (wf->fptr == NULL) return NULL;
++
+   // decompress
+   if(ar2v6bzip){
+      wf->fptr = uncompress_pipe_ar2v(wf->fptr);
+@@ -310,6 +299,8 @@
+      wf->fptr = uncompress_pipe(wf->fptr);
+   }
+ 
++  if (wf->fptr == NULL) return NULL;
++
+   #define NEW_BUFSIZ 16384
+   setvbuf(wf->fptr,NULL,_IOFBF,(size_t)NEW_BUFSIZ); /* Faster i/o? */
+   return wf;
+--- rsl-v1.50/wsr88d.h	2018-06-13 17:34:28.000000000 -0400
++++ rsl-v1.50-devel/wsr88d.h	2018-06-13 17:10:07.000000000 -0400
+@@ -212,6 +212,8 @@
+ float wsr88d_get_frequency(Wsr88d_ray *ray);
+ 
+ int no_command (char *cmd);
++FILE *uncompress_pipe_helper (FILE *fp, char *test_cmd, char *err_msg, char *uncompress_cmd);
++FILE *uncompress_pipe_ar2v (FILE *fp);
+ FILE *uncompress_pipe (FILE *fp);
+ FILE *compress_pipe (FILE *fp);
+ int rsl_pclose(FILE *fp);
