@@ -27,10 +27,11 @@ int main(int argc, char **argv)
 
     Radar *radar;
 
-    RSL_select_fields("all", NULL);
-    RSL_read_these_sweeps("0", NULL);
+    //RSL_select_fields("all", NULL);
+    //RSL_read_these_sweeps("0", NULL);
 
-    radar = RSL_anyformat_to_radar(infile, station);
+    radar = RSL_wsr88d_to_radar(infile, station);
+    //radar = RSL_anyformat_to_radar(infile, station);
     if (radar == NULL) 
     {
 	fprintf(stderr, "Failed to read radar file");
