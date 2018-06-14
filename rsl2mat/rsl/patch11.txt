@@ -1,6 +1,21 @@
 --- rsl-v1.50/gzip.c	2012-11-28 18:19:36.000000000 -0500
-+++ rsl-v1.50-devel/gzip.c	2018-06-13 17:21:42.000000000 -0400
-@@ -67,27 +67,62 @@
++++ rsl-v1.50-devel/gzip.c	2018-06-14 10:39:31.000000000 -0400
+@@ -48,12 +48,8 @@
+ 	
+ int rsl_pclose(FILE *fp)
+ {
+-  int rc;
+-  if ((rc=pclose(fp)) == EOF) {
+-	perror ("pclose");  /* This or fclose do the job. */
+-	if ((rc=fclose(fp)) == EOF)
+-	  perror ("fclose");  /* This or fclose do the job. */
+-  }
++  int rc = pclose(fp);
++  if (rc == -1) perror ("pclose");
+   return rc;
+ }
+ 
+@@ -67,27 +63,64 @@
    else return !0;
  }
  
@@ -13,26 +28,28 @@
 -  /* Pass the file pointed to by 'fp' through the gzip pipe. */
  
 -  FILE *fpipe;
--  int save_fd;
-+  /* Pass the file pointed to by 'fp' through the uncompress pipe. */
++  /* Pass the file pointed to by 'fp' through the uncompress pipe. 
++     If the uncompress command cannot be found or any system call
++     fails, close fp and return NULL. */
++
++  FILE *fpipe = NULL;
+   int save_fd;
++  int rc;
++  
++  if (no_command(test_cmd)) {
++    fprintf(stderr, "%s\n", err_msg);
++    fclose(fp);
++    return NULL;
++  }
  
 -  if (no_command("gzip --version > /dev/null 2>&1")) return fp;
 -  save_fd = dup(0);
 -  close(0); /* Redirect stdin for gzip. */
 -  dup(fileno(fp));
-+  FILE *fpipe = NULL;
-+  int save_fd;
-+  int rc;
-+  
-+  if (no_command(test_cmd)) {
-+    fprintf(stderr, "%s\n", err_msg);
-+    close(fp);
-+    return NULL;
-+  }
-+
 +  /* Create temporary copy of stdin */
 +  save_fd = dup(STDIN_FILENO);
-+
+ 
+-  fpipe = popen("gzip -q -d -f --stdout", "r");
 +  /* Set stdin = fd for radar file */
 +  rc = dup2(fileno(fp), STDIN_FILENO);
 +
@@ -43,8 +60,7 @@
 +      close(save_fd);
 +      return NULL;
 +  }
- 
--  fpipe = popen("gzip -q -d -f --stdout", "r");
++
 +  /* Run uncompress program (with stdin=fp, stdout=fpipe) */
 +  fpipe = popen(uncompress_cmd, "r");
    if (fpipe == NULL) perror("uncompress_pipe");
@@ -74,8 +90,9 @@
  FILE *compress_pipe (FILE *fp)
  {
    /* Pass the file pointed to by 'fp' through the gzip pipe. */
---- rsl-v1.50/rsl.h	2018-06-13 17:34:28.000000000 -0400
-+++ rsl-v1.50-devel/rsl.h	2018-06-13 16:51:32.000000000 -0400
+
+--- rsl-v1.50/rsl.h	2018-06-14 10:48:32.000000000 -0400
++++ rsl-v1.50-devel/rsl.h	2018-06-13 17:36:03.000000000 -0400
 @@ -755,6 +755,8 @@
  Histogram *RSL_read_histogram(char *infile);
  
@@ -85,8 +102,9 @@
  FILE *uncompress_pipe (FILE *fp);
  FILE *compress_pipe (FILE *fp);
  int rsl_pclose(FILE *fp);
---- rsl-v1.50/wsr88d.c	2018-06-13 17:34:09.000000000 -0400
-+++ rsl-v1.50-devel/wsr88d.c	2018-06-13 17:25:45.000000000 -0400
+
+--- rsl-v1.50/wsr88d.c	2018-06-14 10:48:24.000000000 -0400
++++ rsl-v1.50-devel/wsr88d.c	2018-06-14 10:34:52.000000000 -0400
 @@ -232,26 +232,13 @@
  // adapted from uncompress_pipe in gzip.c
  FILE *uncompress_pipe_ar2v (FILE *fp)
@@ -141,8 +159,9 @@
    #define NEW_BUFSIZ 16384
    setvbuf(wf->fptr,NULL,_IOFBF,(size_t)NEW_BUFSIZ); /* Faster i/o? */
    return wf;
---- rsl-v1.50/wsr88d.h	2018-06-13 17:34:28.000000000 -0400
-+++ rsl-v1.50-devel/wsr88d.h	2018-06-13 17:10:07.000000000 -0400
+
+--- rsl-v1.50/wsr88d.h	2018-06-14 10:48:32.000000000 -0400
++++ rsl-v1.50-devel/wsr88d.h	2018-06-13 17:36:03.000000000 -0400
 @@ -212,6 +212,8 @@
  float wsr88d_get_frequency(Wsr88d_ray *ray);
  
