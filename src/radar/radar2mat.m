@@ -116,12 +116,14 @@ if ~isempty(params.elevs)
     end
 end
 
-% If not interpolating, check that the same elevation angles are available for all products
-if isempty(params.elevs)
-    for f=1:n_fields
-        if any(abs([radar.(fields{f}).sweeps.elev] - available_elevs) > 0.2)
-            error('Product %s has different elevations angles\n', fields{f});
-        end
+% Check that the same elevation angles are available for all products
+for f=1:n_fields
+    my_elevs = [radar.(fields{f}).sweeps.elev];
+    if numel(my_elevs) ~= numel(available_elevs)
+        error('Product %s has different number of sweeps\n', fields{f});
+    end
+    if any(abs([radar.(fields{f}).sweeps.elev] - available_elevs) > 0.2)
+        error('Product %s has different elevations angles\n', fields{f});
     end
 end
 
