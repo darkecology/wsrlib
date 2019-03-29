@@ -4,11 +4,17 @@ import re
 from datetime import datetime, timedelta
 from calendar import timegm
 import os
+from s3_util import datetime_range
+# from pandas import date_range
+# from pandas.Timestamp import to_pydatetime
 
 from sunset_util import get_sunset_sunrise_time
 
 con = None
-db_file = 'nexrad.db'  # Change to point to location of data file 
+if os.uname()[1] == 'kwinn':
+    db_file = 'inventory/nexrad.db'
+else:
+    db_file = 'nexrad.db'  # Change to point to location of data file
 #db_file = '/data/nexrad.db' # doppler
 
 def connect_db():
@@ -17,7 +23,7 @@ def connect_db():
         try:
             con = sqlite3.connect(db_file,detect_types=sqlite3.PARSE_COLNAMES)
             sqlite3.register_converter("datetime", unix2datetime)
-        except Error as e:
+        except Exception as e:
             print(e)
     return con
 
@@ -367,7 +373,41 @@ def id2key(id):
     return key
 
 
-def get_scans(stations=None, start=None, end=None):
+def align_scans(scans, start, end,
+                aligned_scan_frequency = timedelta(minutes=30)):
+    # t = date_range(start_time, end_time, freq = aligned_scan_frequency)
+    # t = list(map(to_pydatetime, t))
+    t = datetime_range(start, end, aligned_scan_frequency, inclusive=True)
+    t = [x for x in t]
+
+    scan_times = [scan[2] for scan in scans]
+
+    subsampled_scans = [None] * len(t)
+    time_diffs       = [None] * len(t)
+
+    min_scan_times = 0
+    for i_t in range(len(t)):
+        for i_scan_times in range(min_scan_times, len(scan_times)):
+            time_diff = scan_times[i_scan_times] - t[i_t]
+
+            # if we found a closer scan, then record it, but stop it from being matched to another i_t
+            if (subsampled_scans[i_t] is None) or (time_diff < time_diffs[i_t]):
+                subsampled_scans[i_t] = scans[i_scan_times]
+                time_diffs[i_t]       = time_diff
+                
+                min_scan_times = i_scan_times + 1
+
+            # regardless, if time_diff is positive then we've found the first scan after t
+            # and so there is no point in continuing to search
+            if time_diff > timedelta(0):
+                break
+
+    scans = [scan for scan in subsampled_scans if scan is not None]
+
+    return scans
+
+def get_scans(stations=None, start=None, end=None,
+              do_sort = False, aligned_scan_frequency = None):
 
     con = connect_db()
 
@@ -389,6 +429,14 @@ def get_scans(stations=None, start=None, end=None):
 
     rows = con.execute(sql)
     scans = [row for row in rows]
+
+    if do_sort or aligned_scan_frequency:
+        # sort scans (by timestamp)
+        scans = sorted(scans, key=lambda scan: scan[2])
+
+    if aligned_scan_frequency:
+        scans = align_scans(scans, start, end, aligned_scan_frequency)
+
     return scans
 
 
@@ -423,37 +471,9 @@ def get_scans_overnight(stations, start, end,
             else:
                 end_time = sunrise_tomorrow
 
-            scans = get_scans(station, start_time, end_time)
+            scans = get_scans([station], start_time, end_time, aligned_scan_frequency = aligned_scan_frequency)
 
-            # sort scans (by timestamp)
-            scans = sorted(scans, key=lambda scan: scan[2])
-
-            if aligned_scan_frequency:
-                t = datetime_range(start_time, end_time, aligned_scan_frequency, inclusive=True)
-
-                scan_times = [scan[2] for scan in scans]
-
-                subsampled_scans = [None] * len(t)
-                time_diffs       = [None] * len(t)
-
-                min_scan_times = 0
-                for i_t in range(len(t)):
-                    for i_scan_times in range(min_scan_times, len(scan_times)):
-                        time_diff = scan_times[i_scan_times] - t[i_t]
-
-                        # if we found a closer scan, then record it, but stop it from being matched to another i_t
-                        if (subsampled_scans[i_t] is None) or (time_diff < time_diffs[i_t]):
-                            subsampled_scans[i_t] = scans[i_scan_times]
-                            time_diffs[i_t]       = time_diff
-                            
-                            min_scan_times = i_scan_times + 1
-
-                        # regardless, if time_diff is positive then we've found the first scan after t
-                        # and so there is no point in continuing to search
-                        if time_diff > timedelta(0):
-                            break
-
-                scans = subsampled_scans[subsampled_scans is not None]
+            # if aligned_scan_frequency:
 
                 # subsampled_scans = [None] * len(t)
                 # time_diffs       = [None] * len(t)
