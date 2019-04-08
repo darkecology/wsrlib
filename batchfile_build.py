@@ -85,12 +85,17 @@ def get_scans(station, year, season, window, offset, freq):
     scans = []
     for range in ranges:
         if window == 'all':
-            scans = scans + ni.get_scans([station], range[0], range[1], aligned_scan_frequency = freq, sorted = True)
-        else:
+            scans = scans + ni.get_scans([station], range[0], range[1], aligned_scan_frequency = freq, do_sort = True)
+        elif window == 'night':
             scans = scans + ni.get_scans_overnight([station], range[0], range[1],
                                                    start_offset = -offset, start_offset_from = start_offset_from,
                                                    end_offset   = offset,  end_offset_from   = end_offset_from,
                                                    aligned_scan_frequency = freq)
+        else:
+            scans = scans + ni.get_scans_daytime([station], range[0], range[1],
+                                                 start_offset=-offset, start_offset_from=start_offset_from,
+                                                 end_offset=offset, end_offset_from=end_offset_from,
+                                                 aligned_scan_frequency=freq)
 
     return scans
 
@@ -240,6 +245,14 @@ def main(argv):
         print("WARNING: nonzero index is only meaningful if group is 'none'")
         i_batch = 0
 
+    # breaking the code at this point after command line parameters have been processed
+    # so that other scripts can build batchfiles
+    build_batches(start_year, end_year, region, i_batch, batch_size,
+                  freq, season, window, offset, group, tag, output_dir, silent)
+
+
+def build_batches(start_year, end_year, region, i_batch, batch_size,
+                  freq, season, window, offset, group, tag, output_dir, silent):
     if os.path.isfile(output_dir):
         print("ERROR: output directory already exists, is not a directory")
         sys.exit(14)
@@ -248,6 +261,8 @@ def main(argv):
             os.makedirs(output_dir)
         except Exception:
             print("WARNING: output directory already exists or cannot be created")
+
+    stations = nexrad_util.get_stations(region)
 
     # write this batch definition
     if tag:
@@ -292,19 +307,25 @@ def main(argv):
 
                 if group == "stationyear":
                     # flush the buffer, reset the index
-                    write_batch(scan_buffer[0:batch_size], output_dir, batch_name(station, year, tag, i_batch, group))
-                    scan_buffer = scan_buffer[batch_size:]
+                    while len(scan_buffer) > 0:
+                        # flush the buffer
+                        write_batch(scan_buffer[0:batch_size], output_dir,
+                                    batch_name(station, year, tag, i_batch, group))
+                        scan_buffer = scan_buffer[batch_size:]
+                        i_batch = i_batch + 1
                     i_batch = 0
 
             if group == "year":
                 # flush the buffer, reset the index
-                write_batch(scan_buffer[0:batch_size], output_dir, batch_name(station, year, tag, i_batch, group))
-                scan_buffer = scan_buffer[batch_size:]
+                while len(scan_buffer) > 0:
+                    # flush the buffer
+                    write_batch(scan_buffer[0:batch_size], output_dir,
+                                batch_name(station, year, tag, i_batch, group))
+                    scan_buffer = scan_buffer[batch_size:]
+                    i_batch = i_batch + 1
                 i_batch = 0
     elif group == 'station':
         None
-
-
 
 
 if __name__ == "__main__":

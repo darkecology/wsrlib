@@ -67,10 +67,11 @@ def main(argv):
 
     opts = {}
     result_dir = 'default'
+    select    = None
     batchpath = argv[0]
     
     try:
-        opts,args = getopt.getopt(argv[1:], "h:d:", ["help", "dir="])
+        opts,args = getopt.getopt(argv[1:], "h:s:d:", ["help", "select=", "dir="])
     except getopt.GetoptError:
         print("ERROR: Invalid Arguments")
         print(get_usage_string(prog))
@@ -82,6 +83,8 @@ def main(argv):
             sys.exit(0)
         elif opt in ("-d", "--dir"):
             result_dir = arg
+        elif opt in ("-s", "--select"):
+            select = arg
         
     if not (os.path.isfile(batchpath) or os.path.isdir(batchpath)):
         print("ERROR: The path %s does not exist."%batchpath)
@@ -92,11 +95,18 @@ def main(argv):
     if os.path.isfile(batchpath):
         batches = [batchpath]
     else:
+        # remove files without the right extension (.batch)
         batches = [os.path.join(batchpath, file) for file in os.listdir(batchpath) if file.endswith('.batch')]
+
+    # remove batches who don't match the selection
+    batches = [batch for batch in batches if (select in os.path.basename(batch))]
 
     for batch in batches:
         with open(batch, 'r') as batchfile:
             scans = [line.strip() for line in batchfile.readlines()]
+
+            if len(scans) == 0:
+                break
 
             job_id = submit_batch(scans, os.path.splitext(os.path.basename(batch))[0], result_dir)
             job_ids[job_id] = batch

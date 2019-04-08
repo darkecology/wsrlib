@@ -11,7 +11,7 @@ import sys
 
 import numpy as np
 
-from sunset_util import get_sunset_sunrise_time
+from sunset_util import get_next_sunset_sunrise_time
 
 ####################################
 # Helpers
@@ -208,7 +208,7 @@ def get_overnight_scans(start_date, end_date, stations,
     for station in stations:
         #iterate over days in range (excluding the last date, since we will be considering the night beginning on each day and continuing into the next and so are naturally "inclusive")
         for day in datetime_range(start_date, end_date, timedelta(days=1), inclusive = False):
-            sunset_today, sunrise_tomorrow = get_sunset_sunrise_time(station, day.strftime("%Y-%m-%d"))
+            sunset_today, sunrise_tomorrow = get_next_sunset_sunrise_time(station, day.date())
 
             # compute start and end times
             if  (start_offset_from == 'sunset'):

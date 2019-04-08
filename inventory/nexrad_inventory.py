@@ -8,11 +8,11 @@ from s3_util import datetime_range
 # from pandas import date_range
 # from pandas.Timestamp import to_pydatetime
 
-from sunset_util import get_sunset_sunrise_time
+import sunset_util
 
 con = None
 if os.uname()[1] == 'kwinn':
-    db_file = 'inventory/nexrad.db'
+    db_file = '/Users/kwinner/Work/cajun/aws/inventory/nexrad.db'
 else:
     db_file = 'nexrad.db'  # Change to point to location of data file
 #db_file = '/data/nexrad.db' # doppler
@@ -377,8 +377,7 @@ def align_scans(scans, start, end,
                 aligned_scan_frequency = timedelta(minutes=30)):
     # t = date_range(start_time, end_time, freq = aligned_scan_frequency)
     # t = list(map(to_pydatetime, t))
-    t = datetime_range(start, end, aligned_scan_frequency, inclusive=True)
-    t = [x for x in t]
+    t = [t for t in datetime_range(start, end, aligned_scan_frequency, inclusive=True)]
 
     scan_times = [scan[2] for scan in scans]
 
@@ -391,7 +390,7 @@ def align_scans(scans, start, end,
             time_diff = scan_times[i_scan_times] - t[i_t]
 
             # if we found a closer scan, then record it, but stop it from being matched to another i_t
-            if (subsampled_scans[i_t] is None) or (time_diff < time_diffs[i_t]):
+            if (subsampled_scans[i_t] is None) or (time_diff < abs(time_diffs[i_t])):
                 subsampled_scans[i_t] = scans[i_scan_times]
                 time_diffs[i_t]       = time_diff
                 
@@ -454,7 +453,7 @@ def get_scans_overnight(stations, start, end,
     for station in stations:
         #iterate over days in range (excluding the last date, since we will be considering the night beginning on each day and continuing into the next and so are naturally "inclusive")
         for day in datetime_range(start, end, timedelta(days=1), inclusive = False):
-            sunset_today, sunrise_tomorrow = get_sunset_sunrise_time(station, day.strftime("%Y-%m-%d"))
+            sunset_today, sunrise_tomorrow = sunset_util.get_next_sunset_sunrise_time(station, day.date())
 
             # compute start and end times
             if  (start_offset_from == 'sunset'):
@@ -497,6 +496,61 @@ def get_scans_overnight(stations, start, end,
 
             all_scans = all_scans + scans
     
+    return all_scans
+
+
+def get_scans_daytime(stations, start, end,
+                      start_offset = -timedelta(0), start_offset_from = 'sunrise',
+                      end_offset   =  timedelta(0), end_offset_from   = 'sunset',
+                      aligned_scan_frequency = timedelta(hours=1)):
+    # start, end should be datetime objects
+
+    all_scans = [];
+    # iterate over stations (necessary since sunrise/sunset time vary by station)
+    for station in stations:
+        # iterate over days in range
+        for day in datetime_range(start, end, timedelta(days=1), inclusive=True):
+            sunrise_today, sunset_today = sunset_util.get_sunrise_sunset_time(station, day.date())
+
+            # compute start and end times
+            if (start_offset_from == 'sunrise'):
+                start_time = sunrise_today + start_offset
+            elif (start_offset_from == 'sunset'):
+                start_time = sunset_today + start_offset
+            else:
+                start_time = sunrise_today
+
+            if (end_offset_from == 'sunrise'):
+                end_time = sunrise_today + end_offset
+            elif (end_offset_from == 'sunset'):
+                end_time = sunset_today + end_offset
+            else:
+                end_time = sunset_today
+
+            scans = get_scans([station], start_time, end_time, aligned_scan_frequency=aligned_scan_frequency)
+
+            # if aligned_scan_frequency:
+
+            # subsampled_scans = [None] * len(t)
+            # time_diffs       = [None] * len(t)
+            # min_i_t = 0
+            # for i_scan_times in range(len(scan_times)):
+            #     prev_time_diff = None
+            #     for i_t in range(min_i_t, len(t)):
+            #         time_diff = scan_times[i_scan_times] - t[i_t]
+            #         if (subsampled_scans[i_t] is None) or (time_diff < time_diffs[i_t]):
+            #             subsampled_scans[i_t] = scans[i_scan_times]
+            #             time_diffs[i_t]       = time_diff
+            #         if i_t == min_i_t and time_diff >= timedelta(0):
+            #             # the current scan came after t[i_t], so no future scan can be closer to t[i_t]
+            #             min_i_t = min_i_t + 1
+            #         if prev_time_diff is not None and time_diff >= timedelta(0) and time_diff > prev_time_diff:
+            #             # we've
+            #             break
+            #         prev_time_diff = time_diff
+
+            all_scans = all_scans + scans
+
     return all_scans
 
 def create_db():
