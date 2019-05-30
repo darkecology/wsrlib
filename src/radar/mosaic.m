@@ -1,4 +1,8 @@
-function [im, minDist, x, y, X, Y, LON, LAT] = mosaic(files, lonlim, latlim, imageSize, rmax, fields, stations, max_elev)
+function [im, minDist, x, y, X, Y, LON, LAT] = mosaic(files, lonlim, latlim, imageSize, rmax, fields, stations, max_elev, dealias)
+
+if nargin < 9
+    dealias = false;
+end
 
 n = numel(files);
 
@@ -73,6 +77,18 @@ for f=1:n
     try
         radar = rsl2mat(files{f}, stations{f}, opt);
         
+        if dealias
+            RMIN  = 5000;
+            RMAX  = 150000;
+            ZSTEP = 100;
+            ZMAX  = 3000;
+            RMSE_THRESH = inf;
+            EP_GAMMA = 0.1;
+
+            [ edges, ~, u, v, rmse, ~, ~, ~ ] = epvvp(radar, ZSTEP, RMIN, RMAX, ZMAX, 'EP', EP_GAMMA);
+            [radar, ~] = vvp_dealias(radar, edges, u, v, rmse, RMSE_THRESH);
+        end
+        
         % Get coordinates of rectangular image patch centered at radar
         [I, J, inds] = getPatch(radar, imageSz, patchRadius, s);
                 
@@ -143,7 +159,7 @@ y = flip(y);
 Y = flip(Y, 1);
 
 for i=1:length(im)
-    im{i} = flip( im{1}, 1 );
+    im{i} = flip( im{i}, 1 );
 end
 minDist = flip( minDist, 1 );
 
