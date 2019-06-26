@@ -20,7 +20,7 @@ def submit_batch(scans, name, result_dir):
 
     #Get submit time (milliseconds upto 3 precision)
     submit_time = datetime.strftime(datetime.utcnow(), '%Y-%m-%d_%H:%M:%S:%f')[:-3]
-    command =  [",".join(scans), result_dir, name, 'kyjun/multielev.mat', '/kyjun/clutter_masks', 'diagnostics', 'false', 'stats', 'true', 'submit_time', submit_time]
+    command =  [",".join(scans), result_dir, name, 'cajun/multielev.mat', '/cajun/clutter_masks', 'diagnostics', 'false', 'stats', 'true', 'submit_time', submit_time]
 
     job_desc = {
         'jobName' : '%s_%s' % (JOB_PREFIX, name),
@@ -42,7 +42,7 @@ def submit_batch(scans, name, result_dir):
 def get_usage_string(prog):
     usage_str = \
     "Usage:\n\
-  %s batchfile [-d <s3_dir>]\n\
+  %s batchfile [-d <s3_dir> -s <string>]\n\
   %s -h | --help\n" %(prog, prog)
     return usage_str            
 
@@ -53,6 +53,7 @@ def get_help_string(prog):
 batchfile (may be a single file or directory of batchfiles)\n\
 Options:\n\
   -h --help     Show this help\n\
+  -s --select   Only batchfiles that contain this substring will be processed.\n\
   -d --dir      Specify an s3 directory for the results of these jobs.\n"%(get_usage_string(prog))
     return help_string
 
@@ -99,7 +100,11 @@ def main(argv):
         batches = [os.path.join(batchpath, file) for file in os.listdir(batchpath) if file.endswith('.batch')]
 
     # remove batches who don't match the selection
-    batches = [batch for batch in batches if (select in os.path.basename(batch))]
+    if select is not None:
+        batches = [batch for batch in batches if (select in os.path.basename(batch))]
+
+    # manually remove batches from ____
+    # batches = [batch for batch in batches if int(batch[63:67]) > 2003]
 
     for batch in batches:
         with open(batch, 'r') as batchfile:
