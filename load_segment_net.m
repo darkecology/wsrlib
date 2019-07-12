@@ -1,10 +1,14 @@
 function [ net ] = load_segment_net( seg_file, SEG_GPU_DEVICE )
-%LOAG_SEG_NET Load segmentation net
+%LOAD_SEGMENT_NET Load neural network from file into memory
 %   net = load_seg_net( seg_file, SEG_GPU_DEVICE )
 %
 % Inputs:
 %    seg_file        Location of .mat file
 %    SEG_GPU_DEVICE  ID of GPU device, or [] if none
+% Outputs:
+%    net             The neural net object
+%
+% See also: SEGMENT_SCAN
 
 if nargin < 2
     SEG_GPU_DEVICE = [];

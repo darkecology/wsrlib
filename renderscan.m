@@ -1,7 +1,8 @@
-% -------------------------------------------------------------------------
 function [gif, bg, x, y] = renderscan( radar, varargin )
-% -------------------------------------------------------------------------
-%RENDER_SCAN Copy of original RENDERSCAN, but supports multiple modalities
+%RENDERSCAN Render a radar scan for segmentation
+
+
+% Copy of original RENDERSCAN, but supports multiple modalities
 %such as radial velocity ('vr') and spectrum width ('sw') in addition to
 %the default relfectivity ('dz').
 

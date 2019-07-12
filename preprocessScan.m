@@ -1,4 +1,7 @@
 function ims = preprocessScan(data, opts)
+% PREPROCESSSCAN Preprocess rendered scan for segmentation
+%
+% ims = preprocessScan(data, opts)
       
 rgb = cellfun(@(x) single(data.(x)(:,:,opts.sweep)), opts.mode, ...
             'UniformOutput', false);

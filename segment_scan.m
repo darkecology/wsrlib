@@ -1,7 +1,25 @@
 function [ SEG_MASK, x, y, probs, labels ] = segment_scan( radar, net, RMAX, SEG_GPU_DEVICE, SEG_IMG_SIZE, elevs )
-%SEGMENT_SCAN Run segmentation net to segment the scan
+% SEGMENT_SCAN Run segmentation net to segment the scan
+%
+% [ SEG_MASK, x, y, probs, labels ] = segment_scan( radar, net, RMAX, SEG_GPU_DEVICE, SEG_IMG_SIZE, elevs )
+%
+% Inputs:
+%    radar
+%    net
+%    RMAX
+%    SEG_GPU_DEVICE
+%    SEG_IMG_SIZE
+%    elevs
+%
+% Outputs:
+%    SEG_MASK
+%    x
+%    y
+%    probs
+%    labels
+%
+% Note: GPU code untested
 
-% note: GPU code untested, provided by @tsungyu
 
 % extract class labels from net?
 labels = struct();
