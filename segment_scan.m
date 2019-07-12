@@ -20,7 +20,6 @@ function [ SEG_MASK, x, y, probs, labels ] = segment_scan( radar, net, RMAX, SEG
 %
 % Note: GPU code untested
 
-
 % extract class labels from net?
 labels = struct();
 classes = net.meta.classes;
@@ -31,35 +30,21 @@ end
 labels.clutter = 4;
 
 % Get the dz data for ground-truth background
-if exist('elevs', 'var')
-    dz = radar2mat(radar, ...
-                   'fields', {'dz'}, ...
-                   'elevs', elevs, ...
-                   'coords', 'cartesian', ...
-                   'dim', net.meta.bopts.imageSize(1));
-else
-    dz = radar2mat(radar, ...
-                   'fields', {'dz'}, ...
-                   'sweeps', net.meta.bopts.output_sweep, ...
-                   'coords', 'cartesian', ...
-                   'dim', net.meta.bopts.imageSize(1));
-end
+dz = radar2mat(radar, ...
+               'fields', {'dz'}, ...
+               'elevs', elevs, ...
+               'coords', 'cartesian', ...
+               'dim', net.meta.bopts.imageSize(1));
 dz = dz.dz;
 bg = isnan(dz);
 
 % Render the scan for prediction
-if exist('elevs', 'var')
-    [data, y, x] = radar2mat(radar, ...
-                             'fields', net.meta.bopts.mode, ...
-                             'coords', net.meta.bopts.coordinate, ...
-                             'elevs', elevs, ...
-                             'dim',    net.meta.bopts.imageSize(1));
-else
-    [data, y, x] = radar2mat(radar, ...
-                             'fields', net.meta.bopts.mode, ...
-                             'coords', net.meta.bopts.coordinate, ...
-                             'dim',    net.meta.bopts.imageSize(1));
-end
+[data, y, x] = radar2mat(radar, ...
+                         'fields', net.meta.bopts.mode, ...
+                         'coords', net.meta.bopts.coordinate, ...
+                         'elevs', elevs, ...
+                         'dim',    net.meta.bopts.imageSize(1));
+
 IMG_padded = preprocessScan(data, net.meta.bopts);
 
 % Move the input to gpu
@@ -70,56 +55,33 @@ end
 % Do forward passing to get the prediction
 net.mode = 'test';
 net.eval({'input', IMG_padded});
-if length(net.meta.bopts.output_sweep) == 1
-    % single layer predictions
-    idx = net.getVarIndex('prob');
-    probs = net.vars(idx).value;  % Note: this is the logit score prior to softmax
 
-    % remove any predicted background labels
-    % (for debugging purposes, the original scores matrix is left alone)
-    SEG_MASK = scores;
-    SEG_MASK(:,:,labels.background) = -inf;
-    
-    % Select class with highest score
-    [~, SEG_MASK] = max(probs, [], 3);
+% Get class probabilities
+probs = arrayfun(@(layer) net.getVar(strcat('prob_', int2str(layer))).value, ...
+                    net.meta.bopts.output_sweep, ...
+                    'UniformOutput', false);
 
-    % Remove the padding
-    ty = floor((1:size(SEG_MASK,1)) - net.meta.bopts.padto(1)/2 + net.meta.bopts.imageSize(1)/2);
-    tx = floor((1:size(SEG_MASK,2)) - net.meta.bopts.padto(2)/2 + net.meta.bopts.imageSize(2)/2);
-    ty = ty > 0 & ty <= net.meta.bopts.imageSize(1);
-    tx = tx > 0 & tx <= net.meta.bopts.imageSize(2);
-    
-    SEG_MASK = SEG_MASK(ty, tx);
-else
-    % multi layer predictions
-    
-    % Get class probabilities
-    probs = arrayfun(@(layer) net.getVar(strcat('prob_', int2str(layer))).value, ...
-                        net.meta.bopts.output_sweep, ...
-                        'UniformOutput', false);
-                    
-    probs = cat(4, probs{:});
-    
-    % Get class with highest probability that is not background
-    bg_ind = find(strcmp(net.meta.classes, 'background'));
-    probs_no_background = probs;
-    probs_no_background(:,:,bg_ind,:) = 0; %#ok<FNDSB>    
-    
-    [~, SEG_MASK] = max(probs_no_background, [], 3);
-    SEG_MASK = squeeze(SEG_MASK);
-    
-    % remove the padding
-    ty = floor((1:size(SEG_MASK,1)) - net.meta.bopts.padto(1)/2 + net.meta.bopts.imageSize(1)/2);
-    tx = floor((1:size(SEG_MASK,2)) - net.meta.bopts.padto(2)/2 + net.meta.bopts.imageSize(2)/2);
-    ty = ty > 0 & ty <= net.meta.bopts.imageSize(1);
-    tx = tx > 0 & tx <= net.meta.bopts.imageSize(2);
-    
-    SEG_MASK = SEG_MASK(ty, tx, :);
-    probs = probs(ty, tx, :, :);
-    
-    % Postprocess (use original probabilities including background for this)
-    [probs, SEG_MASK] = postprocess(probs, SEG_MASK, net.meta.classes);
-end
+probs = cat(4, probs{:});
+
+% Get class with highest probability that is not background
+bg_ind = find(strcmp(net.meta.classes, 'background'));
+probs_no_background = probs;
+probs_no_background(:,:,bg_ind,:) = 0; %#ok<FNDSB>    
+
+[~, SEG_MASK] = max(probs_no_background, [], 3);
+SEG_MASK = squeeze(SEG_MASK);
+
+% remove the padding
+ty = floor((1:size(SEG_MASK,1)) - net.meta.bopts.padto(1)/2 + net.meta.bopts.imageSize(1)/2);
+tx = floor((1:size(SEG_MASK,2)) - net.meta.bopts.padto(2)/2 + net.meta.bopts.imageSize(2)/2);
+ty = ty > 0 & ty <= net.meta.bopts.imageSize(1);
+tx = tx > 0 & tx <= net.meta.bopts.imageSize(2);
+
+SEG_MASK = SEG_MASK(ty, tx, :);
+probs = probs(ty, tx, :, :);
+
+% Postprocess (use original probabilities including background for this)
+[probs, SEG_MASK] = postprocess(probs, SEG_MASK, net.meta.classes);
 
 % Now set all ground truth background pixels
 SEG_MASK(bg) = find(strcmp(net.meta.classes, 'background'));
