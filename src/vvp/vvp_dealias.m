@@ -18,6 +18,10 @@ function [ radar_dealiased, radar_smoothed ] = vvp_dealias( radar, edges, u, v, 
 %
 % See also EPVVP
 
+if nargin < 6
+    rmse_thresh = inf;
+end
+
 ntilts = numel(radar.vr.sweeps);
 
 radar_dealiased = radar;
