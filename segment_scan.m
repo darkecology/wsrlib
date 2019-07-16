@@ -1,42 +1,46 @@
-function [ SEG_MASK, x, y, probs, labels ] = segment_scan( radar, net, SEG_GPU_DEVICE )
+function [ PREDS, PROBS, classes, x, y, elevs ] = segment_scan( radar, net, SEG_GPU_DEVICE )
 % SEGMENT_SCAN Run segmentation net to segment the scan
 %
-% [ SEG_MASK, x, y, probs, labels ] = segment_scan( radar, net, SEG_GPU_DEVICE )
+% [ PREDS, x, y, probs, labels ] = segment_scan( radar, net, SEG_GPU_DEVICE )
 %
 % Inputs:
-%    radar
-%    net
-%    SEG_GPU_DEVICE
+%    radar            The radar struct (from rsl2mat)
+%    net              The neural network (DagNN object + metadata)
+%    SEG_GPU_DEVICE   Set to use GPU (default [])
 %
 % Outputs:
-%    SEG_MASK
-%    x
-%    y
-%    probs
-%    labels
+%    PREDS            3D array with predicted pixel labels (n x n x 5)
+%    PROBS            4D array with class probabilities (n x n x 5 x #classes)
+%    classes          struct mapping class names to ids
+%    x                vector of x coordinates (n x 1)
+%    y                vector of y coordinates (n x 1)
+%    elevs            vector of elevation angles (5 x 1)
 %
 % Note: GPU code untested
 
+if nargin < 3
+    SEG_GPU_DEVICE = [];
+end
+
 % extract class labels from net
-labels = struct();
-classes = net.meta.classes;
-for i = 1:numel(classes)
-    labels.(classes{i}) = i;
+classes = struct();
+for i = 1:numel(net.meta.classes)
+    classes.(net.meta.classes{i}) = i;
 end
 %remove in future when clutter gets predicted
-labels.clutter = 4;
+classes.clutter = 4;
 
 % Fixed rendering parameters for segmentation
-R_MAX = 150000;
-ELEVS = 0.5:4.5; 
+r_max = 150000;
+elevs = 0.5:4.5; 
 
 % Get the dz data for ground-truth background
 dz = radar2mat(radar, ...
                'fields', {'dz'}, ...
                'coords', 'cartesian', ...
                'dim', net.meta.bopts.imageSize(1),...
-               'r_max', R_MAX,...
-               'elevs', ELEVS);
+               'r_max', r_max,...
+               'elevs', elevs);
 dz = dz.dz;
 bg = isnan(dz);
 
@@ -45,8 +49,8 @@ bg = isnan(dz);
                          'fields', net.meta.bopts.mode, ...
                          'coords', net.meta.bopts.coordinate, ...
                          'dim',    net.meta.bopts.imageSize(1), ...
-                         'elevs', ELEVS, ...
-                         'r_max', R_MAX);
+                         'elevs', elevs, ...
+                         'r_max', r_max);
 
 % Preprocess (add padding, etc.)
 IMG_padded = preprocess(data, net.meta.bopts);
@@ -61,34 +65,34 @@ net.mode = 'test';
 net.eval({'input', IMG_padded});
 
 % Get class probabilities
-probs = arrayfun(@(layer) net.getVar(strcat('prob_', int2str(layer))).value, ...
+PROBS = arrayfun(@(layer) net.getVar(strcat('prob_', int2str(layer))).value, ...
                     net.meta.bopts.output_sweep, ...
                     'UniformOutput', false);
 
-probs = cat(4, probs{:});
+PROBS = cat(4, PROBS{:});
 
 % Get class with highest probability that is not background
 bg_ind = find(strcmp(net.meta.classes, 'background'));
-probs_no_background = probs;
+probs_no_background = PROBS;
 probs_no_background(:,:,bg_ind,:) = 0; %#ok<FNDSB>    
 
-[~, SEG_MASK] = max(probs_no_background, [], 3);
-SEG_MASK = squeeze(SEG_MASK);
+[~, PREDS] = max(probs_no_background, [], 3);
+PREDS = squeeze(PREDS);
 
 % remove the padding
-ty = floor((1:size(SEG_MASK,1)) - net.meta.bopts.padto(1)/2 + net.meta.bopts.imageSize(1)/2);
-tx = floor((1:size(SEG_MASK,2)) - net.meta.bopts.padto(2)/2 + net.meta.bopts.imageSize(2)/2);
+ty = floor((1:size(PREDS,1)) - net.meta.bopts.padto(1)/2 + net.meta.bopts.imageSize(1)/2);
+tx = floor((1:size(PREDS,2)) - net.meta.bopts.padto(2)/2 + net.meta.bopts.imageSize(2)/2);
 ty = ty > 0 & ty <= net.meta.bopts.imageSize(1);
 tx = tx > 0 & tx <= net.meta.bopts.imageSize(2);
 
-SEG_MASK = SEG_MASK(ty, tx, :);
-probs = probs(ty, tx, :, :);
+PREDS = PREDS(ty, tx, :);
+PROBS = PROBS(ty, tx, :, :);
 
 % Postprocess (use original probabilities including background for this)
-[probs, SEG_MASK] = postprocess(probs, SEG_MASK, net.meta.classes);
+[PROBS, PREDS] = postprocess(PROBS, PREDS, net.meta.classes);
 
 % Now set all ground truth background pixels
-SEG_MASK(bg) = find(strcmp(net.meta.classes, 'background'));
+PREDS(bg) = find(strcmp(net.meta.classes, 'background'));
 
 end
 
