@@ -1,4 +1,4 @@
-function [ SEG_MASK, x, y, probs, labels ] = segment_scan( radar, net, RMAX, SEG_GPU_DEVICE, SEG_IMG_SIZE, elevs )
+function [ SEG_MASK, x, y, probs, labels ] = segment_scan( radar, net, SEG_GPU_DEVICE, elevs )
 % SEGMENT_SCAN Run segmentation net to segment the scan
 %
 % [ SEG_MASK, x, y, probs, labels ] = segment_scan( radar, net, RMAX, SEG_GPU_DEVICE, SEG_IMG_SIZE, elevs )
