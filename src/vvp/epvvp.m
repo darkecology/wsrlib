@@ -60,7 +60,7 @@ function [ edges, z, u, v, rmse, nll, cov, cnt ] = ...
 MIN_DATA = 5;       % Height bins with fewer data points are discarded
 
 if nargin < 2 || isempty(zstep)
-    zstep = 20;
+    zstep = 100;
 end
 
 if nargin < 3 || isempty(rmin)
@@ -68,11 +68,11 @@ if nargin < 3 || isempty(rmin)
 end
 
 if nargin < 4 || isempty(rmax)
-    rmax = 40000;
+    rmax = 37500;
 end
 
 if nargin < 5 || isempty(zmax)
-    zmax = 6000;
+    zmax = 3000;
 end
 
 if nargin < 6 || isempty(alg)
