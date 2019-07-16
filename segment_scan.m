@@ -1,15 +1,12 @@
-function [ SEG_MASK, x, y, probs, labels ] = segment_scan( radar, net, SEG_GPU_DEVICE, elevs )
+function [ SEG_MASK, x, y, probs, labels ] = segment_scan( radar, net, SEG_GPU_DEVICE )
 % SEGMENT_SCAN Run segmentation net to segment the scan
 %
-% [ SEG_MASK, x, y, probs, labels ] = segment_scan( radar, net, RMAX, SEG_GPU_DEVICE, SEG_IMG_SIZE, elevs )
+% [ SEG_MASK, x, y, probs, labels ] = segment_scan( radar, net, SEG_GPU_DEVICE )
 %
 % Inputs:
 %    radar
 %    net
-%    RMAX
 %    SEG_GPU_DEVICE
-%    SEG_IMG_SIZE
-%    elevs
 %
 % Outputs:
 %    SEG_MASK
@@ -29,12 +26,17 @@ end
 %remove in future when clutter gets predicted
 labels.clutter = 4;
 
+% Fixed rendering parameters for segmentation
+R_MAX = 150000;
+ELEVS = 0.5:4.5; 
+
 % Get the dz data for ground-truth background
 dz = radar2mat(radar, ...
                'fields', {'dz'}, ...
-               'elevs', elevs, ...
                'coords', 'cartesian', ...
-               'dim', net.meta.bopts.imageSize(1));
+               'dim', net.meta.bopts.imageSize(1),...
+               'r_max', R_MAX,...
+               'elevs', ELEVS);
 dz = dz.dz;
 bg = isnan(dz);
 
@@ -42,8 +44,9 @@ bg = isnan(dz);
 [data, y, x] = radar2mat(radar, ...
                          'fields', net.meta.bopts.mode, ...
                          'coords', net.meta.bopts.coordinate, ...
-                         'elevs', elevs, ...
-                         'dim',    net.meta.bopts.imageSize(1));
+                         'dim',    net.meta.bopts.imageSize(1), ...
+                         'elevs', ELEVS, ...
+                         'r_max', R_MAX);
 
 % Preprocess (add padding, etc.)
 IMG_padded = preprocess(data, net.meta.bopts);
