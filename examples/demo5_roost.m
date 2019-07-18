@@ -46,7 +46,7 @@ r  = 10560.28723;  % meters
 [angle, dist_from_radar] = cart2pol(x0, y0);
 bearing = pol2cmp(angle);
 [roost_lon, roost_lat] = m_fdist(radar.lon, radar.lat, bearing, dist_from_radar);
-roost_lon = alias(roost_lon, 180);
+roost_lon = do_alias(roost_lon, 180);
 fprintf('lat,lon=%.4f,%.4f\n', roost_lat, roost_lon)
 
 
