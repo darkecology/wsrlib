@@ -1,12 +1,11 @@
-function [ PREDS, PROBS, classes, x, y, elevs ] = segment_scan( radar, net, SEG_GPU_DEVICE )
+function [ PREDS, PROBS, classes, x, y, elevs ] = segment_scan( radar, net, varargin )
 % SEGMENT_SCAN Run segmentation net to segment the scan
 %
-% [ PREDS, x, y, probs, labels ] = segment_scan( radar, net, SEG_GPU_DEVICE )
+% [ PREDS, x, y, probs, labels ] = segment_scan( radar, net, ... )
 %
-% Inputs:
+% Required inputs:
 %    radar            The radar struct (from rsl2mat)
 %    net              The neural network (DagNN object + metadata)
-%    SEG_GPU_DEVICE   Set to use GPU (default [])
 %
 % Outputs:
 %    PREDS            3D array with predicted pixel labels (n x n x 5)
@@ -16,11 +15,50 @@ function [ PREDS, PROBS, classes, x, y, elevs ] = segment_scan( radar, net, SEG_
 %    y                vector of y coordinates (n x 1)
 %    elevs            vector of elevation angles (5 x 1)
 %
+% Optional named inputs:
+%    gpu_device       Set to use GPU (default: []) (gpu code untested)
+%
+%    rain_thresh      Classify as rain if pixel rain probability exceeds 
+%                       this value (default: 0.5)
+%
+%    avg_rain_thresh  Classify as rain if average probability over all
+%                     elevations at same spatial location as pixel 
+%                     exceeds this value (default: 0.45)
+%
+%    avg_rain_thresh  Same as above, but max over elevations (default: 1.0)
+%
+%    dilate_radius    Build a fringe of this many pixels around pixels 
+%                     classified as rain to also classify as rain
+%                     (default: 8)
+%
+%    dilate_thresh    The rain probability of the fringe pixel must be at
+%                     least this high to be classified as rain 
+%                     (default: 0.20)
+%
+%    ydirection       'xy' | 'ij'. This specifies whether the y coordinates 
+%                     of pixels are decreasing ('ij') or increasing ('xy') 
+%                     along the first dimension of the array. The default
+%                     is 'xy', which makes the output compatible with
+%                     griddedInterpolant.
+%
 % Note: GPU code untested
 
-if nargin < 3
-    SEG_GPU_DEVICE = [];
-end
+p = inputParser;
+
+addRequired(p, 'radar',    @isstruct);
+addRequired(p, 'net',      @(x) isa(x, 'dagnn.DagNN'));
+
+addParameter(p, 'gpu_device',          []            );
+addParameter(p, 'rain_thresh',       0.50,  @isscalar);
+addParameter(p, 'avg_rain_thresh',   0.45,  @isscalar);
+addParameter(p, 'max_rain_thresh',   1.00,  @isscalar);
+addParameter(p, 'dilate_thresh',     0.20,  @isscalar);
+addParameter(p, 'dilate_radius',        8,  @isscalar);
+addParameter(p, 'ydirection',         'xy', @(x) any(validatestring(x,{'ij','xy'})));
+
+parse(p, radar, net, varargin{:});
+
+params = p.Results;
 
 % extract class labels from net
 classes = struct();
@@ -56,7 +94,7 @@ bg = isnan(dz);
 IMG_padded = preprocess(data, net.meta.bopts);
 
 % Move the input to gpu
-if ~isempty(SEG_GPU_DEVICE)
+if ~isempty(params.gpu_device)
     IMG_padded = gpuArray(IMG_padded);
 end
 
@@ -89,53 +127,67 @@ PREDS = PREDS(ty, tx, :);
 PROBS = PROBS(ty, tx, :, :);
 
 % Postprocess (use original probabilities including background for this)
-[PROBS, PREDS] = postprocess(PROBS, PREDS, net.meta.classes);
+[PROBS, PREDS] = postprocess(PROBS, PREDS, net.meta.classes, params);
 
 % Now set all ground truth background pixels
 PREDS(bg) = find(strcmp(net.meta.classes, 'background'));
 
+switch params.ydirection
+    case 'xy'
+        % Flip order of y dimension so y coordinates are increasing
+        % (output is compatible with griddedInterpolant)
+        y = flip(y);
+        PREDS = flip(PREDS, 1);
+        PROBS = flip(PROBS, 1);
+    case 'ij'
+        % do nothing
+    otherwise
+        % should not get here
+        error('Unrecognized y direction');
+    end
 end
 
-function [probs, SEG_MASK] = postprocess(probs, SEG_MASK, classes)
+function [probs, SEG_MASK] = postprocess(probs, SEG_MASK, classes, params)
 
     rain_ind = find(strcmp(classes, 'rain'));
     rain_prob = squeeze(probs(:,:,rain_ind,:));
     
-    
     avg_rain_prob = sum(rain_prob,3)/size(rain_prob,3);
     max_rain_prob = max(rain_prob,[], 3);
     
-    rain_thresh = 0.5;
-    avg_rain_thresh = 0.45;
-    max_rain_thresh = 1.0;
-
-    dilate_thresh = 0.2;
-    dilate_radius = 8;
+%     rain_thresh = 0.5;
+%     avg_rain_thresh = 0.45;
+%     max_rain_thresh = 1.0;
+% 
+%     dilate_thresh = 0.2;
+%     dilate_radius = 8;
     
-    vis = false;
-    if vis
-        figure();
-        clf();
-        
-        subplot(1,3,1);
-        imagesc(avg_rain_prob, [0, 1]);
-        colorbar();
-        
-        subplot(1,3,2);
-        imagesc(max_rain_prob, [0, 1]);
-        colorbar();
-        
-        subplot(1,3,3);
-        imagesc(avg_rain_prob > 0.3 | max_rain_prob > 0.7);
-        colorbar();    
-    end
+%     vis = false;
+%     if vis
+%         figure();
+%         clf();
+%         
+%         subplot(1,3,1);
+%         imagesc(avg_rain_prob, [0, 1]);
+%         colorbar();
+%         
+%         subplot(1,3,2);
+%         imagesc(max_rain_prob, [0, 1]);
+%         colorbar();
+%         
+%         subplot(1,3,3);
+%         imagesc(avg_rain_prob > 0.3 | max_rain_prob > 0.7);
+%         colorbar();    
+%     end
     
     avg_rain_prob = repmat(avg_rain_prob, [1, 1, 5]);
     max_rain_prob = repmat(max_rain_prob, [1, 1, 5]);
-    is_rain = rain_prob > rain_thresh | avg_rain_prob > avg_rain_thresh | max_rain_prob > max_rain_thresh;
+    is_rain = rain_prob > params.rain_thresh | ...
+        avg_rain_prob > params.avg_rain_thresh | ...
+        max_rain_prob > params.max_rain_thresh;
     
-    dilated = imdilate(is_rain, circle_nbhd(dilate_radius));
-    is_rain = is_rain | (dilated & rain_prob > dilate_thresh);
+    dilated = imdilate(is_rain, circle_nbhd(params.dilate_radius));
+    is_rain = is_rain | (dilated & rain_prob > params.dilate_thresh);
 
     SEG_MASK(is_rain) = rain_ind;
 end
