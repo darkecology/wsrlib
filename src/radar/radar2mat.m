@@ -1,7 +1,10 @@
 function [ data, x1, x2, x3, fields ] = radar2mat( radar, varargin )
 %RADAR2MAT Convert an aligned radar volume to 3d-matrix
 %
-% [ data, x1, x2, x3 ] = radar2mat( radar, fields, r_max, varargin )
+% [ data, x1, x2, x3 ] = radar2mat( radar, varargin )
+%
+% Example:
+%    [ data, x1, x2, x3 ] = radar2mat( radar, 'fields', {'dz', 'vr'}, 'r_max', 150000 )
 %
 % Inputs:
 %   radar        radar struct (required)
@@ -19,7 +22,7 @@ function [ data, x1, x2, x3, fields ] = radar2mat( radar, varargin )
 %                number, using nearest-neighbor interpolation to match to
 %                the desired elevations
 %   output_format  cell | struct
-
+%
 % Outputs:
 %   data         struct or cell array of 3D data matrices of size m x n x p
 %   x1           vector of coordinates for first dimension (m x 1)
