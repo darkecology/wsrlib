@@ -29,12 +29,16 @@ radar_dealiased = vvp_dealias(radar, edges, u, v, rmse, RMSE_THRESH);
 %% 3. Align volumes and extract 3D data matrices
 
 % Align all sweeps to a common polar grid
-radar_aligned = align_scan(radar_dealiased, AZ_RES, RANGE_RES, RMAX_M );
+%radar_aligned = align_scan(radar_dealiased, AZ_RES, RANGE_RES, RMAX_M );
 
 % Extract 3D data matrices and coordinate vectors
-[data, range, az, elev] = radar2mat(radar_aligned, {'dz', 'vr'});
-DZ = data{1};
-VR = data{2};
+[data, range, az, elev] = radar2mat(radar_dealiased, ...
+    'fields', {'dz', 'vr'}, ...
+    'r_max', RMAX_M,...
+    'az_res', AZ_RES,...
+    'r_res', RANGE_RES);
+DZ = data.dz;
+VR = data.vr;
 
 % Set nodata pulse volumes to 0 reflectivity (-inf on decibel scale)
 DZ(isnan(DZ)) = -inf;
