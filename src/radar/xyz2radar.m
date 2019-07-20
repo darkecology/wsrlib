@@ -1,4 +1,4 @@
-function [ az, range, elev ] = xyz2radar( x, y, z )
+function [ range, az, elev ] = xyz2radar( x, y, z )
 %XYZ2RADAR Convert (x, y, z) to (az, range, elev)
 %
 
