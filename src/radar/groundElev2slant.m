@@ -1,5 +1,5 @@
 function [ r, h ] = groundElev2slant( s, thet )
-%GROUNDELEV2SLANT Convert from slant range and elevation to ground range and height.
+%GROUNDELEV2SLANT Convert from slant range and elevation angle to ground range and height.
 %
 % [ r, h ] = groundElev2slant( s, thet )
 %
