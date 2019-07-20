@@ -1,4 +1,4 @@
-function local_file = aws_get_scan(key, dataroot, background, verbose)
+function [local_file, info] = aws_get_scan(key, dataroot, background, verbose)
 %AWS_GET_SCAN Download a scan from AWS
 %
 %  local_path = aws_get_scan( key, dataroot )
@@ -25,6 +25,8 @@ if nargin < 4
 end
 
 [~, aws_path, name] = aws_key(key);
+
+info = aws_parse(name);
 
 % If the scan exists locally, return path to it.
 % TODO: this can return a false positive 
