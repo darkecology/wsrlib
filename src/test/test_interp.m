@@ -35,7 +35,7 @@ while true
     % Map (x,y) coordinates to slant radius and azimuth
     %[x, y, z] = meshgrid(x, y, z);
 
-    [az, range, elev] = xyz2radar(x, y, z);
+    [range, az, elev] = xyz2radar(x, y, z);
     
     %%% PPI plot
     figure(1); clf();
