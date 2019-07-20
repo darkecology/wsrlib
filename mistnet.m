@@ -1,11 +1,10 @@
-function [ PREDS, PROBS, classes, x, y, elevs ] = segment_scan( radar, net, varargin )
+function [ PREDS, PROBS, classes, y, x, elevs ] = mistnet( radar, varargin )
 % SEGMENT_SCAN Run segmentation net to segment the scan
 %
 % [ PREDS, x, y, probs, labels ] = segment_scan( radar, net, ... )
 %
 % Required inputs:
 %    radar            The radar struct (from rsl2mat)
-%    net              The neural network (DagNN object + metadata)
 %
 % Outputs:
 %    PREDS            3D array with predicted pixel labels (n x n x 5)
@@ -16,10 +15,19 @@ function [ PREDS, PROBS, classes, x, y, elevs ] = segment_scan( radar, net, vara
 %    elevs            vector of elevation angles (5 x 1)
 %
 % Optional named inputs:
+%
+%    net_path         Path to model file (default is mistnet model
+%                     distributed with wsrlib). The net is loaded only on
+%                     the first call to mistnet() and then saved in memory.
+%                     Loading the net takes a couple seconds.
+%
+%    net              A DagNN object. If set, this object will be used 
+%                     instead of loading the net from file.
+%
 %    gpu_device       Set to use GPU (default: []) (gpu code untested)
 %
 %    rain_thresh      Classify as rain if pixel rain probability exceeds 
-%                       this value (default: 0.5)
+%                     this value (default: 0.5)
 %
 %    avg_rain_thresh  Classify as rain if average probability over all
 %                     elevations at same spatial location as pixel 
@@ -43,10 +51,11 @@ function [ PREDS, PROBS, classes, x, y, elevs ] = segment_scan( radar, net, vara
 %
 % Note: GPU code untested
 
+DEFAULT_NET_PATH = sprintf('%s/cnn/mistnet.mat', cajun_root());
+
 p = inputParser;
 
 addRequired(p, 'radar',    @isstruct);
-addRequired(p, 'net',      @(x) isa(x, 'dagnn.DagNN'));
 
 addParameter(p, 'gpu_device',          []            );
 addParameter(p, 'rain_thresh',       0.50,  @isscalar);
@@ -54,11 +63,39 @@ addParameter(p, 'avg_rain_thresh',   0.45,  @isscalar);
 addParameter(p, 'max_rain_thresh',   1.00,  @isscalar);
 addParameter(p, 'dilate_thresh',     0.20,  @isscalar);
 addParameter(p, 'dilate_radius',        8,  @isscalar);
-addParameter(p, 'ydirection',         'xy', @(x) any(validatestring(x,{'ij','xy'})));
+addParameter(p, 'ydirection',        'xy',  @(x) any(validatestring(x,{'ij','xy'})));
 
-parse(p, radar, net, varargin{:});
+addParameter(p, 'net_path',   DEFAULT_NET_PATH,  @isstring);
+addParameter(p, 'net',                      [],  @(x) isempty(x) || isa(x, 'dagnn.DagNN'));
+
+parse(p, radar, varargin{:});
 
 params = p.Results;
+
+% LOAD NET
+persistent saved_net;
+persistent saved_net_path;
+
+if ~isempty(params.net)
+    % Use the network that was passed in
+    net = params.net;
+else 
+    % Use network from file
+    if params.net_path
+        net_path = params.net_path;
+    else
+        net_path = sprintf('%s/cnn/mistnet.mat', cajun_root());
+    end
+    
+    % Check if net is already loaded into memory
+    if ~isempty(saved_net) && strcmp(saved_net_path, net_path)
+        net = saved_net;
+    else
+        net = load_segment_net(net_path, params.gpu_device);
+        saved_net = net;
+        saved_net_path = net_path;
+    end
+end
 
 % extract class labels from net
 classes = struct();
@@ -68,28 +105,29 @@ end
 %remove in future when clutter gets predicted
 classes.clutter = 4;
 
-% Fixed rendering parameters for segmentation
-r_max = 150000;
+% Rendering parameters
 elevs = 0.5:4.5; 
-
-% Get the dz data for ground-truth background
-dz = radar2mat(radar, ...
-               'fields', {'dz'}, ...
-               'coords', 'cartesian', ...
-               'dim', net.meta.bopts.imageSize(1),...
-               'r_max', r_max,...
-               'elevs', elevs);
-dz = dz.dz;
-bg = isnan(dz);
+grid_params = {
+    'coords', net.meta.bopts.coordinate, ...
+    'dim', net.meta.bopts.imageSize(1),...
+    'r_max', 150000,...
+    'elevs', elevs, ...
+    'ydirection', 'ij'};  % NOTE: model was trained with 'ij' direction, so 
+                          % use this even though the default in WSRLIB is
+                          % 'xy'
 
 % Render the scan for prediction
-[data, y, x] = radar2mat(radar, ...
-                         'fields', net.meta.bopts.mode, ...
-                         'coords', net.meta.bopts.coordinate, ...
-                         'dim',    net.meta.bopts.imageSize(1), ...
-                         'elevs', elevs, ...
-                         'r_max', r_max);
+[data, y, x] = radar2mat(radar, 'fields', net.meta.bopts.mode, grid_params{:});
 
+% Get the dz data for ground-truth background
+if ismember('dz', fieldnames(data))
+    dz = data.dz;
+else
+    dz = radar2mat(radar, 'fields', {'dz'}, grid_params{:});
+    dz = dz.dz;
+end
+bg = isnan(dz);               
+                     
 % Preprocess (add padding, etc.)
 IMG_padded = preprocess(data, net.meta.bopts);
 
@@ -144,7 +182,7 @@ switch params.ydirection
     otherwise
         % should not get here
         error('Unrecognized y direction');
-    end
+end
 end
 
 function [probs, SEG_MASK] = postprocess(probs, SEG_MASK, classes, params)
@@ -277,3 +315,5 @@ end
 function A = replaceNan(A, nanvalue)
     A(isnan(A)) = nanvalue;
 end
+
+
