@@ -22,6 +22,11 @@ function [ data, x1, x2, x3, fields ] = radar2mat( radar, varargin )
 %                number, using nearest-neighbor interpolation to match to
 %                the desired elevations
 %   output_format  cell | struct
+%   ydirection   'xy' | 'ij'. This specifies whether the y coordinates 
+%                  of pixels are decreasing ('ij') or increasing ('xy') 
+%                  along the first dimension of the array. The default
+%                  is 'xy', which makes the output compatible with
+%                  griddedInterpolant.
 %
 % Outputs:
 %   data         struct or cell array of 3D data matrices of size m x n x p
@@ -50,6 +55,7 @@ DEFAULT_SWEEPS = [];
 DEFAULT_ELEVS  = [];
 DEFAULT_INTERP_METHOD = 'nearest';
 DEFAULT_OUTPUT_FORMAT = 'struct';
+DEFAULT_YDIRECTION = 'xy';
 
 p = inputParser;
 
@@ -67,6 +73,7 @@ addParameter(p,  'elevs',   DEFAULT_ELEVS, @(x) validateattributes(x,{'numeric'}
 addParameter(p,  'interp_method',   DEFAULT_INTERP_METHOD, @(x) ischar(x));
 addParameter(p,  'output_format',   DEFAULT_OUTPUT_FORMAT, @(x) any(validatestring(x,{'struct','cell'})));
 addParameter(p,  'use_ground_range',   true, @islogical);
+addParameter(p, 'ydirection',  DEFAULT_YDIRECTION, @(x) any(validatestring(x,{'ij','xy'})));
 
 parse(p, radar, varargin{:});
 
@@ -153,7 +160,12 @@ switch params.coords
         
         % Query points
         x = linspace (-params.r_max, params.r_max, params.dim);
-        y = -x;
+        switch params.ydirection
+            case 'xy'
+                y = x;
+            case 'ij'
+                y = -x;
+        end
         [X, Y] = meshgrid(x, y);
         [PHI, R] = cart2pol(X, Y);
         PHI = pol2cmp(PHI);  % convert from radians to compass heading
