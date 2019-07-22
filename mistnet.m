@@ -91,7 +91,7 @@ else
     if ~isempty(saved_net) && strcmp(saved_net_path, net_path)
         net = saved_net;
     else
-        net = load_segment_net(net_path, params.gpu_device);
+        net = load_net(net_path, params.gpu_device);
         saved_net = net;
         saved_net_path = net_path;
     end
