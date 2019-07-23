@@ -1,4 +1,3 @@
-
 function [ net ] = load_segment_net( seg_file, SEG_GPU_DEVICE )
 %LOAD_SEGMENT_NET Load neural network from file into memory
 %   net = load_seg_net( seg_file, SEG_GPU_DEVICE )
