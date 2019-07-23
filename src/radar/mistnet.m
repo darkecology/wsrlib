@@ -1,7 +1,7 @@
 function [ PREDS, PROBS, classes, y, x, elevs ] = mistnet( radar, varargin )
 % SEGMENT_SCAN Run segmentation net to segment the scan
 %
-% [ PREDS, x, y, probs, labels ] = segment_scan( radar, net, ... )
+% [PREDS, PROBS, classes, y, x, elevs] = segment_scan( radar, ... )
 %
 % Required inputs:
 %    radar            The radar struct (from rsl2mat)
@@ -169,6 +169,9 @@ PROBS = PROBS(ty, tx, :, :);
 
 % Now set all ground truth background pixels
 PREDS(bg) = find(strcmp(net.meta.classes, 'background'));
+
+% Permute output direction of probs to be 600 x 600 x 5 x #classes
+PROBS = permute(PROBS, [1, 2, 4, 3]);
 
 switch params.ydirection
     case 'xy'

@@ -36,17 +36,12 @@ VR = data.vr;
 % Get sample volume coordinate matrices
 [RANGE, AZ, ELEV] = ndgrid(range, az, elev);
 
-% Run mistnet to get predictions for Cartesian volume
-[PREDS, PROBS, classes, x, y, elevs] = mistnet( radar );
+% Use mistnet_polar to make predictions for points in polar coordinates
+[PREDS, classes, PROBS] = mistnet_polar( radar, RANGE, AZ, ELEV);
 
-% Create interpolating function
-F = griddedInterpolant({y', x', elevs'}, PREDS, 'nearest');
+% Convert range and elevation to height in meters above elevation of radar
+[~, HEIGHT] = slant2ground(RANGE, ELEV);
 
-% Convert sample volume coordinate matrices to XYZ
-[X, Y, HEIGHT] = radar2xyz(RANGE, AZ, ELEV);
-
-% Intepolate mistnet predictions onto polar volume
-PREDS = F(Y, X, ELEV);
 
 % Plot mistnet predictions in polar coordinates
 figure(1);
@@ -58,12 +53,17 @@ cmap = [0, 0.5, 1;
 colormap(cmap);
 
 for i = 1:5
-    subplot(5,2, 2*(i-1) + 1);
+    subplot(5,3, 3*(i-1) + 1);
     imagesc(az, range, DZ(:,:,i), [-5, 35]);
     colormap(gca, jet(32));
     colorbar();
-    
-    subplot(5,2, 2*(i-1) + 2);
+
+    subplot(5,3, 3*(i-1) + 2);
+    imagesc(az, range, PROBS(:,:,i,3), [0 1]);
+    colormap(gca, hot(32));
+    colorbar();
+
+    subplot(5,3, 3*(i-1) + 3);
     image(az, range, PREDS(:,:,i));    
     colormap(gca, cmap);
     colorbar('YTick', 1.5:3.5, 'YTickLabel', {'background', 'biology', 'rain'});
