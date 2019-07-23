@@ -1,6 +1,7 @@
 % Read radar file
 key = 'KBGM20130412_022349'; % weather
 key = 'KRTX20100510_062940'; % weather
+key = 'KABX20170902_041920'; % mix
 radar_file = aws_get_scan(key, 'tmp');
 scaninfo = aws_parse(radar_file);
 station = scaninfo.station;
@@ -42,42 +43,76 @@ VR = data.vr;
 % Convert range and elevation to height in meters above elevation of radar
 [~, HEIGHT] = slant2ground(RANGE, ELEV);
 
+% Set rain sample volumes to 0 reflectivity (-inf on decibel scale)
+MASKED_DZ = DZ;
+MASKED_DZ(PREDS==classes.rain) = -inf;
 
-% Plot mistnet predictions in polar coordinates
-figure(1);
-clf();
+% Set nodata sample volumes to 0 reflectivity (-inf on decibel scale)
+MASKED_DZ(isnan(MASKED_DZ)) = -inf;
 
+% Convert to reflectivity
+Z    = idb(MASKED_DZ);      % inverse decibel transform --> reflectivity factor
+REFL = z_to_refl(Z);        % reflectivity factor --> reflectivity
+
+
+% Plot predictions 
+f = figure(1);
+f.Position = [100, 800, 1800, 600];
 cmap = [0, 0.5, 1;
         1, 0.5, 0;
         1, 0, 0];
+
 colormap(cmap);
 
+nr = 5;
+nc = 4;
+figure;
+ax = gobjects(nc,nr); % Subplots use opposite numbering convention 
+                      % from arrays, so start reversed
+figure(1);                      
+                    
 for i = 1:5
-    subplot(5,3, 3*(i-1) + 1);
+    
+    ind = nc*(i-1) + 1;
+    ax(ind) = subplot(5,4, ind);
     imagesc(az, range, DZ(:,:,i), [-5, 35]);
     colormap(gca, jet(32));
     colorbar();
 
-    subplot(5,3, 3*(i-1) + 2);
+    ind = nc*(i-1) + 2;
+    ax(ind) = subplot(5,4, ind);
     imagesc(az, range, PROBS(:,:,i,3), [0 1]);
     colormap(gca, hot(32));
     colorbar();
 
-    subplot(5,3, 3*(i-1) + 3);
+    ind = nc*(i-1) + 3;
+    ax(ind) = subplot(5,4, ind);
     image(az, range, PREDS(:,:,i));    
     colormap(gca, cmap);
     colorbar('YTick', 1.5:3.5, 'YTickLabel', {'background', 'biology', 'rain'});
+    
+    ind = nc*(i-1) + 4;
+    ax(ind) = subplot(5,4, ind);
+    imagesc(az, range, MASKED_DZ(:,:,i), [-5, 35]);
+    colormap(gca, jet(32));
+    colorbar();
 end
 
-% Set rain sample volumes to 0 reflectivity (-inf on decibel scale)
-DZ(PREDS==classes.rain) = -inf;
+ax = ax'; % Your handle array now has the same layout as your subplots
 
-% Set nodata sample volumes to 0 reflectivity (-inf on decibel scale)
-DZ(isnan(DZ)) = -inf;
+title(ax(1,1), 'DZ');
+title(ax(1,2), 'Rain prob.');
+title(ax(1,3), 'Classification');
+title(ax(1,4), 'Filtered DZ');
 
-% Convert to reflectivity
-Z    = idb(DZ);             % inverse decibel transform --> reflectivity factor
-REFL = z_to_refl(Z);        % reflectivity factor --> reflectivity
+ylabel(ax(1,1), '0.5 deg.');
+ylabel(ax(2,1), '1.5 deg.');
+ylabel(ax(3,1), '2.5 deg.');
+ylabel(ax(4,1), '3.5 deg.');
+ylabel(ax(5,1), '4.5 deg.');
+
+
+
 
 % Compute mean reflectivity in each 100m height bin
 
@@ -98,8 +133,8 @@ for i=1:nbins
 end
 
 % Plot results
-
-figure(2); clf();
+figure(2); 
+clf();
 
 subplot(1,3,1);
 plot(density, height, 'o');
