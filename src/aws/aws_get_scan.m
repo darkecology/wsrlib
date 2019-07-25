@@ -3,17 +3,30 @@ function [local_file, info] = aws_get_scan(key, dataroot, background, verbose)
 %
 %  local_path = aws_get_scan( key, dataroot )
 %
-%  Inputs:
-%    key       Any prefix of the filename part of key, e.g.,
-%              KABX20170902_041920 or KABX20170902_041920_V06
+%  This function is intended to download multiple radar files locally
+%  stored in the same directory structure as the s3 bucket. If you just
+%  want to process remote radar files and not save them for repeated
+%  analysis, see rsl2mat_s3.
 %
-%    dataroot  Scan will be donwloaded in local copy of AWS directory
+%  Inputs:
+%    key           Any prefix of the filename part of key, e.g.,
+%                  KABX20170902_041920 or KABX20170902_041920_V06
+%
+%    dataroot      Scan will be stored within this root directory following
+%                  the same directory structure as the s3 bucket, i.e., 
+%                  <year>/<month>/<day>/<station>/<scan>
+%
+%    background    If true, intiate download and return immediately
+%
+%    verbose       Print status messages
 %
 %  Output:
 %    local_path  Path to downloaded file
+%
+% See also: RSL2MAT_S3
 
 if nargin < 2
-    dataroot = 'data';
+    error('dataroot is required. Files are not deleted automatically');
 end
 
 if nargin < 3

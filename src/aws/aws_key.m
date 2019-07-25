@@ -19,6 +19,9 @@ end
 
 if ischar(s)
     s = aws_parse(s);
+    if nargin < 2
+        suffix = s.suffix;
+    end
 end
 
 path = sprintf('%4d/%02d/%02d/%s', s.year, s.month, s.day, s.station);

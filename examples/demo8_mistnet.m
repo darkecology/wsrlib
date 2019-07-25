@@ -3,11 +3,9 @@ key = 'KRTX20100510_062940'; % weather
 key = 'KABX20170902_041920'; % mix
 key = 'KRTX20150514_062414'; % clear
 
-% Download scan
-[radar_file, info] = aws_get_scan(key, 'tmp');
-
-% Ingest radar file
-radar = rsl2mat(radar_file, info.station);
+% Read scan from s3
+info = aws_parse(key);
+radar = rsl2mat_s3(key, info.station);
 
 % Call mistnet
 [PREDS, PROBS, classes, y, x, elevs] = mistnet( radar );

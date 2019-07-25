@@ -2,11 +2,9 @@
 key = 'KBGM20130412_022349'; % weather
 key = 'KRTX20100510_062940'; % weather
 key = 'KABX20170902_041920'; % mix
-radar_file = aws_get_scan(key, 'tmp');
-scaninfo = aws_parse(radar_file);
-station = scaninfo.station;
 
-radar = rsl2mat(radar_file, station);
+info = aws_parse(key);
+radar = rsl2mat_s3(key, info.station);
 
 % Preliminaries: vvp, dealias
 
