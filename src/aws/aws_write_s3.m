@@ -20,4 +20,3 @@ function aws_write_s3( local_dir, s3_dir )
     
     setenv('LD_LIBRARY_PATH', ld_bk);    
 end
-
