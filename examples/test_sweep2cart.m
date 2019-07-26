@@ -19,6 +19,7 @@ for i=1:4
     
     subplot(2, 4, i);
     imagescnan(x, y, z);
+    axis xy;
     set(gca, 'color', [0 0 0]);
     colormap(dzmap);
     freezeColors();
@@ -31,6 +32,7 @@ for i=1:4
     
     subplot(2, 4, 4+i);
     imagescnan(x, y, z);
+    axis xy;
     set(gca, 'color', [0 0 0]);
     colormap(vrmap);
     freezeColors();

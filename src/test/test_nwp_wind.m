@@ -15,14 +15,14 @@ function test_wind_file(nwp)
 % Get 0Z file
 date = datenum('2010-09-11 01:10:00');
 
-if ~strcmp(nwp.get_filename(date), 'merged_AWIP32.2010091100.3D')
+if ~strcmp(nwp.get_filename(date), '2010/merged_AWIP32.2010091100.3D')
     error('Error in narr_wind_file');
 end
 
 % Get 3Z file
 date = datenum('2010-09-11 01:31:00');
 
-if ~strcmp(nwp.get_filename(date), 'merged_AWIP32.2010091103.3D')
+if ~strcmp(nwp.get_filename(date), '2010/merged_AWIP32.2010091103.3D')
     error('Error in narr_wind_file');
 end
 
