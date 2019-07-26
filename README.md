@@ -9,9 +9,7 @@
 
 2. MATLAB
 
-3. A supported compiler for your version of MATLAB that is properly
-  installed and configured. (E.g., for MATLAB 2015a, see
-  [this page](http://www.mathworks.com/support/compilers/R2015a/index.html))
+3. A [supported compiler](https://www.mathworks.com/support/requirements/supported-compilers.html) for your version of MATLAB that is properly installed and configured.
 
 The vast majority of installation problems are due to the last
 item. Depending on the match between your OS version and MATLAB
@@ -67,10 +65,6 @@ subdirectory):
 There are a number of other demos in the examples directory that
 will help you get started with wsrlib.
 
-## Getting help
-
-Please email questions to <wsrlib-support@cs.umass.edu>
-
 ## License
 
 ~~~~
@@ -97,7 +91,7 @@ along with this program.  If not, see http://www.gnu.org/
 
 ## Acknowledgment
 
-The development of WSRLIB was supported by the National Science Foundation under Grant No. 1125228.
+The development of WSRLIB was supported by the National Science Foundation under Grants No. 1125228 and 1661259.
 
 ## How to Cite
 
@@ -105,16 +99,20 @@ WSRLIB is open source software. You are welcome to use the code under the terms 
 
 ~~~~
 Sheldon, Daniel. WSRLIB: MATLAB Toolbox for Weather Surveillance Radar.
-http://bitbucket.org/dsheldon/wsrlib, 2015.
+http://bitbucket.org/dsheldon/wsrlib, 2019.
+~~~~
+
+If you use mistnet to discriminate rain from biology, please cite the paper:
+
+~~~~
+Tsung-Yu Lin, Kevin Winner, Garrett Bernstein, Abhay Mittal, Adriaan M. Dokter, Kyle G. Horton, Cecilia Nilsson, Benjamin M. Van Doren, Andrew Farnsworth, Frank A. La Sorte, Subhransu Maji, and Daniel Sheldon. MistNet: Measuring historical bird migration in the US using archived weather radar data and convolutional neural networks. Methods in Ecology and Evolution, 2019.
 ~~~~
 
 If you use any of the dealiasing or velocity profiling routines from the vvp subdirectory, please cite the original paper:
 
 ~~~~
-
 Daniel Sheldon, Andrew Farnsworth, Jed Irvine, Benjamin Van Doren, Kevin Webb, 
 Thomas G. Dietterich, and Steve Kelling. Approximate Bayesian inference for 
 reconstructing velocities of migrating birds from weather radar. In Proceedings of 
 the 27th AAAI Conference on Artificial Intelligence (AAAI), 2013.
-
 ~~~~
