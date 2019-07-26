@@ -1,4 +1,5 @@
-# WSRLIB: MATLAB Toolbox for Weather Surveillance Radar
+# WSRLIB: MATLAB Toolbox for Weather Surveillance Radar 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3351750.svg)](https://doi.org/10.5281/zenodo.3351750)
 
 ## Requirements
 
@@ -97,22 +98,20 @@ The development of WSRLIB was supported by the National Science Foundation under
 
 WSRLIB is open source software. You are welcome to use the code under the terms of the license for research or commercial purposes. If you use WSRLIB in published research, please acknowledge it with a citation:
 
-~~~~
-Sheldon, Daniel. WSRLIB: MATLAB Toolbox for Weather Surveillance Radar.
-http://bitbucket.org/dsheldon/wsrlib, 2019.
-~~~~
+> Sheldon, Daniel. WSRLIB: MATLAB Toolbox for Weather Surveillance Radar, 2019. 
+> [https://doi.org/10.5281/zenodo.3351750]
 
 If you use mistnet to discriminate rain from biology, please cite the paper:
 
-~~~~
-Tsung-Yu Lin, Kevin Winner, Garrett Bernstein, Abhay Mittal, Adriaan M. Dokter, Kyle G. Horton, Cecilia Nilsson, Benjamin M. Van Doren, Andrew Farnsworth, Frank A. La Sorte, Subhransu Maji, and Daniel Sheldon. MistNet: Measuring historical bird migration in the US using archived weather radar data and convolutional neural networks. Methods in Ecology and Evolution, 2019.
-~~~~
+> Tsung-Yu Lin, Kevin Winner, Garrett Bernstein, Abhay Mittal, Adriaan M. Dokter, 
+> Kyle G. Horton, Cecilia Nilsson, Benjamin M. Van Doren, Andrew Farnsworth, 
+> Frank A. La Sorte, Subhransu Maji, and Daniel Sheldon. MistNet: Measuring 
+> historical bird migration in the US using archived weather radar data and 
+> convolutional neural networks. Methods in Ecology and Evolution, 2019.
 
 If you use any of the dealiasing or velocity profiling routines from the vvp subdirectory, please cite the original paper:
 
-~~~~
-Daniel Sheldon, Andrew Farnsworth, Jed Irvine, Benjamin Van Doren, Kevin Webb, 
-Thomas G. Dietterich, and Steve Kelling. Approximate Bayesian inference for 
-reconstructing velocities of migrating birds from weather radar. In Proceedings of 
-the 27th AAAI Conference on Artificial Intelligence (AAAI), 2013.
-~~~~
+> Daniel Sheldon, Andrew Farnsworth, Jed Irvine, Benjamin Van Doren, Kevin Webb, 
+> Thomas G. Dietterich, and Steve Kelling. Approximate Bayesian inference for 
+> reconstructing velocities of migrating birds from weather radar. In Proceedings of 
+> the 27th AAAI Conference on Artificial Intelligence (AAAI), 2013.
