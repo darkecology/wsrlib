@@ -1,5 +1,5 @@
 # WSRLIB: MATLAB Toolbox for Weather Surveillance Radar 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3351750.svg)](https://doi.org/10.5281/zenodo.3351750)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3352264.svg)](https://doi.org/10.5281/zenodo.3352264)
 
 ## Requirements
 
@@ -80,7 +80,7 @@ The development of WSRLIB was supported by the National Science Foundation under
 WSRLIB is open source software. You are welcome to use the code under the terms of the license for research or commercial purposes. If you use WSRLIB in published research, please acknowledge it with a citation:
 
 > Sheldon, Daniel. WSRLIB: MATLAB Toolbox for Weather Surveillance Radar, 2019. 
-> [https://doi.org/10.5281/zenodo.3351750]
+> [https://doi.org/10.5281/zenodo.3352264]
 
 If you use mistnet to discriminate rain from biology, please cite the paper:
 
