@@ -1,5 +1,5 @@
 function [ F ] = radarInterpolant( data, az, range, type )
-%RADARINTERPOLANT - Create interpolating function for radar data
+%RADARINTERPOLANT Create interpolating function for radar data
 %
 % F = radarInterpolant( data, az, range )
 %

@@ -1,4 +1,6 @@
 function [dzmap, dzlim, bins] = dzmap_kyle(bgcolor)
+% DZMAP_KYLE A reflectivity colormap obtained from Kyle Horton
+%
 
 if nargin < 1
     bgcolor = [0 0 0];

@@ -1,7 +1,7 @@
-function [ data, range, az, elev ] = radar2mat( radar, fields, rmax )
-%RADAR2MAT Convert an aligned radar volume to 3d-matrix
+function [ data, range, az, elev ] = radar2mat_legacy( radar, fields, rmax )
+%RADAR2MAT_LEGACY Convert an aligned radar volume to 3d-matrix
 %
-% [ data, range, az, elev ] = radar2mat( radar, fields, rmax )
+% [ data, range, az, elev ] = radar2mat_legacy( radar, fields, rmax )
 %
 % Inputs:
 %   radar     radar struct (must be aligned. See below)
@@ -15,7 +15,11 @@ function [ data, range, az, elev ] = radar2mat( radar, fields, rmax )
 %
 % NOTE: radar must first be aligned. 
 %
-% See also ALIGN_SCAN, CHECK_ALIGNED
+% This function is now deprected. See radar2mat, which replaces it and does
+% not require first calling align_radar
+%
+% SEE ALSO: radar2mat
+
 
 if nargin < 2
     fields = {'dz', 'vr'};

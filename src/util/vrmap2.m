@@ -1,4 +1,5 @@
 function cmap = vrmap2(n)
+% VRMAP2 Improved colormap for radial velocity
   
     red   = rgb2hsv([1 0 0]);
     green = rgb2hsv([0 1 0]);

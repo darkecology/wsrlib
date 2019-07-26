@@ -1,5 +1,5 @@
 function [ x ] = do_alias( x, vmax )
-%ALIAS Alias a value to within interval [-vmax, vmax]
+%DO_ALIAS Alias a value to within interval [-vmax, vmax]
 %
 % x = aliax(x, vmax);
 

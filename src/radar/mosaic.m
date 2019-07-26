@@ -1,4 +1,6 @@
 function [im, minDist, x, y, X, Y, LON, LAT] = mosaic(files, lonlim, latlim, imageSize, rmax, fields, stations, max_elev, dealias)
+% MOSAIC Create a mosaic image from many rada files
+%
 
 if nargin < 9
     dealias = false;

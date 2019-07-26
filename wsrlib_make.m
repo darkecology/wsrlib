@@ -25,3 +25,32 @@ fprintf('\n\nSuccessfully compiled rsl\n\n');
 %%%%%%%%%%%%%%%%%%%%%% 
 addpath(sprintf('%s/rsl2mat', root));
 make_rsl2mat();
+
+%%%%%%%%%%%%%%%%%%%%%%
+% Compile matconvnet
+%%%%%%%%%%%%%%%%%%%%%%
+mex -setup C++
+addpath(fullfile(root, '/lib/matconvnet-1.0-beta24/matlab'));
+vl_compilenn();
+
+%%%%%%%%%%%%%%%%%%%%%%
+% Download the neural net locally if needed
+%%%%%%%%%%%%%%%%%%%%%%
+net_url = 'http://doppler.cs.umass.edu/sharedModels/multielev_sunset_largeset_74.mat';
+net_local_file = sprintf('%s/data/mistnet.mat', root);
+
+if ~exist(net_local_file, 'file')
+    fprintf('Downloading net from %s\n', net_url);
+    try
+        websave(net_local_file, net_url);
+    catch
+        fprintf('Download failed\n');
+        if exist(net_local_file, 'file')
+            fprintf('Deleting local file\n');
+            delete(net_local_file);
+        end
+    end
+end
+
+
+

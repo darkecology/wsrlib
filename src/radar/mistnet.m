@@ -1,7 +1,7 @@
 function [ PREDS, PROBS, classes, y, x, elevs ] = mistnet( radar, varargin )
-% SEGMENT_SCAN Run segmentation net to segment the scan
+% MISTNET Run mistnet to segment the scan
 %
-% [PREDS, PROBS, classes, y, x, elevs] = segment_scan( radar, ... )
+% [PREDS, PROBS, classes, y, x, elevs] = mistnet( radar, ... )
 %
 % Required inputs:
 %    radar            The radar struct (from rsl2mat)

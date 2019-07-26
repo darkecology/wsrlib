@@ -21,3 +21,9 @@
 %   sample_radar_file - Path of sample radar file
 %   struct2csv        - Convert struct array to csv file
 %   vec               - Vectorize a matrix
+%   dzmap_kyle        - A reflectivity colormap obtained from Kyle Horton
+%   dzmap_wct         - Reflectivity colormap copied from NOAA's WCT software
+%   imwrite_gif_nan   - Write indexed image as gif with nan --> transparent 
+%   imwrite_png_nan   - Write indexed image as png with nan --> transparent 
+%   vrmap             - Basic colormap for radial velocity
+%   vrmap2            - Improved colormap for radial velocity

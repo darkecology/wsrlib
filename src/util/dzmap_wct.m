@@ -1,4 +1,5 @@
 function [dzmap, dzlim, bins] = dzmap_wct()
+% DZMAP_WCT Reflectivity colormap copied from NOAA's WCT software
 
 % WCT cm
 rr = fliplr([235 153 255 192 214 255 255 231 255 000 000 000 000 001 000 187 174 150 102 050 000]);

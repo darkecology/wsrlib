@@ -1,7 +1,7 @@
 % VVP
 %
 % Files
-%   alias                  - Alias a value to within interval [-vmax, vmax]
+
 %   compute_loss           - Compute rmse and wrapped normal neg. log likelihood 
 %   divide_gausspot        - Divide two Guassian potentials
 %   epvvp                  - Expectation Propagation (EP)-based volume velocity profile
@@ -18,3 +18,4 @@
 %   pot2moment             - Convert from information form to moment form (i.e. get mean
 %   vvp_dealias            - Dealias a volume using a velocity profile
 %   wrapped_normal_nll     - Compute the wrapped normal negative log likelihood
+%   do_alias               - Alias a value to within interval [-vmax, vmax]

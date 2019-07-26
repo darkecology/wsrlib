@@ -1,11 +1,11 @@
 classdef NAM3D_218 < NAM3D
     
-    % NAM3D_212 Class for NAM data on grid #212
+    % NAM3D_218 Class for NAM data on grid #218
     %
     %   http://nomads.ncdc.noaa.gov/data.php
     %   http://www.nco.ncep.noaa.gov/pmb/docs/on388/tableb.html#GRID218
     %
-    % See also NWP, NARR, NAM3D, NAM3D_212, NAM3D_218
+    % See also NWP, NARR, NAM3D, NAM3D_212
 
     
     methods (Static)

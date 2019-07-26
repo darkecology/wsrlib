@@ -1,5 +1,6 @@
 function imwrite_gif_nan(im, cmap, filename)
-  
+% IMWRITE_GIF_NAN Write indexed image as gif with nan --> transparent 
+
   cmap = [0 0 0;
 	  cmap];
   im = im+1;

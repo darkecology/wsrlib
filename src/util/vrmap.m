@@ -1,5 +1,6 @@
 function cmap = vrmap(n)
-  
+% VRMAP Basic colormap for radial velocity
+
   darkgreen = [ 0 .5  0];
   darkred   = [.5  0  0];  
   white     = [ 1  1  1];
