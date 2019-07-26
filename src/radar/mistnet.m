@@ -51,7 +51,7 @@ function [ PREDS, PROBS, classes, y, x, elevs ] = mistnet( radar, varargin )
 %
 % Note: GPU code untested
 
-DEFAULT_NET_PATH = sprintf('%s/cnn/mistnet.mat', cajun_root());
+DEFAULT_NET_PATH = sprintf('%s/data/mistnet.mat', wsrlib_root());
 
 p = inputParser;
 

@@ -12,6 +12,7 @@ rsl2mat/*.o
 
 # files created when njtbx reads grib files
 data/*.gbx
+data/mistnet.mat
 
 # Emacs backup files
 *~
