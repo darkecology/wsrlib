@@ -2,6 +2,7 @@ key = 'KBGM20130412_022349'; % weather
 key = 'KRTX20100510_062940'; % weather
 key = 'KABX20170902_041920'; % mix
 key = 'KRTX20150514_062414'; % clear
+key = 'KBGM20191008_012807'; % weather
 
 % Read scan from s3
 info = aws_parse(key);
@@ -11,7 +12,7 @@ radar = rsl2mat_s3(key, info.station);
 [PREDS, PROBS, classes, y, x, elevs] = mistnet( radar );
 
 % Render radar data for comparison
-data = radar2mat(radar, 'coords', 'cartesian', 'r_max', 150000, 'dim', 600);
+data = radar2mat(radar, 'elevs', 0.5:4.5, 'coords', 'cartesian', 'r_max', 150000, 'dim', 600);
 
 % Display data and segmentation
 figure(1); clf();
