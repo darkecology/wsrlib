@@ -16,6 +16,10 @@ end
 
 root = wsrlib_root();
 
+% Add matconvnet and run setup() function
+addpath(fullfile(root, '/lib/matconvnet-1.0-beta24/matlab'));
+vl_setupnn();
+
 % Add directories non-recursively when possible to avoid slow commands and
 % bloated MATLAB path
 addpath(root);
