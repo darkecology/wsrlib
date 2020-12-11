@@ -16,7 +16,14 @@ function [R, PHI, THET] = ll2radar(radar_lon, radar_lat, LON, LAT, Z)
 %   ELEV           Array of elevation angle values (only set if Z is
 %                  supplied)
 
+if isscalar(radar_lon)
+    radar_lon = repmat(radar_lon, size(LON));
+    radar_lat = repmat(radar_lat, size(LAT));
+end
+
 [R, PHI] = m_idist(radar_lon, radar_lat, LON, LAT);
+
+
 PHI(PHI > 360) = PHI(PHI > 360) - 360;
 PHI(PHI < 0  ) = PHI(PHI < 0  ) + 360;
 
