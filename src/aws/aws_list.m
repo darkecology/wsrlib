@@ -22,8 +22,11 @@ if status
     error('Something went wrong...');
 end
 
-filedata = loadjson( result );
-
-fileinfo  = cellfun ( @(c) aws_parse( c.Key ), filedata, 'UniformOutput', true );
+if strcmp(strtrim(result), 'null')
+    fileinfo = [];
+else
+    filedata = loadjson( result );
+    fileinfo  = cellfun ( @(c) aws_parse( c.Key ), filedata, 'UniformOutput', true );
+end
 
 end
