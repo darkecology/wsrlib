@@ -58,7 +58,7 @@ p = inputParser;
 addRequired(p, 'radar',    @isstruct);
 
 addParameter(p, 'gpu_device',          []            );
-addParameter(p, 'rain_thresh',       0.50,  @isscalar);
+addParameter(p, 'rain_thresh',       0.45,  @isscalar);
 addParameter(p, 'avg_rain_thresh',   0.45,  @isscalar);
 addParameter(p, 'max_rain_thresh',   1.00,  @isscalar);
 addParameter(p, 'dilate_thresh',     0.20,  @isscalar);
