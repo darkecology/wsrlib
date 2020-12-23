@@ -1,0 +1,185 @@
+diff --git a/rsl.h b/rsl.h
+index b1f5e44..c154917 100644
+--- a/rsl.h
++++ b/rsl.h
+@@ -46,7 +46,7 @@
+ /*            so you shouldn't have to modify anything here.          */
+ /**********************************************************************/
+ #ifndef COLORDIR
+-#define COLORDIR "/home/kelley/trmm/lib/colors"
++#define COLORDIR "/opt/local/lib/colors"
+ #endif
+ 
+ /* These are the color table indexes. See RSL_set/get_color_table. */
+@@ -495,7 +495,7 @@ typedef struct {
+  * rsl_qfield by adding a '1' for each new volume index.
+  */
+ 
+-#define MAX_RADAR_VOLUMES 47
++#define MAX_RADAR_VOLUMES 48
+ 
+ #define DZ_INDEX 0
+ #define VR_INDEX 1
+@@ -544,7 +544,7 @@ typedef struct {
+ #define TV_INDEX 44
+ #define ZV_INDEX 45
+ #define SN_INDEX 46
+-
++#define DC_INDEX 47
+ 
+ /* Prototypes for functions. */
+ /* Alphabetical and grouped by object returned. */
+@@ -858,7 +858,7 @@ static char *RSL_ftype[] = {"DZ", "VR", "SW", "CZ", "ZT", "DR",
+                             "SQ", "VS", "VL", "VG", "VT", "NP",
+                             "HC", "VC", "V2", "S2", "V3", "S3",
+                             "CR", "CC", "PR", "SD", "ZZ", "RD",
+-                            "ET", "EZ", "TV", "ZV", "SN"};
++                            "ET", "EZ", "TV", "ZV", "SN", "DC"};
+ 
+ static  float (*RSL_f_list[])(Range x) = {DZ_F, VR_F, SW_F, CZ_F, ZT_F, DR_F,
+                                           LR_F, ZD_F, DM_F, RH_F, PH_F, XZ_F,
+@@ -867,7 +867,7 @@ static  float (*RSL_f_list[])(Range x) = {DZ_F, VR_F, SW_F, CZ_F, ZT_F, DR_F,
+                                           SQ_F, VS_F, VL_F, VG_F, VT_F, NP_F,
+                                           HC_F, VC_F, VR_F, SW_F, VR_F, SW_F,
+                                           DZ_F, CZ_F, PH_F, SD_F, DZ_F, DZ_F,
+-                                          ZT_F, DZ_F, ZT_F, DZ_F, SN_F};
++                                          ZT_F, DZ_F, ZT_F, DZ_F, SN_F, DZ_F};
+ 
+ static  Range (*RSL_invf_list[])(float x)
+          = {DZ_INVF, VR_INVF, SW_INVF, CZ_INVF, ZT_INVF, DR_INVF, 
+@@ -877,7 +877,7 @@ static  Range (*RSL_invf_list[])(float x)
+             SQ_INVF, VS_INVF, VL_INVF, VG_INVF, VT_INVF, NP_INVF,
+             HC_INVF, VC_INVF, VR_INVF, SW_INVF, VR_INVF, SW_INVF,
+             DZ_INVF, CZ_INVF, PH_INVF, SD_INVF, DZ_INVF, DZ_INVF,
+-            ZT_INVF, DZ_INVF, ZT_INVF, DZ_INVF, SN_INVF};
++            ZT_INVF, DZ_INVF, ZT_INVF, DZ_INVF, SN_INVF, DZ_INVF};
+ #endif
+ /* Secret routines that are quite useful and useful to developers. */
+ void radar_load_date_time(Radar *radar);
+diff --git a/wsr88d.h b/wsr88d.h
+index de996fc..3c08656 100644
+--- a/wsr88d.h
++++ b/wsr88d.h
+@@ -7,7 +7,7 @@
+  * The directory should be the same as the LIBDIR in the makefile.
+  */
+ #ifndef WSR88D_SITE_INFO_FILE
+-#define WSR88D_SITE_INFO_FILE "/home/kelley/trmm/lib/wsr88d_locations.dat"
++#define WSR88D_SITE_INFO_FILE "/opt/local/lib/wsr88d_locations.dat"
+ #endif
+ /*===============================================================*/
+ typedef struct {
+diff --git a/wsr88d_m31.c b/wsr88d_m31.c
+index 3695310..d28253e 100644
+--- a/wsr88d_m31.c
++++ b/wsr88d_m31.c
+@@ -357,12 +357,14 @@ void wsr88d_load_ray_hdr(Wsr88d_ray_m31 *wsr88d_ray, Ray *ray)
+ 
+ int wsr88d_get_vol_index(char* dataname)
+ {
++
+     if (strncmp(dataname, "DREF", 4) == 0) return DZ_INDEX;
+     if (strncmp(dataname, "DVEL", 4) == 0) return VR_INDEX;
+     if (strncmp(dataname, "DSW",  3) == 0) return SW_INDEX;
+     if (strncmp(dataname, "DZDR", 4) == 0) return DR_INDEX;
+     if (strncmp(dataname, "DPHI", 4) == 0) return PH_INDEX;
+     if (strncmp(dataname, "DRHO", 4) == 0) return RH_INDEX;
++    if (strncmp(dataname, "DCFP", 4) == 0) return DC_INDEX;
+ 
+     return -1;
+ }
+@@ -400,6 +402,7 @@ void wsr88d_load_ray_into_radar(Wsr88d_ray_m31 *wsr88d_ray, int isweep,
+     int merging_split_cuts;
+ 
+     merging_split_cuts =  wsr88d_merge_split_cuts_is_set();
++    // FIXME: on newer radar data nfields is too large, causing for loop below to access unallocated memory
+     nfields = wsr88d_ray->ray_hdr.data_block_count - nconstblocks;
+     field_offset = (int *) &wsr88d_ray->ray_hdr.radial_const;
+     do_swap = little_endian();
+
+diff --git a/wsr88d_m31.c b/wsr88d_m31.c
+index d28253e..9ea2ee1 100644
+--- a/wsr88d_m31.c
++++ b/wsr88d_m31.c
+@@ -479,6 +479,10 @@ void wsr88d_load_ray_into_radar(Wsr88d_ray_m31 *wsr88d_ray, int isweep,
+                     radar->v[vol_index]->h.type_str = strdup("Correlation "
+                         "Coefficient (RhoHV)");
+                     break;
++                case DC_INDEX:
++                    radar->v[vol_index]->h.type_str = strdup("Clutter "
++                        "Filter Power removed (CFP)");
++                    break;
+             }
+ 	   
+ 	}
+
+From e84fe88ffca877027b8ccefb8e057b7aec39ac3a Mon Sep 17 00:00:00 2001
+From: adokter <adriaandokter@gmail.com>
+Date: Sat, 19 Sep 2020 12:01:51 -0400
+Subject: [PATCH 3/5] update ray header for build 19.0
+
+---
+ wsr88d_m31.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/wsr88d_m31.c b/wsr88d_m31.c
+index 9ea2ee1..c462138 100644
+--- a/wsr88d_m31.c
++++ b/wsr88d_m31.c
+@@ -78,6 +78,7 @@ typedef struct {
+     unsigned int field4;
+     unsigned int field5;
+     unsigned int field6;
++    unsigned int cfp_const;
+ } Ray_header_m31;  /* Called Data Header Block in RDA/RPG document. */
+ 
+ typedef struct {
+
+From 20d75ffd2e4aa76c12a4c7276d073a88a6de8c6b Mon Sep 17 00:00:00 2001
+From: adokter <adriaandokter@gmail.com>
+Date: Sat, 19 Sep 2020 12:14:55 -0400
+Subject: [PATCH 4/5] hotfix issue #12
+
+---
+ wsr88d_m31.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/wsr88d_m31.c b/wsr88d_m31.c
+index c462138..b7e9cc4 100644
+--- a/wsr88d_m31.c
++++ b/wsr88d_m31.c
+@@ -405,10 +405,10 @@ void wsr88d_load_ray_into_radar(Wsr88d_ray_m31 *wsr88d_ray, int isweep,
+     merging_split_cuts =  wsr88d_merge_split_cuts_is_set();
+     // FIXME: on newer radar data nfields is too large, causing for loop below to access unallocated memory
+     nfields = wsr88d_ray->ray_hdr.data_block_count - nconstblocks;
++    if(nfields > 6) nfields=6; /* this effectively skips reading of CFP data FIXME */
+     field_offset = (int *) &wsr88d_ray->ray_hdr.radial_const;
+     do_swap = little_endian();
+     iray = wsr88d_ray->ray_hdr.azm_num - 1;
+-
+     for (ifield=0; ifield < nfields; ifield++) {
+ 	field_offset++;
+ 	data_index = *field_offset;
+
+From 3326a8a1a0e3f598ed2625abe949136a77aecbb8 Mon Sep 17 00:00:00 2001
+From: adokter <adriaandokter@gmail.com>
+Date: Sat, 19 Sep 2020 12:18:10 -0400
+Subject: [PATCH 5/5] wait with changing ray header until CFP implementation
+
+---
+ wsr88d_m31.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/wsr88d_m31.c b/wsr88d_m31.c
+index b7e9cc4..979880d 100644
+--- a/wsr88d_m31.c
++++ b/wsr88d_m31.c
+@@ -78,7 +78,7 @@ typedef struct {
+     unsigned int field4;
+     unsigned int field5;
+     unsigned int field6;
+-    unsigned int cfp_const;
++    /* unsigned int cfp_const; to be added for CFP data in build 19.0 FIXME */
+ } Ray_header_m31;  /* Called Data Header Block in RDA/RPG document. */
+ 
+ typedef struct {

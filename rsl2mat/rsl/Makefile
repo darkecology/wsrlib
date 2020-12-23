@@ -16,6 +16,7 @@ all:
 #	cd $(SUBDIR) &&	patch -p1 < ../patch9.txt
 	cd $(SUBDIR) &&	patch -p1 < ../patch10.txt
 	cd $(SUBDIR) &&	patch -p1 < ../patch11.txt
+	cd $(SUBDIR) &&	patch -p1 < ../patch12.txt  # From https://patch-diff.githubusercontent.com/raw/adokter/rsl/pull/13.patch
 	cd $(SUBDIR) && (CFLAGS="-g" ./configure --prefix=$(DIR)/install)
 	cd $(SUBDIR) && ( make; make install )
 
