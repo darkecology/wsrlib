@@ -43,7 +43,6 @@ function [ data, x1, x2, x3, fields ] = radar2mat( radar, varargin )
 
 FLAG_START = 131067;
 
-
 DEFAULT_FIELDS = {'all'};
 DEFAULT_COORDS = 'polar';
 DEFAULT_R_MIN  = 2125;
@@ -56,6 +55,7 @@ DEFAULT_ELEVS  = [];
 DEFAULT_INTERP_METHOD = 'nearest';
 DEFAULT_OUTPUT_FORMAT = 'struct';
 DEFAULT_YDIRECTION = 'xy';
+DEFAULT_MAX_INTERP_DIST = 1.0; % maximum interpolation distance for elevation angles
 
 p = inputParser;
 
@@ -72,6 +72,7 @@ addParameter(p, 'sweeps',  DEFAULT_SWEEPS, @(x) validateattributes(x,{'numeric'}
 addParameter(p,  'elevs',   DEFAULT_ELEVS, @(x) validateattributes(x,{'numeric'},{'nonempty','positive'}));
 addParameter(p,  'interp_method',   DEFAULT_INTERP_METHOD, @(x) ischar(x));
 addParameter(p,  'output_format',   DEFAULT_OUTPUT_FORMAT, @(x) any(validatestring(x,{'struct','cell'})));
+addParameter(p,  'max_interp_dist', DEFAULT_MAX_INTERP_DIST, @(x) isscalar(x) && x >= 0);
 addParameter(p,  'use_ground_range',   true, @islogical);
 addParameter(p, 'ydirection',  DEFAULT_YDIRECTION, @(x) any(validatestring(x,{'ij','xy'})));
 
@@ -116,13 +117,31 @@ end
 % Find the indices of the desired sweeps
 available_elevs = [radar.(fields{1}).sweeps.elev];
 if ~isempty(params.elevs)
-    % For each requested elevation (in params.elevs), find index of nearest 
-    % available elevation (in elevs)
-    inds = 1:length(available_elevs);
-    sweeps = interp1(available_elevs, inds, params.elevs, 'nearest', 'extrap'); 
-    if any(isnan(sweeps))
-        warning('Unable to match requested sweeps, removing unmatched sweeps.')
-        sweeps = sweeps(~isnan(sweeps));
+    if length(available_elevs) == 1
+        if length(params.elevs) == 1
+            sweeps = 1;
+        else
+            error('Only one sweep available: cannot interpolate');
+        end
+    else
+        % For each requested elevation (in params.elevs), find index of nearest 
+        % available elevation (in elevs)
+        inds = 1:length(available_elevs);
+        sweeps = interp1(available_elevs, inds, params.elevs, 'nearest', 'extrap'); 
+        if any(isnan(sweeps))
+            warning('Unable to match requested sweeps, removing unmatched sweeps.')
+            sweeps = sweeps(~isnan(sweeps));
+        end
+    end
+    
+    % Check if any selected sweeps exceed the maximum interpolation distance
+    interp_dist = abs(available_elevs(sweeps)) - params.elevs;
+    is_bad = interp_dist > params.max_interp_dist;
+    if any(is_bad)
+       error('Failed to match elevations %s. Available elevs are %s, max_dist is %.2f.', ...
+           mat2str(params.elevs(is_bad)), ...
+           mat2str(available_elevs), ...
+           params.max_interp_dist); 
     end
 end
 
