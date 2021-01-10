@@ -1,0 +1,129 @@
+--- rsl-v1.50/wsr88d.c	2021-01-09 20:06:27.000000000 -0500
++++ wsr88d.c	2021-01-09 20:11:25.000000000 -0500
+@@ -471,21 +471,21 @@
+   end_of_volume = 0;
+ /* Step 2. */
+   while ( ! end_of_volume ) {
+     if ((wsr88d_ray.msg_type & 15) != 1) {
+       /*
+       fprintf(stderr,"SKIPPING (amid a sweep) packet: type %d, "
+             "radial status %d\n",
+              wsr88d_ray.msg_type, wsr88d_ray.ray_status);
+        */
+ 
+-    } else {
++    } else if (wsr88d_ray.ray_num > 0 && wsr88d_ray.ray_num < MAX_RAYS_IN_SWEEP) {
+       /* Load this ray into the sweep. */
+       ray_num = wsr88d_ray.ray_num;
+       /* Double check against #  records we've seen. */
+       /* It is possible that a reset occurs and we begin to overwrite
+        * previously loaded rays.  I've seen this occur, rarely, in the
+        * WSR88D data.  I must trust 'ray_num'.
+        */
+       /*
+       if (nrec+1 != ray_num) {
+         fprintf(stderr, "Data says %d is ray_num, but, I've seen %d "
+@@ -501,25 +501,27 @@
+     if (n > 0) nrec++;
+     end_of_volume = wsr88d_ray.ray_status == 2 ||
+                     wsr88d_ray.ray_status == 4 ||
+                     n <= 0;
+   }
+ 
+   /* Process the last packet of the input data. */
+   if ((wsr88d_ray.ray_status == 2 || wsr88d_ray.ray_status == 4) &&
+ 	  (wsr88d_ray.msg_type & 15) == 1) {
+     /* Load this ray into the sweep. */
+-    ray_num = wsr88d_ray.ray_num;
+-    if (wsr88d_sweep->ray[ray_num] == NULL) {
+-      wsr88d_sweep->ray[ray_num] = (Wsr88d_ray *) malloc (sizeof(Wsr88d_ray));
++    if (wsr88d_ray.ray_num >= 0 && wsr88d_ray.ray_num < MAX_RAYS_IN_SWEEP) {
++      ray_num = wsr88d_ray.ray_num;
++      if (wsr88d_sweep->ray[ray_num] == NULL) {
++        wsr88d_sweep->ray[ray_num] = (Wsr88d_ray *) malloc (sizeof(Wsr88d_ray));
++      }
++      memcpy(wsr88d_sweep->ray[ray_num], &wsr88d_ray, sizeof(Wsr88d_ray));
+     }
+-    memcpy(wsr88d_sweep->ray[ray_num], &wsr88d_ray, sizeof(Wsr88d_ray));
+   }
+ 
+   /* Just to be safe, clear all ray pointers left in this sweep to
+    * the maximum MAX_RAYS_IN_SWEEP.  This is required when the 
+    * wsr88d_sweep is reused and not cleared.
+    */
+   free_and_clear_sweep(wsr88d_sweep, ray_num+1, MAX_RAYS_IN_SWEEP);
+   
+ /*
+   fprintf(stderr,"Processed %d records for elevation number %d\n",
+@@ -641,38 +643,46 @@
+   fprintf(stderr," vel_ptr = %d  #g = %d, ", vel_ptr, num_vel_gates);
+   fprintf(stderr,"spec_ptr = %d  #g = %d, ", spec_ptr, num_spec_gates);
+   fprintf(stderr,"res_flag = %d\n", res_flag);
+ */
+ 
+   if (THE_DATA_WANTED == WSR88D_DZ) {
+     /* do the reflectivity data  (dbZ)*/
+     if (refl_ptr+num_ref_gates > 2300) 
+       fprintf(stderr, "WARNING: # refl index (%d) exceeds maximum (2300)\n",
+               refl_ptr+num_ref_gates);
++    else if (num_ref_gates < 0 )
++      fprintf(stderr, "WARNING: negative # refl_gates (%d)\n", num_ref_gates);
++    else if (num_ref_gates > 0 && refl_ptr < 0 )
++      fprintf(stderr, "WARNING: bad refl pointer (%d)\n", refl_ptr);
+     else {
+     for(i=0; i<num_ref_gates; i++) {
+       ival = ray->data[refl_ptr+i];
+       if(ival > 1)
+           v[i] = (((ival-2.0)/2.0)-32.0);
+       else if (ival == 1) 
+         v[i] = WSR88D_RFVAL;
+       else /* ival = 0 */
+         v[i] = WSR88D_BADVAL;
+     }
+     *n = num_ref_gates;
+     }
+ 
+   } else if (THE_DATA_WANTED == WSR88D_VR) {
+     /* do the velocity data  (M/S) */
+     if (vel_ptr+num_vel_gates > 2300) 
+       fprintf(stderr, "WARNING: # vel index (%d) exceeds maximum (2300)\n",
+               vel_ptr+num_vel_gates);
++    else if (num_vel_gates < 0 )
++      fprintf(stderr, "WARNING: negative # vel gates (%d)\n", num_vel_gates);
++    else if (num_vel_gates > 0 && vel_ptr < 0 )
++      fprintf(stderr, "WARNING: bad vel pointer (%d)\n", vel_ptr);
+     else {
+     for(i=0; i<num_vel_gates;i++)   {
+       ival = ray->data[vel_ptr+i];
+       if(ival > 1)
+         if (res_flag == 2) /* High resolution: 0.5 m/s */
+           v[i] = (((ival-2.0)/2.0)-63.5);
+         else
+           v[i] = ((ival-2.0)-127.0);
+       else if (ival == 1) 
+         v[i] = WSR88D_RFVAL;
+@@ -680,20 +690,24 @@
+         v[i] = WSR88D_BADVAL;
+     }
+     *n = num_vel_gates;
+     }
+     
+   } else if (THE_DATA_WANTED == WSR88D_SW) {
+     /* now do the spectrum width data (M/S)*/
+     if (spec_ptr+num_spec_gates > 2300) 
+       fprintf(stderr, "WARNING: # spec index (%d) exceeds maximum (2300)\n",
+               spec_ptr+num_spec_gates);
++    else if (num_spec_gates < 0 )
++      fprintf(stderr, "WARNING: negative # num spec gates (%d)\n", num_spec_gates);
++    else if (num_spec_gates > 0 && spec_ptr < 0 )
++      fprintf(stderr, "WARNING: bad spec pointer (%d)\n", spec_ptr);
+     else {
+     for(i=0;i<num_spec_gates;i++) {
+       ival = ray->data[spec_ptr+i];
+         if(ival > 1)
+           v[i] = (((ival-2)/2.0)-63.5);
+         else if (ival == 1) 
+           v[i] = WSR88D_RFVAL;
+         else /* ival = 0 */
+           v[i] = WSR88D_BADVAL;
+     }
