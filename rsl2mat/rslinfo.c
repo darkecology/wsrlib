@@ -34,7 +34,7 @@ int main(int argc, char **argv)
     //radar = RSL_anyformat_to_radar(infile, station);
     if (radar == NULL) 
     {
-	fprintf(stderr, "Failed to read radar file");
+	fprintf(stderr, "Failed to read radar file\n");
 	exit(2);
     }
 

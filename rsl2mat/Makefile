@@ -94,7 +94,8 @@ RSL ?=$(CWD)/rsl/install
 MEX = $(MATLABROOT)/bin/mex
 EXT = $(shell $(MATLABROOT)/bin/mexext)
 
-CC ?= gcc
+CC ?= cc
+
 
 # --------------------------------------------------------------------
 # Set flags: mex, compiler, and linker
@@ -156,8 +157,5 @@ clean:
 	-rm rslinfo.o
 	-rm rslinfo
 
-rslinfo: rslinfo.o
-	$(CC) -Wl,-rpath,$(RSL)/lib -L$(RSL)/lib -lrsl rslinfo.o -o $@
-
-rslinfo.o: rslinfo.c
-	$(CC) -g -DDEBUG -c -I$(RSL)/include rslinfo.c -o $@
+rslinfo: rslinfo.c
+	$(CC) -g -DDEBUG -Wl,-rpath,$(RSL)/lib -L$(RSL)/lib -lrsl -I$(RSL)/include rslinfo.c -o $@
