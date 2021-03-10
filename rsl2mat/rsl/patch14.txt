@@ -1,0 +1,26 @@
+--- rsl-v1.50/wsr88d_m31.c	2021-03-10 16:34:47.000000000 -0500
++++ wsr88d_m31.c	2021-03-10 16:34:43.000000000 -0500
+@@ -583,21 +583,22 @@
+     memset(&wsr88d_ray, 0, sizeof(Wsr88d_ray_m31)); /* Initialize to be safe. */
+ 
+     while (! end_of_vos) {
+ 	if (msghdr.msg_type == 31) {
+ 	    if (little_endian()) wsr88d_swap_m31_hdr(&msghdr);
+ 
+ 	    /* Get size of the remainder of message.  The given size is in
+ 	     * halfwords; convert it to bytes.
+ 	     */
+ 	    msg_size = (int) msghdr.msg_size * 2 - msg_hdr_size;
+-
++            if (msg_size < 0) return NULL;
++            
+ 	    n = read_wsr88d_ray_m31(wf, msg_size, &wsr88d_ray);
+ 	    if (n <= 0) return NULL;
+ 	    raynum = wsr88d_ray.ray_hdr.azm_num;
+ 	    if (raynum > MAXRAYS_M31) {
+ 		fprintf(stderr,"Error: raynum = %d, exceeds MAXRAYS_M31"
+ 			" (%d)\n", raynum, MAXRAYS_M31);
+ 		fprintf(stderr,"isweep = %d\n", isweep);
+ 		RSL_free_radar(radar);
+ 		return NULL;
+ 	    }
