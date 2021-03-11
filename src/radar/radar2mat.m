@@ -23,10 +23,14 @@ function [ data, x1, x2, x3, fields ] = radar2mat( radar, varargin )
 %                the desired elevations
 %   output_format  cell | struct
 %   ydirection   'xy' | 'ij'. This specifies whether the y coordinates 
-%                  of pixels are decreasing ('ij') or increasing ('xy') 
-%                  along the first dimension of the array. The default
-%                  is 'xy', which makes the output compatible with
-%                  griddedInterpolant.
+%                of pixels are decreasing ('ij') or increasing ('xy') 
+%                along the first dimension of the array. The default
+%                is 'xy', which makes the output compatible with
+%                griddedInterpolant.
+%   interp_method: Interpolation method for use within radarInterpolant.
+%                Default is 'nearest'.
+%   max_interp_dist: Tolerance in degrees for matching requested elevation 
+%                angles (defualt: 1.0)
 %
 % Outputs:
 %   data         struct or cell array of 3D data matrices of size m x n x p
