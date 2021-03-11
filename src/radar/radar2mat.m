@@ -36,10 +36,16 @@ function [ data, x1, x2, x3, fields ] = radar2mat( radar, varargin )
 %
 % For polar coordinates the dimension order is range, az, elev
 %
-% For Cartesian, the dimension order is y, x, z. The y dimension is
-% "flipped" to the y coordinates are in descending order, so it displays
-% naturally as an image.
+% For Cartesian data, the dimension order is y, x, z, with the y dimension 
+% stored in "gridded data" format as opposed to "image format". That is,
+% the first row has the smallest y coordinate. This makes it compatible 
+% with griddedInterpolant but an extra step is required to view it as an
+% image in the correct orientation. For plotting within MATLAB, use "axis
+% xy" to set the axes to the correct orientation. For saving as an image,
+% either set 'ydirection' to 'ij', or use the flip function to flip the
+% first dimension order yourself.
 %
+% See also MAT2MAT, GRIDDEDINTERPOLANT, FLIP, AXIS
 
 FLAG_START = 131067;
 
@@ -101,62 +107,61 @@ end
 n_fields = numel(fields);
 data = cell(n_fields, 1);
 
+
 % Preprocess each product to preserve one sweep per elevation angle
 for f = 1:n_fields
     radar.(fields{f}).sweeps = unique_elev_sweeps(radar, fields{f});
 end
 
-% Get list of requested sweep indices
-if isempty(params.sweeps)
-    sweeps = 1:numel([radar.(fields{1}).sweeps]);
+% Get list of requested elevation angles. Use params.elevs if set,
+% otherwise select from the elevation angles of the first requested field.
+if ~isempty(params.elevs)
+    requested_elevs = params.elevs;
 else
-    sweeps = params.sweeps;
+    % all available elevations
+    requested_elevs = [radar.(fields{1}).sweeps.elev];
+    
+    % subselect if particular sweep indices are requested
+    if ~isempty(params.sweeps)
+        requested_elevs = requested_elevs(params.sweeps);
+    end
 end
 
+% Select sweeps for each field that are as close as possible to desired
+% elevation
+sweeps = cell(n_fields, 1); 
+for f = 1:n_fields
 
-% Find the indices of the desired sweeps
-available_elevs = [radar.(fields{1}).sweeps.elev];
-if ~isempty(params.elevs)
+    available_elevs = [radar.(fields{f}).sweeps.elev];
+    
     if length(available_elevs) == 1
-        if length(params.elevs) == 1
-            sweeps = 1;
+        if length(requested_elevs) == 1
+            sweeps{f} = 1;
         else
             error('Only one sweep available: cannot interpolate');
         end
     else
-        % For each requested elevation (in params.elevs), find index of nearest 
-        % available elevation (in elevs)
+        % For each requested elevation, find index of nearest available elevation
         inds = 1:length(available_elevs);
-        sweeps = interp1(available_elevs, inds, params.elevs, 'nearest', 'extrap'); 
-        if any(isnan(sweeps))
+        sweeps{f} = interp1(available_elevs, inds, requested_elevs, 'nearest', 'extrap');
+        if any(isnan(sweeps{f}))
             warning('Unable to match requested sweeps, removing unmatched sweeps.')
-            sweeps = sweeps(~isnan(sweeps));
+            sweeps{f} = sweeps{f}(~isnan(sweeps{f}));
         end
     end
     
     % Check if any selected sweeps exceed the maximum interpolation distance
-    interp_dist = abs(available_elevs(sweeps)) - params.elevs;
+    interp_dist = abs(available_elevs(sweeps{f})) - requested_elevs;
     is_bad = interp_dist > params.max_interp_dist;
     if any(is_bad)
-       error('Failed to match elevations %s. Available elevs are %s, max_dist is %.2f.', ...
-           mat2str(params.elevs(is_bad)), ...
-           mat2str(available_elevs), ...
-           params.max_interp_dist); 
+        error('Failed to match elevations %s. Available elevs are %s, max_dist is %.2f.', ...
+            mat2str(requested_elevs(is_bad)), ...
+            mat2str(available_elevs), ...
+            params.max_interp_dist);
     end
 end
 
-% Check that the same elevation angles are available for all products
-for f=1:n_fields
-    my_elevs = [radar.(fields{f}).sweeps.elev];
-    if numel(my_elevs) ~= numel(available_elevs)
-        error('Product %s has different number of sweeps\n', fields{f});
-    end
-    if any(abs([radar.(fields{f}).sweeps.elev] - available_elevs) > 0.2)
-        error('Product %s has different elevations angles\n', fields{f});
-    end
-end
-
-n_sweeps = numel(sweeps);
+n_sweeps = numel(requested_elevs);
 
 % Construct R and PHI, the range and azimuth coordinates of the query 
 % points. These are the same for each product and each sweep
@@ -173,7 +178,7 @@ switch params.coords
         % Coordinates of three dimensions in output array
         x1 = r;
         x2 = phi;
-        x3 = available_elevs(sweeps);
+        x3 = available_elevs(sweeps{f});
         
     case 'cartesian'
         
@@ -192,7 +197,7 @@ switch params.coords
         % Coordinates of three dimensions in output array
         x1 = y;
         x2 = x;
-        x3 = available_elevs(sweeps);
+        x3 = available_elevs(sweeps{f});
                 
     otherwise
         error('Bad coordinate system')
@@ -208,7 +213,7 @@ for f = 1:n_fields
     for i = 1:n_sweeps
         
         % Extract data  
-        sweep_num = sweeps(i);
+        sweep_num = sweeps{f}(i);
         sweep = radar.(fields{f}).sweeps(sweep_num);
         [az, range] = get_az_range(sweep);
         vals = sweep.data;

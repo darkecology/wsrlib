@@ -3,9 +3,10 @@
 %key = '2017/09/18/KTBW/KTBW20170918_023500_V06'; % no rain
 %key = '2017/04/20/KBGM/KBGM20170420_024713_V06'; % rain
 key = '2017/04/21/KBGM/KBGM20170421_025222_V06'; % rain
+%key = 'KBUF20190101_160811';
 station = 'KBGM';
 
-scan = aws_get_scan(key);
+scan = aws_get_scan(key, '.');
 radar = rsl2mat(scan, station);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -32,6 +33,7 @@ figure(2);
 imagesc(x, y, cartesian_data.dz(:,:,3:5));
 xlabel('x (meters)');
 ylabel('y (meters)');
+axis xy;
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -84,7 +86,8 @@ end
 [data, y, x, elev] = radar2mat(radar, ...
     'coords', 'cartesian', ...
     'elevs',  ELEVS, ..., 
-    'dim', DIM );
+    'dim', DIM, ...
+    'ydirection', 'ij' );
 
 % Visualize
 figure()
