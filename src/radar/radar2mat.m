@@ -133,12 +133,13 @@ end
 
 % Select sweeps for each field that are as close as possible to desired
 % elevation
-sweeps = cell(n_fields, 1); 
+sweeps = cell(n_fields, 1);
+available_elevs = cell(n_fields, 1);
 for f = 1:n_fields
 
-    available_elevs = [radar.(fields{f}).sweeps.elev];
+    available_elevs{f} = [radar.(fields{f}).sweeps.elev];
     
-    if length(available_elevs) == 1
+    if length(available_elevs{f}) == 1
         if length(requested_elevs) == 1
             sweeps{f} = 1;
         else
@@ -146,8 +147,8 @@ for f = 1:n_fields
         end
     else
         % For each requested elevation, find index of nearest available elevation
-        inds = 1:length(available_elevs);
-        sweeps{f} = interp1(available_elevs, inds, requested_elevs, 'nearest', 'extrap');
+        inds = 1:length(available_elevs{f});
+        sweeps{f} = interp1(available_elevs{f}, inds, requested_elevs, 'nearest', 'extrap');
         if any(isnan(sweeps{f}))
             warning('Unable to match requested sweeps, removing unmatched sweeps.')
             sweeps{f} = sweeps{f}(~isnan(sweeps{f}));
@@ -155,15 +156,22 @@ for f = 1:n_fields
     end
     
     % Check if any selected sweeps exceed the maximum interpolation distance
-    interp_dist = abs(available_elevs(sweeps{f})) - requested_elevs;
+    interp_dist = abs(available_elevs{f}(sweeps{f})) - requested_elevs;
     is_bad = interp_dist > params.max_interp_dist;
     if any(is_bad)
         error('Failed to match elevations %s. Available elevs are %s, max_dist is %.2f.', ...
             mat2str(requested_elevs(is_bad)), ...
-            mat2str(available_elevs), ...
+            mat2str(available_elevs{f}), ...
             params.max_interp_dist);
     end
 end
+
+% Set output elevations using dz if available, else first field
+f = find(strcmp('dz', fields));
+if isempty(f)
+    f = 0;
+end
+output_elevs = available_elevs{f}(sweeps{f});
 
 n_sweeps = numel(requested_elevs);
 
@@ -182,7 +190,7 @@ switch params.coords
         % Coordinates of three dimensions in output array
         x1 = r;
         x2 = phi;
-        x3 = available_elevs(sweeps{f});
+        x3 = output_elevs;
         
     case 'cartesian'
         
@@ -201,7 +209,7 @@ switch params.coords
         % Coordinates of three dimensions in output array
         x1 = y;
         x2 = x;
-        x3 = available_elevs(sweeps{f});
+        x3 = output_elevs;
                 
     otherwise
         error('Bad coordinate system')
