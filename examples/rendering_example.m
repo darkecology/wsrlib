@@ -4,6 +4,9 @@
 %key = '2017/04/20/KBGM/KBGM20170420_024713_V06'; % rain
 key = '2017/04/21/KBGM/KBGM20170421_025222_V06'; % rain
 %key = 'KBUF20190101_160811';
+key = 'KMLB20020406_123241';
+key = 'KMLB20090414_103237_V03';
+key = 'KLIX19971216_132006';
 station = 'KBGM';
 
 scan = aws_get_scan(key, '.');
@@ -14,7 +17,7 @@ radar = rsl2mat(scan, station);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 [ polar_data, range, az, elev ] = radar2mat( radar, ...
     'coords', 'polar', ...
-    'fields', {'dz', 'vr', 'rh'});
+    'fields', {'dz', 'vr', 'sw'});
 
 figure(1);
 imagesc(az, range, polar_data.dz(:,:,3:5));
@@ -27,7 +30,7 @@ ylabel('Range (km)');
 
 [ cartesian_data, x, y, elev ] = radar2mat( radar, ...
     'coords', 'cartesian', ...
-    'fields', {'dz', 'vr', 'rh'});
+    'fields', {'dz', 'vr', 'sw'});
 
 figure(2);
 imagesc(x, y, cartesian_data.dz(:,:,3:5));
