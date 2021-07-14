@@ -16,16 +16,17 @@ figure(2);
 plot_mask(MASK, range, az, elev, 'Static clutter');
 
 figure(3);
-[MASK, range, az, elev] = yearly_clutter_mask(station, 2020, 'low');
-plot_mask(MASK, range, az, elev, 'Clutter 2010');
+[MASK, range, az, elev] = yearly_clutter_mask(station, year, 'low');
+plot_mask(MASK, range, az, elev, sprintf('Clutter %d', year));
 
 function plot_mask(MASK, range, az, elev, name)
-    rmax = 150000;
     num_elev = length(elev);
     for i = 1:num_elev
-       subplot(num_elev, 1, i);       
-       [im, x, y] = mat2cart(double(MASK(:,:,i)), az, range, 600, rmax, 'nearest');
-       image(x, y, int32(im));
+       subplot(num_elev, 1, i);
+       image(az, range, MASK(:,:,i));       
+       %rmax = 150000;
+       %[im, x, y] = mat2cart(double(MASK(:,:,i)), az, range, 600, rmax, 'nearest');
+       %image(x, y, int32(im));
        title(sprintf('%s: %.2f degrees', name, elev(i)));
        colormap(lines(2));
     end

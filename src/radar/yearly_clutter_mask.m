@@ -35,9 +35,15 @@ end
 s = load(filename);
 MASK = s.MASK;
 
-% Cartesian interpolation
-az = linspace(1, 360, 360);
-range = 500:500:150000;
-elev = 0.5:4.5;
-
+switch name
+    case {'low', 'high'}
+        % Cartesian interpolation
+        az = linspace(1, 360, 360);
+        range = 500:500:150000;
+        elev = 0.5:4.5;
+    case {'legacy'}
+        az = linspace(1, 360, 360);
+        range = linspace(500, 37500, 75);
+        elev = 0.5:4.5;
+end
 end
