@@ -1,9 +1,11 @@
 function [ avg_z, cnt ] = vpr( dz, height, height_step, height_max)
 %VPR Vertical profile of reflectivity
 %
-% [ avg_z, cnt ] = vpr( dz, height, height_step, height_max)
+%  [avg_z, cnt] = vpr( dz, height, height_step, height_max)
 %
-
+% Compute vertical profile of reflectivity assigning sample volumes to bins
+% based on their height and computing average of all non-nan reflectivity
+% values (on linear scale) within bin.
 
 if nargin < 3
     height_step = 100;
