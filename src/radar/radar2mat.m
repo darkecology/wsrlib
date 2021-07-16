@@ -65,7 +65,7 @@ DEFAULT_ELEVS  = [];
 DEFAULT_INTERP_METHOD = 'nearest';
 DEFAULT_OUTPUT_FORMAT = 'struct';
 DEFAULT_YDIRECTION = 'xy';
-DEFAULT_MAX_INTERP_DIST = 1.0; % maximum interpolation distance for elevation angles
+DEFAULT_MAX_INTERP_DIST = 0.5; % maximum interpolation distance for elevation angles
 
 p = inputParser;
 
@@ -159,7 +159,7 @@ for f = 1:n_fields
     interp_dist = abs(available_elevs{f}(sweeps{f}) - requested_elevs);
     is_bad = interp_dist > params.max_interp_dist;
     if any(is_bad)
-        error('Failed to match elevations %s. Available elevs are %s, max_dist is %.2f.', ...
+        error('Failed to match elevations %s. Available elevs are %s, max_interp_dist is %.2f.', ...
             mat2str(requested_elevs(is_bad)), ...
             mat2str(available_elevs{f}), ...
             params.max_interp_dist);
