@@ -237,14 +237,20 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
 
     int nvolumes = radar->h.nvolumes;
 
-    if (nvolumes > DZ_INDEX && radar->v[DZ_INDEX]) 
+    if (nvolumes > DZ_INDEX && radar->v[DZ_INDEX])
 	mxSetField(radarStruct, 0, "dz", volumeToStruct(radar, radar->v[DZ_INDEX], opt));
-
+    else
+        ERR("no reflectivity data");
+    
     if (nvolumes > VR_INDEX && radar->v[VR_INDEX]) 
 	mxSetField(radarStruct, 0, "vr", volumeToStruct(radar, radar->v[VR_INDEX], opt));
+    else
+        ERR("no velocity data");
 
     if (nvolumes > SW_INDEX && radar->v[SW_INDEX]) 
 	mxSetField(radarStruct, 0, "sw", volumeToStruct(radar, radar->v[SW_INDEX], opt));
+    else
+        ERR("no spectrum width data");
 
     if (nvolumes > DR_INDEX && radar->v[DR_INDEX]) 
 	mxSetField(radarStruct, 0, "dr", volumeToStruct(radar, radar->v[DR_INDEX], opt));
