@@ -156,7 +156,7 @@ for f = 1:n_fields
     end
     
     % Check if any selected sweeps exceed the maximum interpolation distance
-    interp_dist = abs(available_elevs{f}(sweeps{f})) - requested_elevs;
+    interp_dist = abs(available_elevs{f}(sweeps{f}) - requested_elevs);
     is_bad = interp_dist > params.max_interp_dist;
     if any(is_bad)
         error('Failed to match elevations %s. Available elevs are %s, max_dist is %.2f.', ...
