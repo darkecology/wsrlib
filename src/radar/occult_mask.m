@@ -1,5 +1,5 @@
 function [MASK, range, az, elev] = occult_mask(station, name)
-%STATIC_CLUTTER_MASK Get static clutter mask for station
+%OCCULT_MASK Get beam occultation mask for station
 %
 % [MASK, range, az, elev] = occult_mask(station)
 % [MASK, range, az, elev] = occult_mask(station, name)
