@@ -16,7 +16,7 @@ figure(2);
 plot_mask(MASK, range, az, elev, 'Static clutter');
 
 figure(3);
-[MASK, range, az, elev] = yearly_clutter_mask(station, year, 'low');
+[MASK, range, az, elev] = yearly_clutter_mask(station, year, 'more');
 plot_mask(MASK, range, az, elev, sprintf('Clutter %d', year));
 
 function plot_mask(MASK, range, az, elev, name)
