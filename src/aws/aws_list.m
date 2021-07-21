@@ -1,8 +1,13 @@
-function [ fileinfo ] = aws_list( station, year, month, day, hour )
+function [ fileinfo ] = aws_list( station, year, month, day, hour, varargin )
 %AWS_LIST Get a list of archive files 
 %
 % [ files ] = aws_list( year, month, day, station )
 %
+
+p = inputParser;
+addParameter(p, 'max_items', 10000, @isnumeric);
+parse(p, varargin{:});
+params = p.Results;
 
 s3path = sprintf('%04d/%02d/%02d/%04s', ...
     year, month, day, station );
@@ -14,8 +19,7 @@ if nargin >= 5
         s3path, station, year, month, day, hour);
 end
 
-
-cmd = sprintf('aws s3api list-objects --bucket noaa-nexrad-level2 --prefix %s --query ''Contents[].{Key: Key, Size: Size}'' --output json', s3path);
+cmd = sprintf('aws s3api list-objects --bucket noaa-nexrad-level2 --prefix %s --max-items %d --query ''Contents[].{Key: Key, Size: Size}'' --output json', s3path, params.max_items);
 
 [status, result] = system( cmd );
 if status
