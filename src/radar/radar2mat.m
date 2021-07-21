@@ -65,7 +65,7 @@ DEFAULT_ELEVS  = [];
 DEFAULT_INTERP_METHOD = 'nearest';
 DEFAULT_OUTPUT_FORMAT = 'struct';
 DEFAULT_YDIRECTION = 'xy';
-DEFAULT_MAX_INTERP_DIST = 0.5; % maximum interpolation distance for elevation angles
+DEFAULT_MAX_INTERP_DIST = 0.75; % maximum interpolation distance for elevation angles
 
 p = inputParser;
 
