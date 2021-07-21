@@ -49,7 +49,7 @@ s = load(filename);
 MASK = s.MASK;
 
 switch name
-    case {'low', 'high'}
+    case {'more', 'less'}
         % Cartesian interpolation
         az = linspace(1, 360, 360);
         range = 500:500:150000;
