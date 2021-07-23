@@ -322,7 +322,10 @@ mxArray* volumeToStruct(Radar *radar, Volume* vol, Options opt)
     for (int i = 0; i < vol->h.nsweeps; i++)
     {
 	Sweep *sweep = vol->sweep[i];
-	if (sweep->h.nrays > 0 && sweep->ray[0]->h.fix_angle <= opt.max_elev && sweep->ray[0]->h.fix_angle > 0) 
+	if (sweep &&
+            sweep->h.nrays > 0 &&
+            sweep->ray[0]->h.fix_angle <= opt.max_elev &&
+            sweep->ray[0]->h.fix_angle > 0) 
 	    n_output_sweeps++;
     }
     n_output_sweeps = MIN(n_output_sweeps, opt.nsweeps);
@@ -359,7 +362,10 @@ mxArray* volumeToStruct(Radar *radar, Volume* vol, Options opt)
     {
 	Sweep *sweep = vol->sweep[j];
 	
-	if (sweep->h.nrays > 0 && sweep->ray[0]->h.fix_angle <= opt.max_elev && sweep->ray[0]->h.fix_angle > 0) 
+	if (sweep &&
+            sweep->h.nrays > 0 &&
+            sweep->ray[0]->h.fix_angle <= opt.max_elev &&
+            sweep->ray[0]->h.fix_angle > 0) 
 	{
 	    mxSetField(sweepStructs, i, "elev",         mxCreateDoubleScalar(sweep->h.elev));
 	    mxSetField(sweepStructs, i, "beam_width",   mxCreateDoubleScalar(sweep->h.beam_width));
