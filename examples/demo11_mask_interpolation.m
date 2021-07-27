@@ -7,13 +7,15 @@ station = 'KVTX';
 station = 'KYUX';
 station = 'KBBX';
 %station = 'KDOX';
-station = 'KAMX';
+%station = 'KAMX';
+
+clutter_version = 'all_lowest_eta_more';
 
 % Get occult and clutter masks and interpolants
 [OCCULT_MASK, range, az, elev] = occult_mask(station);
 F_occult = get_interpolant(OCCULT_MASK, range, az, elev);
 
-[CLUTTER_MASK, range, az, elev] = static_clutter_mask(station);
+[CLUTTER_MASK, range, az, elev] = static_clutter_mask(station, clutter_version);
 F_clutter = get_interpolant(CLUTTER_MASK, range, az, elev);
 
 % Get output coordinates
