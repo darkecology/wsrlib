@@ -16,16 +16,16 @@ if fid == -1
 end
 
 % Parse first row to get field names
-C = textscan(fid,'%s', 1, 'delimiter', '');
+C = textscan(fid,'%q', 1, 'delimiter', '');
 headerline = C{1}{1};
 
-C = textscan(headerline, '%s', 'delimiter', ',', 'CollectOutput', true);
+C = textscan(headerline, '%q', 'delimiter', ',', 'CollectOutput', true);
 fieldnames = C{1};
 nfields = numel(fieldnames);
 
 % If format is not specified assume all strings (%s)
 if nargin < 2
-    fmt = repmat('%s', 1, nfields);
+    fmt = repmat('%q', 1, nfields);
 end
 
 % Read the remaining lines
