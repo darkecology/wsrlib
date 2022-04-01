@@ -46,7 +46,7 @@ if nargin < 3
 end
 
 if nargin < 4
-    cajun_rmax = 37500;
+    cajun_rmax = 50000;
 end
 
 if nargin < 5
