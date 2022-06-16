@@ -22,7 +22,7 @@ all:
 	cd $(SUBDIR) &&	patch -p1 < ../patch15.txt # KBBX20060113_170337.gz
 	cd $(SUBDIR) &&	patch -p1 < ../patch16.txt # KCCX20130112_070503_V06.gz
 	cd $(SUBDIR) &&	patch -p1 < ../patch17.txt # KRGX20140110_000416_V06.gz
-	cd $(SUBDIR) && (CFLAGS="-g" ./configure --prefix=$(DIR)/install)
+	cd $(SUBDIR) && (CFLAGS="-g -Wno-error=implicit-function-declaration" ./configure --prefix=$(DIR)/install)
 	cd $(SUBDIR) && ( make; make install )
 
 clean:
