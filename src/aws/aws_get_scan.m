@@ -64,7 +64,7 @@ ld_bk = getenv('LD_LIBRARY_PATH');
 setenv('LD_LIBRARY_PATH', '');
 
 % s3 directory listing to find full name of scan
-cmd = sprintf('aws s3 ls s3://noaa-nexrad-level2/%s/%s', aws_path, name);
+cmd = sprintf('aws s3 ls s3://unidata-nexrad-level2/%s/%s', aws_path, name);
 
 [status, result] = system(cmd);
 if status
@@ -78,7 +78,7 @@ fullkey = fields{4};
 local_file = sprintf('%s/%s/%s', dataroot, aws_path, fullkey);
 
 % Copy the scan
-cmd = sprintf('aws s3 cp s3://noaa-nexrad-level2/%s/%s %s',...
+cmd = sprintf('aws s3 cp s3://unidata-nexrad-level2/%s/%s %s',...
     aws_path, fullkey, local_file);
 
 if background
