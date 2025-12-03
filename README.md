@@ -8,7 +8,7 @@
   to igest radar files, which, unfortunately, is not supported on
   Windows.)
 
-2. MATLAB
+2. MATLAB. For Mac computers with Apple Silicon processors such as M1 through M4, you must install MATLAB for an **Intel processor**, which will run on your computer using [Rosetta](https://en.wikipedia.org/wiki/Rosetta_(software)). This is because WSRLIB uses the [MatConvNet](https://www.vlfeat.org/matconvnet/) library, which does not compile to the Apple Silicon ARM architecture.
 
 3. A [supported compiler](https://www.mathworks.com/support/requirements/supported-compilers.html) for your version of MATLAB that is properly installed and configured.
 
