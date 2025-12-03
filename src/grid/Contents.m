@@ -1,6 +1,6 @@
 % GRID
 %
-% Files
+% Spatial grids
 %   create_grid - Return a structure defining a 2D spatial grid
 %   grid_edges  - Return grid cells edges
 %   grid_points - Return all grid points

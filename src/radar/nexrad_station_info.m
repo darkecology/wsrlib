@@ -1,5 +1,5 @@
 function station_info = nexrad_station_info()
-%NEXRAD_STATIONS Get NEXRAD station information.
+%NEXRAD_STATION_INFO Get NEXRAD station information.
 %
 % station_info = nexrad_station_info()
 %
