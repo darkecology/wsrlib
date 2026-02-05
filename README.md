@@ -1,5 +1,5 @@
 # WSRLIB: MATLAB Toolbox for Weather Surveillance Radar 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3352264.svg)](https://doi.org/10.5281/zenodo.3352264)
+[![DOI](https://zenodo.org/badge/110856311.svg)](https://doi.org/10.5281/zenodo.18499478)
 
 ## Requirements
 
