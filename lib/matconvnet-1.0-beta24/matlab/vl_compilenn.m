@@ -175,8 +175,12 @@ if isempty(opts.imageLibrary)
   switch arch
     case 'glnxa64', opts.imageLibrary = 'libjpeg' ;
     case 'maci64', opts.imageLibrary = 'quartz' ;
+    case 'maca64', opts.imageLibrary = 'quartz' ;
     case 'win64', opts.imageLibrary = 'gdiplus' ;
   end
+end
+if strcmp(arch, 'maca64') && opts.enableGpu
+  error('GPU builds are not supported on architecture ''%s''.', arch) ;
 end
 if isempty(opts.imageLibraryLinkFlags)
   switch opts.imageLibrary
@@ -212,7 +216,7 @@ mex_src{end+1} = fullfile(root,'matlab','src',['vl_nnbilinearsampler.' ext]) ;
 mex_src{end+1} = fullfile(root,'matlab','src',['vl_nnroipool.' ext]) ;
 mex_src{end+1} = fullfile(root,'matlab','src',['vl_taccummex.' ext]) ;
 switch arch
-  case {'glnxa64','maci64'}
+  case {'glnxa64','maci64','maca64'}
     % not yet supported in windows
     mex_src{end+1} = fullfile(root,'matlab','src',['vl_tmove.' ext]) ;
 end
@@ -347,7 +351,7 @@ if opts.enableDouble
 end
 flags.link{end+1} = '-lmwblas' ;
 switch arch
-  case {'maci64'}
+  case {'maci64','maca64'}
   case {'glnxa64'}
     flags.linklibs{end+1} = '-lrt' ;
   case {'win64'}
@@ -401,6 +405,9 @@ switch arch
       end
     end
 
+  case {'maca64'}
+    flags.ccoptim{end+1} = '-ffast-math' ;
+
   case {'glnxa64'}
     flags.ccoptim{end+1} = '-mssse3 -ftree-vect-loop-version -ffast-math -funroll-all-loops' ;
     flags.nvccpass{end+1} = '-Xcompiler -fPIC -D_FORCE_INLINES' ;
@@ -429,11 +436,15 @@ flags.mexcc = horzcat(flags.cc, ...
 if ~ispc, flags.mexcc{end+1} = '-cxx'; end
 
 % mex: compile GPU
-flags.mexcu= horzcat({'-f' mex_cuda_config(root)}, ...
-                     flags.cc, ...
-                     {'-largeArrayDims'}, ...
-                     {['CXXFLAGS=$CXXFLAGS ' quote_nvcc(flags.ccpass) ' ' strjoin(flags.nvccpass)]}, ...
-                     {['CXXOPTIMFLAGS=$CXXOPTIMFLAGS ' quote_nvcc(flags.ccoptim)]}) ;
+if opts.enableGpu
+  flags.mexcu= horzcat({'-f' mex_cuda_config(root)}, ...
+                       flags.cc, ...
+                       {'-largeArrayDims'}, ...
+                       {['CXXFLAGS=$CXXFLAGS ' quote_nvcc(flags.ccpass) ' ' strjoin(flags.nvccpass)]}, ...
+                       {['CXXOPTIMFLAGS=$CXXOPTIMFLAGS ' quote_nvcc(flags.ccoptim)]}) ;
+else
+  flags.mexcu = {} ;
+end
 
 % mex: link
 flags.mexlink = horzcat(flags.cc, flags.link, ...
@@ -553,7 +564,7 @@ function ext = objext()
 % architecture
 switch computer('arch')
   case 'win64', ext = 'obj';
-  case {'maci64', 'glnxa64'}, ext = 'o' ;
+  case {'maci64', 'maca64', 'glnxa64'}, ext = 'o' ;
   otherwise, error('Unsupported architecture %s.', computer) ;
 end
 
@@ -740,4 +751,3 @@ catch
                       'falling back to default\n'], mfilename);
   cudaArch = opts.defCudaArch;
 end
-

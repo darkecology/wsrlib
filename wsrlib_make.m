@@ -13,7 +13,25 @@ root = wsrlib_root();
 %%%%%%%%%%%%%%%%%%%%%% 
 fprintf('********** Compiling rsl ************\n\n');
 
-status = system(sprintf('CC=/opt/homebrew/bin/gcc-13 CXX=/opt/homebrew/bin/g++-13 make -C %s/rsl2mat/rsl', root), '-echo');
+cc = strtrim(getenv('CC'));
+cxx = strtrim(getenv('CXX'));
+
+if isempty(cc) || isempty(cxx)
+    if ismac
+        [cc_status, cc] = system('command -v clang');
+        [cxx_status, cxx] = system('command -v clang++');
+    else
+        [cc_status, cc] = system('command -v gcc');
+        [cxx_status, cxx] = system('command -v g++');
+    end
+    if cc_status ~= 0 || cxx_status ~= 0
+        error('Failed to locate a C/C++ compiler for building rsl');
+    end
+    cc = strtrim(cc);
+    cxx = strtrim(cxx);
+end
+
+status = system(sprintf('CC=\"%s\" CXX=\"%s\" make -C \"%s/rsl2mat/rsl\"', cc, cxx, root), '-echo');
 if status ~= 0
     error('Failed to compile rsl');
 end
@@ -51,6 +69,4 @@ if ~exist(net_local_file, 'file')
         end
     end
 end
-
-
 
