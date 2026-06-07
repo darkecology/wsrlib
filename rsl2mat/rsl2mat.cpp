@@ -237,14 +237,20 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
 
     int nvolumes = radar->h.nvolumes;
 
-    if (nvolumes > DZ_INDEX && radar->v[DZ_INDEX]) 
+    if (nvolumes > DZ_INDEX && radar->v[DZ_INDEX])
 	mxSetField(radarStruct, 0, "dz", volumeToStruct(radar, radar->v[DZ_INDEX], opt));
-
+    else
+        ERR("no reflectivity data");
+    
     if (nvolumes > VR_INDEX && radar->v[VR_INDEX]) 
 	mxSetField(radarStruct, 0, "vr", volumeToStruct(radar, radar->v[VR_INDEX], opt));
+    else
+        ERR("no velocity data");
 
     if (nvolumes > SW_INDEX && radar->v[SW_INDEX]) 
 	mxSetField(radarStruct, 0, "sw", volumeToStruct(radar, radar->v[SW_INDEX], opt));
+    else
+        ERR("no spectrum width data");
 
     if (nvolumes > DR_INDEX && radar->v[DR_INDEX]) 
 	mxSetField(radarStruct, 0, "dr", volumeToStruct(radar, radar->v[DR_INDEX], opt));
@@ -316,7 +322,10 @@ mxArray* volumeToStruct(Radar *radar, Volume* vol, Options opt)
     for (int i = 0; i < vol->h.nsweeps; i++)
     {
 	Sweep *sweep = vol->sweep[i];
-	if (sweep->h.nrays > 0 && sweep->ray[0]->h.fix_angle <= opt.max_elev && sweep->ray[0]->h.fix_angle > 0) 
+	if (sweep &&
+            sweep->h.nrays > 0 &&
+            sweep->ray[0]->h.fix_angle <= opt.max_elev &&
+            sweep->ray[0]->h.fix_angle > 0) 
 	    n_output_sweeps++;
     }
     n_output_sweeps = MIN(n_output_sweeps, opt.nsweeps);
@@ -353,7 +362,10 @@ mxArray* volumeToStruct(Radar *radar, Volume* vol, Options opt)
     {
 	Sweep *sweep = vol->sweep[j];
 	
-	if (sweep->h.nrays > 0 && sweep->ray[0]->h.fix_angle <= opt.max_elev && sweep->ray[0]->h.fix_angle > 0) 
+	if (sweep &&
+            sweep->h.nrays > 0 &&
+            sweep->ray[0]->h.fix_angle <= opt.max_elev &&
+            sweep->ray[0]->h.fix_angle > 0) 
 	{
 	    mxSetField(sweepStructs, i, "elev",         mxCreateDoubleScalar(sweep->h.elev));
 	    mxSetField(sweepStructs, i, "beam_width",   mxCreateDoubleScalar(sweep->h.beam_width));

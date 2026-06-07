@@ -1,0 +1,20 @@
+--- rsl-v1.50/wsr88d_m31.c	2021-07-23 12:16:39.054179036 -0400
++++ wsr88d_m31.c	2021-07-23 12:16:29.860494118 -0400
+@@ -249,14 +249,14 @@
+ 
+     found = 0;
+     dindex = wsr88d_ray->ray_hdr.radial_const;
+-    if (strncmp((char *) &wsr88d_ray->data[dindex], "RRAD", 4) == 0) found = 1;
++    if (dindex < sizeof(wsr88d_ray->data) && strncmp((char *) &wsr88d_ray->data[dindex], "RRAD", 4) == 0) found = 1;
+     else {
+ 	dindex = wsr88d_ray->ray_hdr.elev_const;
+-	if (strncmp((char *) &wsr88d_ray->data[dindex], "RRAD", 4) == 0)
++	if (dindex < sizeof(wsr88d_ray->data) && strncmp((char *) &wsr88d_ray->data[dindex], "RRAD", 4) == 0)
+ 	    found = 1;
+ 	else {
+ 	    dindex = wsr88d_ray->ray_hdr.vol_const;
+-	    if (strncmp((char *) &wsr88d_ray->data[dindex], "RRAD", 4) == 0)
++	    if (dindex < sizeof(wsr88d_ray->data) && strncmp((char *) &wsr88d_ray->data[dindex], "RRAD", 4) == 0)
+ 		found = 1;
+ 	}
+     }

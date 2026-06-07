@@ -1,5 +1,5 @@
 # WSRLIB: MATLAB Toolbox for Weather Surveillance Radar 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3352264.svg)](https://doi.org/10.5281/zenodo.3352264)
+[![DOI](https://zenodo.org/badge/110856311.svg)](https://doi.org/10.5281/zenodo.18499478)
 
 ## Requirements
 
@@ -8,7 +8,7 @@
   to igest radar files, which, unfortunately, is not supported on
   Windows.)
 
-2. MATLAB
+2. MATLAB. For Mac computers with Apple Silicon processors such as M1 through M4, you must install MATLAB for an **Intel processor**, which will run on your computer using [Rosetta](https://en.wikipedia.org/wiki/Rosetta_(software)). This is because WSRLIB uses the [MatConvNet](https://www.vlfeat.org/matconvnet/) library, which does not compile to the Apple Silicon ARM architecture.
 
 3. A [supported compiler](https://www.mathworks.com/support/requirements/supported-compilers.html) for your version of MATLAB that is properly installed and configured.
 
@@ -79,8 +79,8 @@ The development of WSRLIB was supported by the National Science Foundation under
 
 WSRLIB is open source software. You are welcome to use the code under the terms of the license for research or commercial purposes. If you use WSRLIB in published research, please acknowledge it with a citation:
 
-> Sheldon, Daniel. WSRLIB: MATLAB Toolbox for Weather Surveillance Radar, 2019. 
-> [https://doi.org/10.5281/zenodo.3352264]
+> Sheldon, Daniel. WSRLIB: MATLAB Toolbox for Weather Surveillance Radar, Version 1.0.0, 2026. 
+> [https://doi.org/10.5281/zenodo.18499478].
 
 If you use mistnet to discriminate rain from biology, please cite the paper:
 

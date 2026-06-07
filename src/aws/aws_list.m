@@ -1,8 +1,14 @@
-function [ fileinfo ] = aws_list( station, year, month, day, hour )
-%AWS_LIST Get a list of archive files
+function [ fileinfo ] = aws_list( station, year, month, day, hour, varargin )
+%AWS_LIST Get a list of archive files 
+
 %
 % [ files ] = aws_list( station, year, month, day, hour )
 %
+
+p = inputParser;
+addParameter(p, 'max_items', 10000, @isnumeric);
+parse(p, varargin{:});
+params = p.Results;
 
 s3path = sprintf('%04d/%02d/%02d/%04s', ...
     year, month, day, station );
@@ -14,11 +20,8 @@ if nargin >= 5
         s3path, station, year, month, day, hour);
 end
 
+cmd = sprintf('AWS_PAGER="" /usr/local/bin/aws s3api list-objects --bucket unidata-nexrad-level2 --prefix %s --max-items %d --query ''Contents[].{Key: Key, Size: Size}'' --output json --no-sign-request', s3path, params.max_items);
 
-cmd = sprintf('/usr/local/bin/aws s3api list-objects --no-paginate --bucket noaa-nexrad-level2 --prefix %s --query ''Contents[].{Key: Key, Size: Size}'' --output json --no-sign-request | cat', s3path);
-
-% Alternative function
-% [status, result] = system('/usr/local/bin/aws s3 ls s3://noaa-nexrad-level2 --recursive --query ''Contents[].{Key: Key, Size: Size}'' --output json --no-sign-request | cat');
 
 [status, result] = system( cmd );
 if status
