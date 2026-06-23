@@ -19,7 +19,7 @@ the terms of the BSD license (see the COPYING file).
 /*                             Fast approximated numerical routines */
 /* ---------------------------------------------------------------- */
 
-#ifndef _MSC_VER
+#if !defined(_MSC_VER) && (defined(__x86_64__) || defined(__i386__))
 #include <x86intrin.h>
 #pragma GCC optimize ("fast-math")
 #pragma GCC optimize ("tree-vectorize")

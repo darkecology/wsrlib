@@ -4,16 +4,17 @@ function [ F ] = radarInterpolant( data, az, range, type )
 % F = radarInterpolant( data, az, range )
 %
 % Inputs:
-%   data  - m x n data matrix in polar coordinates (columns are rays)
-%   az    - vector or matrix of azimuths (*)
-%   range - vector or matrix of ranges (*)
+%   data        m x n data matrix in polar coordinates (columns are rays)
+%   az          vector or matrix of azimuths (*)
+%   range       vector or matrix of ranges (*)
+%   interp_type method used in griddedInterpolant
 %
 % Outputs:
-%   F - interpolating function
+%   F       interpolating function
 %
 % (*) az and range can be in matrix or vector form
-% 
-%  Matrix form: 
+%
+%  Matrix form:
 %    - az and range are both m x n
 %    - az(i,j) is the azimuth for data(i,j)
 %    - range(i,j) is the range for data(i,j)
@@ -48,10 +49,10 @@ range = range(:);
 data = data(:,I);
 
 % Make radials wrap around for proper interpolation
-az   = [az(end)-360;  az;  az(1)+360 ]; 
-data = [data(:,end)   data data(:,1)   ];
+az   = [az(end)-360;  az;  az(1)+360 ];
+data = [data(:,end)   data data(:,1) ];
 
-%Simple check to ensure strict monotonicity
+% Simple check to ensure strict monotonicity
 n_mon = find(diff(az)==0);
 for i=1:length(n_mon)
      az(n_mon(i)+1) =  az(n_mon(i)+1)+0.001;

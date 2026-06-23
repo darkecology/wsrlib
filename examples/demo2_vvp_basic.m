@@ -8,8 +8,8 @@ radar = rsl2mat(radar_file, station);
 
 %% 2. Extract data
 
-% Get lowest velocity sweep
-sweep = radar.vr.sweeps(1);      
+% Get lowest radial velocity sweep
+sweep = radar.vr.sweeps(1);
 
 % Get sweep elevation angle and convert to radians
 elev = deg2rad(sweep.elev);
@@ -17,11 +17,11 @@ elev = deg2rad(sweep.elev);
 % Get data matrix
 [data, range, az] = sweep2mat(sweep);
 
-% Convert azimuths measurements from compass headings to standard 
+% Convert azimuths measurements from compass headings to standard
 % mathematical angle (radians counterclockfrom positive x axis)
-az = cmp2pol(az); 
+az = cmp2pol(az);
 
-%% 2. Set up and solve linear regression problem. 
+%% 2. Set up and solve linear regression problem.
 %      - Use data from 100th range bin (~25km)
 
 range_bin = 300;

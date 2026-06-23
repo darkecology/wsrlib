@@ -14,10 +14,10 @@ function [ edges, z, u, v, rmse, nll, cov, cnt ] = ...
 %
 % Outputs:
 %
-%   edges      Elevations of bin edges in meters. Vector of length nbins+1.  
+%   edges      Elevations of bin edges in meters. Vector of length nbins+1.
 %              Example: if zstep = 20 and zmax = 100, the bin edges will be
 %              [0 20 40 60 80 100]
-%   
+%
 %   Remaining outputs have one row per elevation-bin:
 %
 %   z          Height (m) at center of elevation bin
@@ -32,23 +32,23 @@ function [ edges, z, u, v, rmse, nll, cov, cnt ] = ...
 %  [ edges, z, u, v, rmse, nll, cov, cnt ] = epvvp( radar, zstep, rmin, rmax, zmax, alg, gamma, sigma, sigma_prior, sigma_noise, verbose )
 %
 % Additional inputs:
-%   alg        Algorithm: 'GVAD' | 'GVAD+LOCAL' | 'GVAD+KALMAN' | 
+%   alg        Algorithm: 'GVAD' | 'GVAD+LOCAL' | 'GVAD+KALMAN' |
 %                         'EP' | 'EP-NUMERICAL' (default: 'EP')
 %
 %   gamma      Offset for GVAD finite difference in radians (default: 0.1)
 %
-%   sigma      Standard deviation of Gaussian factor that encourages 
+%   sigma      Standard deviation of Gaussian factor that encourages
 %              velocities to vary slowly with elevation:
 %
-%                      -||w(i+1) - w(i)||^2 
+%                      -||w(i+1) - w(i)||^2
 %                 exp  ---------------------
-%                        -zstep * sigma^2   
+%                        -zstep * sigma^2
 %
 %              w(i) and w(i+1) are velocity vectors in bins i and i+1.
-%              Smaller value of sigma --> more similarity. 
+%              Smaller value of sigma --> more similarity.
 %              (Default: 0.08)
-%              
-%   sigma_prior  Standard deviation of zero-mean Gaussian prior on velocity vector. 
+%
+%   sigma_prior  Standard deviation of zero-mean Gaussian prior on velocity vector.
 %                Default is 50 (very weak prior)
 %
 %   sigma_noise  Noise standard deviation (default: 4)
@@ -151,7 +151,7 @@ cnt = cnt(1:end-1);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Setup for message passing
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    
+
 % Create node and edge potentials
 prior = new_gausspot(eye(2)/sigma_prior^2, [0 0]); % weak gaussian prior
 psi   = new_gausspot(kron([1 -1; -1 1]/sigma_neighbor^2, eye(2)), zeros(4,1));
@@ -159,21 +159,21 @@ psi   = new_gausspot(kron([1 -1; -1 1]/sigma_neighbor^2, eye(2)), zeros(4,1));
 % Create messages: intialize to all ones potential
 ones_msg   = new_gausspot(zeros(2), zeros(2,1));
 alpha      = repmat(ones_msg, m, 1);
-beta       = repmat(ones_msg, m, 1);    
+beta       = repmat(ones_msg, m, 1);
 likelihood = repmat(ones_msg,  m, 1);  % approximate likelihood
 posterior  = repmat(ones_msg,  m, 1);  % estimated posterior
 
 % First pass: intialize unary potentials using gvad
 if use_gvad
     for i = 1:m
-                
+
         I = bin == i;
 
         y = ygvad(I);
         X = [-sin(azgvad(I)).*cos(elev(I)) cos(azgvad(I)).*cos(elev(I))];
-        
-        J = ~isnan(y);        
-        
+
+        J = ~isnan(y);
+
         if sum(J) < MIN_DATA
             likelihood(i) = prior;
         else
@@ -182,24 +182,24 @@ if use_gvad
             y = y(J);
             w = X\y;
             resid = X*w - y;
-            
+
             if gvad_local_search
                 % Local search using VAD
                 X = [cos(az(I)).*cos(elev(I)) sin(az(I)).*cos(elev(I))];
                 y = vr(I);
                 w = local_search( nyq_vel(I), w, X, y, maxiter );
                 resid = X*w - y;
-            end            
-            
+            end
+
             n = sum(~isnan(resid));
             sigma_hat = sqrt(nansum(resid.^2)/(n-2));
-            
-            K = X'*X*(2*sin(gamma)/sigma_hat)^2; % Use estimated variance       
+
+            K = X'*X*(2*sin(gamma)/sigma_hat)^2; % Use estimated variance
             likelihood(i).K = K;
             likelihood(i).b = K*w;
         end
     end
-    
+
     posterior = likelihood;
 end
 
@@ -227,24 +227,24 @@ end
         % Update likelihood(i) (current time step)
 
         pot = multiply_gausspot(alpha(i), beta(i), prior);
-%        mom = pot2moment(pot);
-%        fprintf('Level %d, prior u= %.2f, v= %.2f, var(u)= %.2f, var(v)= %.2f\n', i, mom.mu(1), mom.mu(2), mom.S(1,1), mom.S(2,2));
-        
+        %        mom = pot2moment(pot);
+        %        fprintf('Level %d, prior u= %.2f, v= %.2f, var(u)= %.2f, var(v)= %.2f\n', i, mom.mu(1), mom.mu(2), mom.S(1,1), mom.S(2,2));
+
         if cnt(i) < MIN_DATA
             posterior(i) = pot;
         else
-            
+
             I = bin == i;
             y = vr(I);
             X = [cos(az(I)).*cos(elev(I)) sin(az(I)).*cos(elev(I))];
 
             [ posterior(i).K, posterior(i).b ] = local_search_prior( pot.K, pot.b, X, y, nyq_vel(I), sigma_noise, maxiter );
-            
+
             if numerical_hessian
                 [ posterior(i).K, posterior(i).b ] = local_search_numerical( pot.K, pot.b, X, y, nyq_vel(I), sigma_noise, maxiter );
             end
             likelihood(i) = divide_gausspot(posterior(i), pot);
-            
+
         end
 
     end
@@ -271,7 +271,7 @@ for pass=1:ep_passes
         likelihood_update(i);
         alpha_update(i);
     end
-    
+
     % Backward
     for i=m:-1:1
         if verbose
@@ -280,7 +280,7 @@ for pass=1:ep_passes
         likelihood_update(i);
         beta_update(i);
     end
-    
+
 end
 
 % Now recover the parameters

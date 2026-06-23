@@ -2,11 +2,11 @@ function [ az, dist, z ] = expand_coords( az, dist, z )
 %EXPAND_COORDS Get matrices of coordinates for each pulse volume
 %
 % [ az, dist, z ] = expand_coords( az, dist, z )
-% 
+%
 % Input:
-%  az   - vector (length n) of azimuths
-%  dist - vector (length m) of pixel great circle distances along a radial
-%  z    - vector (length m) of pixel heights along a radial
+%  az    vector (length n) of azimuths
+%  dist  vector (length m) of pixel great circle distances along a radial
+%  z     vector (length m) of pixel heights along a radial
 %
 % Output:
 %  Each of (az, dist, z) will be expanded to an m x n matrix with

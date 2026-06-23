@@ -16,3 +16,8 @@ data/mistnet.mat
 
 # Emacs backup files
 *~
+
+# Matlab
+*.asv
+*.m~
+resources/**

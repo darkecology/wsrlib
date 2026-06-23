@@ -18,8 +18,8 @@ data = radar2mat(radar, 'elevs', 0.5:4.5, 'coords', 'cartesian', 'r_max', 150000
 figure(1); clf();
 
 cmap = [0, 0.5, 1;
-        1, 0.5, 0;
-        1, 0, 0];
+    1, 0.5, 0;
+    1, 0, 0];
 colormap(cmap);
 
 plot_idx = 1;
@@ -30,14 +30,14 @@ for i = 1:5
     colormap(gca, jet(32));
     c = colorbar();
     c.Label.String = 'dBZ';
-    
+
     plot_idx = plot_idx + 1;
 
     subplot(5,2, plot_idx);
-    image(x, y, PREDS(:,:,i));  
+    image(x, y, PREDS(:,:,i));
     axis xy;
     colormap(gca, cmap);
     colorbar('YTick', 1.5:3.5, 'YTickLabel', {'background', 'biology', 'rain'});
-    
-    plot_idx = plot_idx + 1;    
+
+    plot_idx = plot_idx + 1;
 end

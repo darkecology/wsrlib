@@ -28,6 +28,7 @@ s.day = day;
 s.hour = hour;
 s.minute = minute;
 s.second = second;
+s.datetime = datetime(s.year,s.month,s.day,s.hour,s.minute,s.second);
 s.suffix = [suffix{:} ext];
 
 end

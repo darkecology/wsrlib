@@ -1,12 +1,14 @@
 function [z, x, y, F] = sweep2cart( sweep, rmax, dim, interp_type, use_ground_range )
 %SWEEP2CART Convert a sweep to cartesian coordinates
-% 
-%  im = sweep2cart( sweep, rmax, dim )
+%
+%  im = sweep2cart( sweep, rmax, dim, interp_type, use_ground_range )
 %
 % Inputs:
-%   sweep - a sweep struct
-%   rmax  - the max radius of the cartesian image
-%   dim   - # of pixels of the cartesian image
+%   sweep               a sweep struct
+%   rmax                the max radius of the cartesian image
+%   dim                 # of pixels of the cartesian image
+%   interp_type         method used in griddedInterpolant (default: linear)
+%   use_ground_range    convert slant range to ground range (default: true)
 %
 % Example:
 %   radar = rsl2mat(...);

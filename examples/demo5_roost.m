@@ -33,7 +33,7 @@ REFL(isnan(REFL)) = 0;
 THETA = cmp2pol(AZ);
 
 % Convert to X,Y coordinates of each pulse volume
-[X, Y] = pol2cart(THETA, GROUND_RANGE); 
+[X, Y] = pol2cart(THETA, GROUND_RANGE);
 
 
 %% Roost location
@@ -70,7 +70,7 @@ for i=1:nbins
     dist_max = edges(i+1);
     
     inds = DIST >= dist_min & DIST < dist_max;
-    density(i) = mean(REFL(inds));    
+    density(i) = mean(REFL(inds));
 end
 
 %% Plot result

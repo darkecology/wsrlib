@@ -62,7 +62,7 @@ mean_refl = mean(REFL(inds));
 
 %% 6. Analysis: compute mean reflectivity in each 100m height bin
 
-% use height bins from previous velocity analysis 
+% use height bins from previous velocity analysis
 nbins   = length(edges)-1;
 
 % initialize density vector to nan
@@ -75,7 +75,7 @@ for i=1:nbins
     height_max = edges(i+1);
     
     inds = HEIGHT >= height_min & HEIGHT < height_max;
-    density(i) = mean(REFL(inds));    
+    density(i) = mean(REFL(inds));
 end
 
 %% 7. Plot results

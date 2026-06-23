@@ -1,6 +1,6 @@
 %% 0. Help
 
-help wsrlib 
+help wsrlib
 doc wsrlib
 
 %% 1. Read radar file
@@ -113,9 +113,9 @@ for i=1:length(fields)
 
     field = fields{i};
     [data, range, az] = sweep2mat(radar.(field).sweeps(1));
-    
+
     rows = range >= range_lim(1) & range <= range_lim(2);
-    
+
     subplot(6,1,i);
     scatter(az, mean(data(rows,:)), 4);
     xlabel('azimuth');

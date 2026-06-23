@@ -1,24 +1,26 @@
 function [Z, x, y, F] = mat2cart( data, az, range, dim, rmax, interp_type, trim_polar)
 %MAT2CART Convert a sweep to cartesian coordinates
-% 
-%  [Z, x, y] = mat2cart( data, az, range, dim )
+%
+%  [Z, x, y, F] = mat2cart( data, az, range, dim, rmax, interp_type, trim_polar )
 %
 % Inputs:
-%   data  - m x n data matrix in polar coordinates (columns are rays)
-%   az    - vector or matrix of azimuths (*)
-%   range - vector or matrix of ranges (*)
-%   rmax  - maximum range (default: max(range))
-%   dim   - # of pixels of the cartesian image
-%   trim_polar - if true the trim polar to given rmax
+%   data        m x n data matrix in polar coordinates (columns are rays)
+%   az          vector or matrix of azimuths (*)
+%   range       vector or matrix of ranges (*)
+%   dim         # of pixels of the cartesian image (default: 400)
+%   rmax        maximum range (default: max(range))
+%   interp_type method used in griddedInterpolant (default: linear)
+%   trim_polar  if true trim data beyond rmax (default: true)
 %
 % Outputs:
-%   Z - cartesian data (i.e., image)
-%   x - vector of x coordinates
-%   y - vector of y coordinates
+%   Z 	cartesian data (i.e., image)
+%   x 	vector of x coordinates
+%   y 	vector of y coordinates
+%   F   interpolating function
 %
 % (*) az and range can be in matrix or vector form
-% 
-%  Matrix form: 
+%
+%  Matrix form:
 %    - az and range are both m x n
 %    - az(i,j) is the azimuth for data(i,j)
 %    - range(i,j) is the range for data(i,j)
@@ -55,7 +57,7 @@ end
 F = radarInterpolant(data, az, range, interp_type);
 
 % Generate an (x,y) grid
-x = linspace (-rmax, rmax, dim);
+x = linspace(-rmax, rmax, dim);
 y = -x;
 
 % Map (x,y) coordinates to range and azimuth

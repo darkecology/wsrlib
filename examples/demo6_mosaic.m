@@ -58,7 +58,7 @@ max_elev = 1;    % for speed, only process lowest elevation. there are options t
 
 % TODO output world file...
 
-%% 
+%%
 [lon1, lat1] = m_xy2ll( x(1), y(1) );      % top left
 [lon2, lat2] = m_xy2ll( x(1),   y(end) );  % bottom left
 [lon3, lat3] = m_xy2ll( x(end), y(1)   );  % top right

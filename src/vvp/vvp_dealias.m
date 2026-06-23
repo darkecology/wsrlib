@@ -4,14 +4,14 @@ function [ radar_dealiased, radar_smoothed ] = vvp_dealias( radar, edges, u, v, 
 %   radar_dealiased = vvp_dealias( radar, edges, u, v, rmse, rmse_thresh )
 %
 %  [radar_dealiased, radar_smoothed ] = vvp_dealias( radar, edges, u, v, rmse, rmse_thresh )
-% 
+%
 % Inputs:
 %   radar                 Radar struct from rsl2mat
 %   edges, u, v, rmse     Output from epvvp (see also EPVVP)
 %   rmse_thresh           Don't dealias in height bins with rmse exceeding
 %                         this value
 % Outputs:
-%   radar_dealiased       Dealiased radar struct 
+%   radar_dealiased       Dealiased radar struct
 %
 %   radar_smoothed        Optional second output gives predicted values
 %                         under uniform velocity model
@@ -42,34 +42,34 @@ for i=1:ntilts
     [az, ~, z] = expand_coords(az, range, z);
 
     % Assign pulse volumes to wind levels
-    [~, bin] = histc(z, edges);
+    [~, ~, bin] = histcounts(z, edges);
 
     elev = repmat(deg2rad(sweep.elev), size(az));
-    
+
     rmse_wind = nan(size(az));
     u_wind = nan(size(az));
     v_wind = nan(size(az));
-    
+
     rmse_wind(:) = rmse(bin(:));
     u_wind(:) = u(bin(:));
     v_wind(:) = v(bin(:));
 
     vr = radar.vr.sweeps(i).data;
     vr(vr > 131000) = nan;
-    valid = ~isnan(vr);        
-    
+    valid = ~isnan(vr);
+
     % The predicted value
-    mu = cos(az).*cos(elev).*u_wind + sin(az).*cos(elev).*v_wind;    
+    mu = cos(az).*cos(elev).*u_wind + sin(az).*cos(elev).*v_wind;
     radar_smoothed.vr.sweeps(i).data(valid) = mu(valid);
-    
+
     % Now dealias
     k = round((mu-vr)/(2*nyq_vel));
     dealiased_vr = vr + 2*nyq_vel*k;
-%    resid = mu - dealiased_vr; 
-    
+    % resid = mu - dealiased_vr;
+
     valid = rmse_wind < rmse_thresh;
     radar_dealiased.vr.sweeps(i).data(valid) = dealiased_vr(valid);
-    
+
 end
 
 end

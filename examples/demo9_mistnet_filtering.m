@@ -53,24 +53,24 @@ Z    = idb(MASKED_DZ);      % inverse decibel transform --> reflectivity factor
 REFL = z_to_refl(Z);        % reflectivity factor --> reflectivity
 
 
-% Plot predictions 
+% Plot predictions
 f = figure(1);
 f.Position = [100, 800, 1800, 600];
 cmap = [0, 0.5, 1;
-        1, 0.5, 0;
-        1, 0, 0];
+    1, 0.5, 0;
+    1, 0, 0];
 
 colormap(cmap);
 
 nr = 5;
 nc = 4;
 figure;
-ax = gobjects(nc,nr); % Subplots use opposite numbering convention 
-                      % from arrays, so start reversed
-figure(1);                      
-                    
+ax = gobjects(nc,nr); % Subplots use opposite numbering convention
+% from arrays, so start reversed
+figure(1);
+
 for i = 1:5
-    
+
     ind = nc*(i-1) + 1;
     ax(ind) = subplot(5,4, ind);
     imagesc(az, range, DZ(:,:,i), [-5, 35]);
@@ -85,10 +85,10 @@ for i = 1:5
 
     ind = nc*(i-1) + 3;
     ax(ind) = subplot(5,4, ind);
-    image(az, range, PREDS(:,:,i));    
+    image(az, range, PREDS(:,:,i));
     colormap(gca, cmap);
     colorbar('YTick', 1.5:3.5, 'YTickLabel', {'background', 'biology', 'rain'});
-    
+
     ind = nc*(i-1) + 4;
     ax(ind) = subplot(5,4, ind);
     imagesc(az, range, MASKED_DZ(:,:,i), [-5, 35]);
@@ -114,7 +114,7 @@ ylabel(ax(5,1), '4.5 deg.');
 
 % Compute mean reflectivity in each 100m height bin
 
-% use height bins from previous velocity analysis 
+% use height bins from previous velocity analysis
 nbins   = length(edges)-1;
 
 % initialize density vector to nan
@@ -122,16 +122,16 @@ density = nan(nbins,1);
 
 % compute density for each bin
 for i=1:nbins
-    
+
     height_min = edges(i);
     height_max = edges(i+1);
-    
+
     inds = HEIGHT >= height_min & HEIGHT < height_max;
-    density(i) = mean(REFL(inds));    
+    density(i) = mean(REFL(inds));
 end
 
 % Plot results
-figure(2); 
+figure(2);
 clf();
 
 subplot(1,3,1);

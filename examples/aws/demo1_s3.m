@@ -4,7 +4,7 @@ station = 'KBOX';
 fileinfo = aws_list('KBOX', 2014, 8, 01, 23 );
 
 thefile = fileinfo(1);
-system( sprintf('aws s3 cp s3://noaa-nexrad-level2/%s .', thefile.key ) );
+system( sprintf('aws s3 cp s3://noaa-nexrad-level2/%s . --no-sign-request', thefile.key ) );
 
 % Write file
 radar = rsl2mat(thefile.name, station);

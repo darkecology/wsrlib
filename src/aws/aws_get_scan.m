@@ -13,7 +13,7 @@ function [local_file, info] = aws_get_scan(key, dataroot, background, verbose)
 %                  KABX20170902_041920 or KABX20170902_041920_V06
 %
 %    dataroot      Scan will be stored within this root directory following
-%                  the same directory structure as the s3 bucket, i.e., 
+%                  the same directory structure as the s3 bucket, i.e.,
 %                  <year>/<month>/<day>/<station>/<scan>
 %
 %    background    If true, intiate download and return immediately
@@ -42,7 +42,7 @@ end
 info = aws_parse(name);
 
 % If the scan exists locally, return path to it.
-% TODO: this can return a false positive 
+% TODO: this can return a false positive
 f = dir(sprintf('%s/%s/%s*', dataroot, aws_path, name));
 pattern = sprintf('^%s(_V\\d\\d)?(.gz)?$', name);
 for i=1:length(f)
@@ -64,7 +64,7 @@ ld_bk = getenv('LD_LIBRARY_PATH');
 setenv('LD_LIBRARY_PATH', '');
 
 % s3 directory listing to find full name of scan
-cmd = sprintf('aws s3 ls s3://unidata-nexrad-level2/%s/%s', aws_path, name);
+cmd = sprintf('aws s3 ls s3://unidata-nexrad-level2/%s/%s --no-sign-request', aws_path, name);
 
 [status, result] = system(cmd);
 if status
@@ -78,7 +78,7 @@ fullkey = fields{4};
 local_file = sprintf('%s/%s/%s', dataroot, aws_path, fullkey);
 
 % Copy the scan
-cmd = sprintf('aws s3 cp s3://unidata-nexrad-level2/%s/%s %s',...
+cmd = sprintf('aws s3 cp s3://unidata-nexrad-level2/%s/%s %s --no-sign-request',...
     aws_path, fullkey, local_file);
 
 if background
