@@ -20,7 +20,7 @@ if nargin >= 5
         s3path, station, year, month, day, hour);
 end
 
-cmd = sprintf('AWS_PAGER="" /usr/local/bin/aws s3api list-objects --bucket unidata-nexrad-level2 --prefix %s --max-items %d --query ''Contents[].{Key: Key, Size: Size}'' --output json --no-sign-request', s3path, params.max_items);
+cmd = sprintf('AWS_PAGER="" aws s3api list-objects --bucket unidata-nexrad-level2 --prefix %s --max-items %d --query ''Contents[].{Key: Key, Size: Size}'' --output json --no-sign-request', s3path, params.max_items);
 
 
 [status, result] = system( cmd );

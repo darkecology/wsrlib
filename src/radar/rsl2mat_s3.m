@@ -25,7 +25,7 @@ function radar = rsl2mat_s3(key, varargin)
 [~, aws_path, name] = aws_key(key);
 
 % s3 directory listing to find full name of scan
-cmd = sprintf('/usr/local/bin/aws s3 ls s3://unidata-nexrad-level2/%s/%s --no-sign-request', aws_path, name);
+cmd = sprintf('aws s3 ls s3://unidata-nexrad-level2/%s/%s --no-sign-request', aws_path, name);
 [status, result] = system(cmd);
 if status
     error('command failed (exit status=%d)\n %s\n %s', status, cmd, result);
@@ -37,7 +37,7 @@ fullkey = fields{4};
 local_file = tempname();
 
 % Copy the scan
-cmd = sprintf('/usr/local/bin/aws s3 cp s3://unidata-nexrad-level2/%s/%s %s --no-sign-request', aws_path, fullkey, local_file);
+cmd = sprintf('aws s3 cp s3://unidata-nexrad-level2/%s/%s %s --no-sign-request', aws_path, fullkey, local_file);
 [status, result] = system(cmd);
 if status
     error('command failed (exit status=%d)\n %s\n %s', status, cmd, result);
