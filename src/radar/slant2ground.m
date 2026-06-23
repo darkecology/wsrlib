@@ -6,14 +6,14 @@ function [ s, h ] = slant2ground( r, thet )
 % Input:
 %   r       range along radar path
 %   thet 	elevation angle in degrees
-% Output:  
+% Output:
 %   s    	range along ground (great circle distance)
-%   h    	height above earth 
+%   h    	height above earth
 %
 % Uses spherical earth with radius 6371.2 km
 %
 % From Doviak and Zrnic 1993 Eqs. (2.28b) and (2.28c)
-% 
+%
 % See also
 % https://github.com/deeplycloudy/lmatools/blob/master/lmatools/coordinateSystems.py
 %

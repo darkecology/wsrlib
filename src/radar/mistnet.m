@@ -86,7 +86,7 @@ else
     else
         net_path = sprintf('%s/cnn/mistnet.mat', cajun_root());
     end
-    
+
     % Check if net is already loaded into memory
     if ~isempty(saved_net) && strcmp(saved_net_path, net_path)
         net = saved_net;
@@ -271,12 +271,12 @@ if ~isempty(opts.padto)
     ims = repmat(reshape(opts.rgbMean, ...
         [1,1,numel(opts.mode)*numel(opts.sweep)]), ...
         opts.padto(1), opts.padto(2), 1);
-    
+
     [h1, w1, ~] = size(temp);
-    
+
     ty = round((1:h1) - h1/2 + opts.padto(1)/2) ;
     tx = round((1:w1) - w1/2 + opts.padto(2)/2) ;
-    
+
     ims(ty, tx, :) = temp;
 end
 

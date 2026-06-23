@@ -30,14 +30,14 @@ for i = 1:5
     colormap(gca, jet(32));
     c = colorbar();
     c.Label.String = 'dBZ';
-    
+
     plot_idx = plot_idx + 1;
-    
+
     subplot(5,2, plot_idx);
     image(x, y, PREDS(:,:,i));
     axis xy;
     colormap(gca, cmap);
     colorbar('YTick', 1.5:3.5, 'YTickLabel', {'background', 'biology', 'rain'});
-    
+
     plot_idx = plot_idx + 1;
 end

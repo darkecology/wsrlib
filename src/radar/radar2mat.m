@@ -24,7 +24,7 @@ function [ data, x1, x2, x3, fields ] = radar2mat( radar, varargin )
 %   output_format  cell | struct
 %   ydirection   'xy' | 'ij'. This specifies whether the y coordinates
 %                of pixels are decreasing ('ij') or increasing ('xy')
-%                along the first dimension of the array. 'xy' is compatible 
+%                along the first dimension of the array. 'xy' is compatible
 %                with griddedInterpolant (default: 'xy')
 %   interp_method: Interpolation method for use within radarInterpolant
 %                (default: 'nearest')
@@ -123,7 +123,7 @@ if ~isempty(params.elevs)
 else
     % all available elevations
     requested_elevs = [radar.(fields{1}).sweeps.elev];
-    
+
     % subselect if particular sweep indices are requested
     if ~isempty(params.sweeps)
         requested_elevs = requested_elevs(params.sweeps);
@@ -135,9 +135,9 @@ end
 sweeps = cell(n_fields, 1);
 available_elevs = cell(n_fields, 1);
 for f = 1:n_fields
-    
+
     available_elevs{f} = [radar.(fields{f}).sweeps.elev];
-    
+
     if length(available_elevs{f}) == 1
         if length(requested_elevs) == 1
             sweeps{f} = 1;
@@ -153,7 +153,7 @@ for f = 1:n_fields
             sweeps{f} = sweeps{f}(~isnan(sweeps{f}));
         end
     end
-    
+
     % Check if any selected sweeps exceed the maximum interpolation distance
     interp_dist = abs(available_elevs{f}(sweeps{f}) - requested_elevs);
     is_bad = interp_dist > params.max_interp_dist;
@@ -178,21 +178,21 @@ n_sweeps = numel(requested_elevs);
 % points. These are the same for each product and each sweep
 
 switch params.coords
-    
+
     case 'polar'
-        
+
         % Query points
         r   = params.r_min  : params.r_res  : params.r_max;
         phi = params.az_res : params.az_res : 360;
         [PHI, R] = meshgrid(phi, r);
-        
+
         % Coordinates of three dimensions in output array
         x1 = r;
         x2 = phi;
         x3 = output_elevs;
-        
+
     case 'cartesian'
-        
+
         % Query points
         x = linspace (-params.r_max, params.r_max, params.dim);
         switch params.ydirection
@@ -204,12 +204,12 @@ switch params.coords
         [X, Y] = meshgrid(x, y);
         [PHI, R] = cart2pol(X, Y);
         PHI = pol2cmp(PHI);  % convert from radians to compass heading
-        
+
         % Coordinates of three dimensions in output array
         x1 = y;
         x2 = x;
         x3 = output_elevs;
-        
+
     otherwise
         error('Bad coordinate system')
 end
@@ -222,24 +222,24 @@ end
 for f = 1:n_fields
     data{f} = nan(m, n, n_sweeps);
     for i = 1:n_sweeps
-        
+
         % Extract data
         sweep_num = sweeps{f}(i);
         sweep = radar.(fields{f}).sweeps(sweep_num);
         [az, range] = get_az_range(sweep);
         vals = sweep.data;
-        
+
         % Convert from slant range to ground range
         if params.use_ground_range
             range = slant2ground(range, sweep.elev);
         end
-        
+
         % Set special non-numeric values to nan
         vals(vals >= FLAG_START) = nan;
-        
+
         % Create the interpolant
         F = radarInterpolant(vals, az, range, params.interp_method);
-        
+
         % Interpolate onto query points and populate slice of output array
         data{f}(:,:,i) = F(R, PHI);
     end
